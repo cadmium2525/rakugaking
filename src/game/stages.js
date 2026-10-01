@@ -14,5 +14,16 @@ export const STAGES=[{
   hint:'水の中は小さく軽い体が得意。ゴールの輪でACTIONを押して封印を解こう。',
   platforms:[tile(0,0,0,8,8),tile(0,-12,-.3,7,16),tile(1,-24,.1,6,5),tile(-1,-31,.3,6,5),tile(0,-38,.5,8,7)],
   spawn:{x:0,y:1.8,z:1},goal:{x:0,y:.5,z:-39},water:{minZ:-19,maxZ:-5,surface:.6},requiresAction:true,
+},{
+  id:4,name:'崩れる遺跡',subtitle:'ためらわず、次の足場へ。',theme:'FALLING RUINS',color:0xc7a58a,sky:0xe9dfd6,
+  hint:'赤茶色の足場は踏むと崩れる。跳び続けよう。落下しても足場は元通り。',
+  platforms:[tile(0,0,0,8,7),tile(0,-7,.5,6,5,{collapse:1.65,color:0xc0876e}),tile(1,-13.5,1,6,5,{collapse:1.65,color:0xc0876e}),tile(-1,-20,1.5,6,5,{collapse:1.65,color:0xc0876e}),tile(0,-26.5,2,6,5,{collapse:1.65,color:0xc0876e}),tile(0,-33,2.5,8,7)],
+  spawn:{x:0,y:1.8,z:1},goal:{x:0,y:2.5,z:-34},
+},{
+  id:5,name:'巨人の塔',subtitle:'きみだけの形で、空の向こうへ。',theme:'GIANT TOWER',color:0xacabc6,sky:0xe2dfed,
+  hint:'風・水・崩れる階段の総合コース。赤い光はJUMPかACTION。最後の封印はACTIONで壊そう。',
+  platforms:[tile(0,0,0,8,8),tile(0,-13,0,5,20,{wind:true}),tile(0,-26,.4,6,5),tile(0,-37,.4,7,14),tile(1,-48,.9,6,5,{collapse:1.65,color:0xb397ac}),tile(-1,-54.5,1.5,6,5,{collapse:1.65,color:0xb397ac}),tile(0,-61,2.1,6,5,{collapse:1.65,color:0xb397ac}),tile(0,-67.5,2.7,8,7)],
+  spawn:{x:0,y:1.8,z:1},goal:{x:0,y:2.7,z:-68},wind:{minZ:-21,maxZ:-5},water:{minZ:-42,maxZ:-31,surface:1},requiresAction:true,sealHP:55,
+  hazards:[{x:0,y:1.3,z:-26},{x:0,y:3.6,z:-66}],
 }];
 export function getStage(id){return STAGES.find(s=>s.id===id)||STAGES[0];}

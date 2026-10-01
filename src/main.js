@@ -32,10 +32,10 @@ try {
   $('#pause').onclick=pause;
   $('#resume').onclick=()=>{$('#pause-dialog').close();paused=false;last=performance.now();};
   $('#pause-dialog').addEventListener('cancel',e=>{e.preventDefault();$('#resume').click();});
-  $('#reset').onclick=()=>{sim.reset();$('#resume').click();};
+  $('#reset').onclick=()=>{if(course)course.retry();else sim.reset();$('#resume').click();};
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
   window.addEventListener('resize',()=>view.resize());
-  function frame(now){const delta=Math.min((now-last)/1000,.1);last=now;if(!paused){accumulator+=delta;while(accumulator>=DT){const controls=input.read();if(controls.action&&!actionHeld&&!course)sim.reset();actionHeld=controls.action;const event=course?course.step(controls):sim.step(controls);accumulator-=DT;elapsed+=DT;if(event==='complete'){paused=true;input.clear();$('#clear-time').textContent=`${course.elapsed.toFixed(2)} 秒 · 落下 ${sim.deaths} 回`;result.showModal();break;}}}else accumulator=0;view.render(sim,delta);$('#status').textContent=`${sim.grounded?'● ON GROUND':'↑ IN THE AIR'}  ·  ${Math.hypot(sim.vx,sim.vz).toFixed(1)} m/s`;requestAnimationFrame(frame);}
+  function frame(now){const delta=Math.min((now-last)/1000,.1);last=now;if(!paused){accumulator+=delta;while(accumulator>=DT){const controls=input.read();if(controls.action&&!actionHeld&&!course)sim.reset();actionHeld=controls.action;const event=course?course.step(controls):sim.step(controls);accumulator-=DT;elapsed+=DT;if(event==='complete'){paused=true;input.clear();$('#clear-time').textContent=`${course.elapsed.toFixed(2)} 秒 · 落下 ${sim.deaths} 回`;result.showModal();break;}}}else accumulator=0;if(course)view.updateCourse(course);view.render(sim,delta);$('#status').textContent=`${sim.grounded?'● ON GROUND':'↑ IN THE AIR'}  ·  ${Math.hypot(sim.vx,sim.vz).toFixed(1)} m/s`;requestAnimationFrame(frame);}
   if(import.meta.env.DEV)window.__qa={state:()=>({position:{...sim.position},grounded:sim.grounded,jumps:sim.jumps,deaths:sim.deaths,paused,elapsed,stage:course?.stage.id,complete:course?.complete,calls:view.renderer.info.render.calls,triangles:view.renderer.info.render.triangles}),reset:()=>sim.reset()};
   requestAnimationFrame(frame);
 }catch(error){$('#status').textContent='起動できませんでした。WebGL対応ブラウザで再読み込みしてください。';console.error(error);}
