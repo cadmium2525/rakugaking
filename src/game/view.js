@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { HALF_HEIGHT } from '../core/controller.js';
+import { buildCharacter, disposeCharacter } from './character.js';
 
 export class GameView {
   constructor(canvas, platforms) {
@@ -22,6 +23,7 @@ export class GameView {
     this.resize();
   }
   resize(){const w=innerWidth,h=innerHeight;this.renderer.setSize(w,h,false);this.camera.aspect=w/h;this.camera.updateProjectionMatrix();}
+  setCharacter(drawing){this.scene.remove(this.avatar);disposeCharacter(this.avatar);this.avatar=buildCharacter(drawing);this.scene.add(this.avatar);}
   render(sim,dt){const p=sim.position;this.avatar.position.set(p.x,p.y-HALF_HEIGHT,p.z);const speed=Math.hypot(sim.vx,sim.vz);if(speed>.2)this.avatar.rotation.y=Math.atan2(sim.vx,sim.vz);this.cameraTarget.set(p.x,p.y+7,p.z+12);this.camera.position.lerp(this.cameraTarget,this.initial?1:1-Math.exp(-dt*5));this.look.set(p.x,p.y+.3,p.z);this.camera.lookAt(this.look);this.initial=false;this.renderer.render(this.scene,this.camera);}
   dispose(){this.scene.traverse(o=>{o.geometry?.dispose();if(o.material)o.material.dispose();});this.renderer.dispose();}
 }

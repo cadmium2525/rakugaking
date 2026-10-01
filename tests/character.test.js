@@ -1,0 +1,7 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {defaultDrawing,PARTS} from '../src/core/drawing.js';
+import {sanitizeDrawing} from '../src/core/shape.js';
+import {buildCharacter,disposeCharacter} from '../src/game/character.js';
+export const fixtures=[{},defaultDrawing(),...['huge','tiny','long-leg','short-leg','long-arm','fat','thin','asymmetric','cross','point','invalid'].map(type=>{const d=defaultDrawing();for(const p of PARTS){d[p][0].points=d[p][0].points.map((v,i)=>type==='invalid'?{x:NaN,y:Infinity}:type==='point'?{x:.5,y:.5}:type==='cross'?{x:i%2,y:i%3/2}:{x:type==='huge'?v.x*10:type==='tiny'?.5+(v.x-.5)*.001:type==='fat'?v.x*2:type==='thin'?.5+(v.x-.5)*.001:v.x,y:type==='long-leg'&&p.includes('leg')||type==='long-arm'&&p.includes('arm')?v.y*2:type==='short-leg'&&p.includes('leg')?v.y*.1:type==='asymmetric'&&p.includes('Left')?v.y*.4:v.y});}return d;})];
+test('13 extreme drawings generate finite bounded geometry and complete hierarchy',()=>{for(const input of fixtures){const drawing=sanitizeDrawing(input),root=buildCharacter(drawing);let count=0;root.traverse(o=>{if(o.geometry){for(const x of o.geometry.attributes.position.array)assert.ok(Number.isFinite(x)&&Math.abs(x)<5);count+=o.geometry.attributes.position.count;}});assert.ok(count>0&&count<40000);for(const part of PARTS)assert.ok(root.getObjectByName(part));disposeCharacter(root);}});

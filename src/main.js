@@ -13,7 +13,7 @@ try {
   const view=new GameView($('#world'),prototypePlatforms);
   const input=new Input($('#stick'),$('#jump'),$('#action'));
   const drawButton=document.createElement('button');drawButton.id='draw-open';drawButton.textContent='✎ ラクガキを描く';document.querySelector('#app').append(drawButton);
-  const editor=new Editor(()=>{editor.root.querySelector('#editor-feedback').textContent='輪郭プレビューを更新しました。立体化は次のフェーズで追加します。';});
+  const editor=new Editor((drawing,name)=>{view.setCharacter(drawing);editor.root.close();sim.reset();document.querySelector('.intro h1').textContent=`${name}、誕生！`;document.querySelector('.intro>p:not(.eyebrow)').textContent='きみのラクガキで、動いてみよう。';});
   drawButton.onclick=()=>{paused=true;input.clear();editor.open();};
   editor.root.addEventListener('close',()=>{paused=false;last=performance.now();});
   let paused=false,last=performance.now(),accumulator=0,actionHeld=false,elapsed=0;

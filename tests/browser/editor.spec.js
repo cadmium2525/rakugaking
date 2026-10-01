@@ -11,3 +11,4 @@ test('drawing editor handles strokes, single points, erase, undo, redo and mirro
   await page.screenshot({path:'test-results/editor.png'});expect(errors).toEqual([]);
   await page.getByLabel('エディタを閉じる').click();await expect(page.locator('.editor')).not.toBeVisible();
 });
+test('birth generates a playable 3D character',async({page})=>{const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/');await page.locator('#draw-open').click();await page.getByRole('button',{name:'誕生させる ✦',exact:true}).click();await expect(page.locator('.editor')).not.toBeVisible();await page.waitForFunction(()=>window.__qa.state().grounded);await page.keyboard.down('Space');await page.waitForTimeout(150);await page.keyboard.up('Space');expect((await page.evaluate(()=>window.__qa.state())).jumps).toBe(1);await page.screenshot({path:'test-results/birth.png'});expect(errors).toEqual([]);});
