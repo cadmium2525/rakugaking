@@ -29,5 +29,5 @@ test('full adventure unlocks and clears all five stages with keyboard input',asy
   const final=await page.evaluate(()=>window.__qa.state());expect(final.records).toBe(1);expect(final.best).toBeGreaterThan(25);expect(final.run.valid).toBe(true);expect(errors).toEqual([]);await page.screenshot({path:'test-results/time-attack-finish.png'});
   const player=`QA-${Date.now()}`;await page.locator('#player-name').fill(player);await page.locator('#submit-score').click();await expect(page.locator('#submit-status')).toContainText('登録しました');
   await page.locator('#select-next').click();await page.locator('[data-close]').click();await page.locator('#ranking-open').click();await expect(page.locator('.ranking-status')).toContainText('自分のベスト');await expect(page.locator('.ranking-table')).toContainText(player);await page.screenshot({path:'test-results/ranking.png'});
-  await page.reload();await page.waitForFunction(()=>window.__qa);expect(await page.evaluate(()=>window.__qa.state().run)).toBeNull();
+  await page.reload();await page.waitForFunction(()=>window.__qa);const restored=await page.evaluate(()=>window.__qa.state());expect(restored.run).toBeNull();expect(restored.best).toBe(final.best);expect(restored.exp).toBe(1400);expect(restored.records).toBe(1);
 });

@@ -8,27 +8,34 @@ import {defaultDrawing} from '../core/drawing.js';
 import {STAGES,getStage} from './stages.js';
 import {Course} from '../core/course.js';
 import {createStageSelect} from '../ui/stage-select.js';
-import {newPlayer,levelFromExp,awardClear,levelStats} from '../core/progression.js';
+import {levelFromExp,awardClear,levelStats} from '../core/progression.js';
 import {RunTimer,formatTime} from '../core/timer.js';
 import {$} from '../ui/shell.js';
 import {sanitizeDrawing} from '../core/shape.js';
 import {RankingPanel} from '../ui/ranking-panel.js';
+import {Library} from '../ui/library.js';
+import {SAVE_VERSION} from '../core/save.js';
 
 export class GameApp {
-  constructor(){
-    this.player=newPlayer();this.drawing=defaultDrawing();this.name='らくがきくん';this.best=null;this.records=[];
+  constructor(store,data,notice){
+    this.store=store;this.player=data.player;this.characters=data.characters;this.active=data.active;this.settings=data.settings;this.records=data.records;this.best=data.best;
+    const active=this.characters.find(c=>c.id===this.active);this.drawing=active?.drawing||defaultDrawing();this.name=active?.name||'らくがきくん';
     this.sim=new Simulation(prototypePlatforms);this.course=null;this.run=null;
     this.view=new GameView($('#world'),prototypePlatforms);
+    this.view.setCharacter(this.drawing);
     this.input=new Input($('#stick'),$('#jump'),$('#action'));
     this.paused=false;this.last=performance.now();this.accumulator=0;this.actionHeld=false;this.elapsed=0;
     this.editor=new Editor((drawing,name)=>this.birth(drawing,name));
+    this.library=new Library(c=>this.selectCharacter(c),id=>{this.characters=this.characters.filter(c=>c.id!==id);if(this.active===id)this.selectCharacter(this.characters[0]);this.save();});
+    this.library.dialog.addEventListener('close',()=>this.resume());
+    $('#library-open').onclick=()=>{this.paused=true;this.input.clear();this.library.open(this.characters,this.active);};
     this.ranking=new RankingPanel();this.ranking.dialog.addEventListener('close',()=>this.resume());
     $('#ranking-open').onclick=()=>{this.paused=true;this.input.clear();this.ranking.open();};
     $('#submit-score').onclick=async()=>{const button=$('#submit-score');button.disabled=true;$('#submit-status').textContent='記録を送信しています…';try{await this.ranking.submit(this.records.at(-1),$('#player-name').value.trim());$('#submit-status').textContent='登録しました。広場のランキングで確認できます。';}catch(error){$('#submit-status').textContent=error.message;}finally{button.disabled=false;}};
     this.editor.root.addEventListener('close',()=>this.resume());
     this.select=createStageSelect(STAGES,id=>this.startStage(id));
     this.select.addEventListener('close',()=>{if(this.course?.complete)this.goHome();else this.resume();});
-    $('#draw-open').onclick=()=>{this.paused=true;this.input.clear();this.editor.open();};
+    $('#draw-open').onclick=()=>{this.paused=true;this.input.clear();this.editor.open(this.drawing);};
     $('#adventure').onclick=()=>this.openStages();
     $('#time-attack').onclick=()=>this.startRun();
     $('#pause').onclick=()=>this.pause();
@@ -41,12 +48,15 @@ export class GameApp {
     document.addEventListener('visibilitychange',()=>{this.input.clear();if(document.hidden&&this.course&&!this.course.complete){this.run?.timer.invalidate('バックグラウンドに移動したため記録対象外');this.pause();}});
     window.addEventListener('resize',()=>this.view.resize());
     this.refreshPlayer();
+    $('#save-status').textContent=notice||'この端末に自動保存';
     this.frame=this.frame.bind(this);
     if(import.meta.env.DEV)window.__qa={state:()=>this.state(),reset:()=>this.sim.reset()};
     requestAnimationFrame(this.frame);
   }
   refreshPlayer(){this.select.refresh(this.player.unlocked);$('#player-level').textContent=`PLAYER LV.${levelFromExp(this.player.exp)} · ${this.player.exp} EXP`;$('#time-attack').disabled=!this.player.cleared.includes(5);$('#time-attack').textContent=this.player.cleared.includes(5)?'ALL STAGES TIME ATTACK →':'TIME ATTACK · 5ステージクリアで解放';}
-  birth(drawing,name){this.drawing=drawing;this.name=name;this.view.setCharacter(drawing);this.sim.stats=levelStats(calculateStats(drawing),levelFromExp(this.player.exp));this.editor.root.close();this.sim.reset();$('.intro h1').textContent=`${name}、誕生！`;$('.intro>p:not(.eyebrow)').textContent='きみのラクガキで、動いてみよう。';$('.pill').textContent=statRows(this.sim.stats).map(([k,v])=>`${k} ${v}`).join(' · ');}
+  birth(drawing,name){if(this.characters.length>=24){this.editor.root.querySelector('#editor-feedback').textContent='24体まで保存できます。なかま一覧で不要なキャラクターを削除してください。';return;}const character={id:crypto.randomUUID(),drawing:sanitizeDrawing(drawing),name,stats:calculateStats(drawing)};this.characters.push(character);this.selectCharacter(character);this.editor.root.close();this.sim.reset();$('.intro h1').textContent=`${name}、誕生！`;$('.intro>p:not(.eyebrow)').textContent='きみのラクガキで、動いてみよう。';$('.pill').textContent=statRows(this.sim.stats).map(([k,v])=>`${k} ${v}`).join(' · ');}
+  selectCharacter(character){this.active=character.id;this.drawing=character.drawing;this.name=character.name;this.view.setCharacter(this.drawing);this.sim.stats=levelStats(calculateStats(this.drawing),levelFromExp(this.player.exp));this.save();}
+  async save(){const data={version:SAVE_VERSION,player:this.player,characters:this.characters,active:this.active,records:this.records.slice(-20),best:this.best,settings:this.settings};$('#save-status').textContent='保存しています…';try{$('#save-status').textContent=await this.store.save(data);}catch(error){$('#save-status').textContent=`保存できません: ${error.message}`;}}
   openStages(){this.paused=true;this.input.clear();this.select.showModal();}
   startRun(){if(!this.player.cleared.includes(5))return;const drawing=sanitizeDrawing(this.drawing);this.run={timer:new RunTimer(),drawing,stats:levelStats(calculateStats(drawing),levelFromExp(this.player.exp)),name:this.name,level:levelFromExp(this.player.exp)};this.startStage(1);}
   startStage(id){
@@ -71,6 +81,7 @@ export class GameApp {
     $('#splits').textContent=this.run?this.run.timer.splits.map((t,i)=>`STAGE ${i+1}  ${formatTime(t)}`).join(' / ')+(this.run.timer.valid?'':` / ${this.run.timer.reason}`):'';
     $('#select-next').textContent=this.run&&!this.run.timer.finished?'次のステージへ →':'ステージを選ぶ →';$('#result').showModal();
     $('#ranking-submit').hidden=!this.run?.timer.finished||!this.run?.timer.valid;$('#submit-status').textContent='';
+    this.save();
   }
   frame(now){
     const delta=Math.min((now-this.last)/1000,.1);this.last=now;
@@ -80,5 +91,5 @@ export class GameApp {
     if(this.run)$('#run-hud').textContent=`STAGE ${formatTime(this.run.timer.stageTime())} · TOTAL ${formatTime(this.run.timer.total())} · BEST ${formatTime(this.best)}${this.run.timer.valid?'':' · 記録対象外'}`;
     requestAnimationFrame(this.frame);
   }
-  state(){return {position:{...this.sim.position},grounded:this.sim.grounded,jumps:this.sim.jumps,deaths:this.sim.deaths,paused:this.paused,elapsed:this.elapsed,stage:this.course?.stage.id,complete:this.course?.complete,exp:this.player.exp,run:this.run?{splits:[...this.run.timer.splits],total:this.run.timer.total(),valid:this.run.timer.valid,level:this.run.level,stats:this.run.stats}:null,best:this.best,records:this.records.length,calls:this.view.renderer.info.render.calls,triangles:this.view.renderer.info.render.triangles};}
+  state(){return {position:{...this.sim.position},grounded:this.sim.grounded,jumps:this.sim.jumps,deaths:this.sim.deaths,paused:this.paused,elapsed:this.elapsed,stage:this.course?.stage.id,complete:this.course?.complete,exp:this.player.exp,characters:this.characters.length,name:this.name,run:this.run?{splits:[...this.run.timer.splits],total:this.run.timer.total(),valid:this.run.timer.valid,level:this.run.level,stats:this.run.stats}:null,best:this.best,records:this.records.length,calls:this.view.renderer.info.render.calls,triangles:this.view.renderer.info.render.triangles};}
 }
