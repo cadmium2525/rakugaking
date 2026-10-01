@@ -1,0 +1,11 @@
+name = "rakuga-ranking"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+ALLOWED_ORIGINS = "https://YOUR-ACCOUNT.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "rakuga-ranking"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"

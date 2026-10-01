@@ -1,6 +1,8 @@
 node_modules/
 .npm-cache/
 dist/
+.local/
+.wrangler/
 test-results/
 playwright-report/
 .env*
