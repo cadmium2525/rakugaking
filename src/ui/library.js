@@ -1,5 +1,46 @@
-import {calculateStats} from '../core/stats.js';
+import { calculateStats } from '../core/stats.js';
 export class Library {
-  constructor(onSelect,onDelete){this.dialog=document.createElement('dialog');this.dialog.className='library';this.dialog.innerHTML='<p class="eyebrow">YOUR SKETCHBOOK</p><h2>きみのなかまたち。</h2><div class="library-cards"></div><button data-close-library>もどる</button>';document.body.append(this.dialog);this.dialog.querySelector('[data-close-library]').onclick=()=>this.dialog.close();this.onSelect=onSelect;this.onDelete=onDelete;}
-  open(characters,active){const cards=this.dialog.querySelector('.library-cards');cards.replaceChildren();for(const c of characters){const card=document.createElement('div');card.className='character-card';const button=document.createElement('button');const s=calculateStats(c.drawing);button.textContent=`${c.id===active?'● ':''}${c.name} / SPEED ${s.speed.toFixed(1)} · WEIGHT ${s.weight.toFixed(2)}`;button.onclick=()=>{this.onSelect(c);this.dialog.close();};card.append(button);if(characters.length>1){const remove=document.createElement('button');remove.textContent='削除';let confirm=false;remove.onclick=()=>{if(!confirm){confirm=true;remove.textContent='もう一度押すと削除';return;}this.onDelete(c.id);this.dialog.close();};card.append(remove);}cards.append(card);}this.dialog.showModal();}
+  constructor(onSelect, onDelete) {
+    this.dialog = document.createElement('dialog');
+    this.dialog.className = 'library';
+    this.dialog.innerHTML =
+      '<p class="eyebrow">YOUR SKETCHBOOK</p><h2>きみのなかまたち。</h2><div class="library-cards"></div><button data-close-library>もどる</button>';
+    document.body.append(this.dialog);
+    this.dialog.querySelector('[data-close-library]').onclick = () => this.dialog.close();
+    this.onSelect = onSelect;
+    this.onDelete = onDelete;
+  }
+  open(characters, active) {
+    const cards = this.dialog.querySelector('.library-cards');
+    cards.replaceChildren();
+    for (const c of characters) {
+      const card = document.createElement('div');
+      card.className = 'character-card';
+      const button = document.createElement('button');
+      const s = calculateStats(c.drawing);
+      button.textContent = `${c.id === active ? '● ' : ''}${c.name} / SPEED ${s.speed.toFixed(1)} · WEIGHT ${s.weight.toFixed(2)}`;
+      button.onclick = () => {
+        this.onSelect(c);
+        this.dialog.close();
+      };
+      card.append(button);
+      if (characters.length > 1) {
+        const remove = document.createElement('button');
+        remove.textContent = '削除';
+        let confirm = false;
+        remove.onclick = () => {
+          if (!confirm) {
+            confirm = true;
+            remove.textContent = 'もう一度押すと削除';
+            return;
+          }
+          this.onDelete(c.id);
+          this.dialog.close();
+        };
+        card.append(remove);
+      }
+      cards.append(card);
+    }
+    this.dialog.showModal();
+  }
 }

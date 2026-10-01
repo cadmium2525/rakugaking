@@ -1,2 +1,18 @@
-import {test,expect} from '@playwright/test';
-test('unconfigured and offline rankings leave the game playable',async({page,context})=>{await page.goto('/');await page.locator('#ranking-open').click();await expect(page.locator('.ranking-status')).toContainText('未接続');await page.locator('.ranking-close').click();await context.setOffline(true);await page.locator('#ranking-open').click();await expect(page.locator('.ranking-status')).toContainText('オフライン');await page.locator('.ranking-close').click();await page.locator('#adventure').click();await page.locator('[data-stage="1"]').click();await page.keyboard.down('KeyW');await page.waitForTimeout(300);await page.keyboard.up('KeyW');expect((await page.evaluate(()=>window.__qa.state())).position.z).toBeLessThan(1);await context.setOffline(false);});
+import { test, expect } from '@playwright/test';
+test('unconfigured and offline rankings leave the game playable', async ({ page, context }) => {
+  await page.goto('/');
+  await page.locator('#ranking-open').click();
+  await expect(page.locator('.ranking-status')).toContainText('未接続');
+  await page.locator('.ranking-close').click();
+  await context.setOffline(true);
+  await page.locator('#ranking-open').click();
+  await expect(page.locator('.ranking-status')).toContainText('オフライン');
+  await page.locator('.ranking-close').click();
+  await page.locator('#adventure').click();
+  await page.locator('[data-stage="1"]').click();
+  await page.keyboard.down('KeyW');
+  await page.waitForTimeout(300);
+  await page.keyboard.up('KeyW');
+  expect((await page.evaluate(() => window.__qa.state())).position.z).toBeLessThan(1);
+  await context.setOffline(false);
+});
