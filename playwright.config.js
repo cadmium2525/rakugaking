@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({testDir:'tests/browser',timeout:30000,workers:1,use:{baseURL:'http://127.0.0.1:5186',headless:true,launchOptions:{channel:'msedge',args:['--enable-webgl','--use-angle=swiftshader','--enable-unsafe-swiftshader']}},webServer:{command:'npm run dev -- --port 5186 --strictPort',url:'http://127.0.0.1:5186',reuseExistingServer:true}});

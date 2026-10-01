@@ -1,0 +1,13 @@
+import {test,expect} from '@playwright/test';
+test('drawing editor handles strokes, single points, erase, undo, redo and mirror',async({page})=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/');await page.locator('#draw-open').click();
+  const canvas=page.getByLabel('ラクガキキャンバス'),r=await canvas.boundingBox();
+  await page.getByRole('button',{name:'パーツ消去',exact:true}).click();
+  await page.mouse.move(r.x+r.width*.2,r.y+r.height*.3);await page.mouse.down();await page.mouse.move(r.x+r.width*.8,r.y+r.height*.7,{steps:15});await page.mouse.move(r.x+r.width*.2,r.y+r.height*.7,{steps:15});await page.mouse.up();
+  await page.mouse.click(r.x+r.width*.5,r.y+r.height*.5);
+  await page.getByRole('button',{name:'↶ 戻す',exact:true}).click();await page.getByRole('button',{name:'↷ 進む',exact:true}).click();
+  await page.getByRole('button',{name:'左うで',exact:true}).click();await page.getByRole('button',{name:'左右コピー',exact:true}).click();
+  await page.getByRole('button',{name:'消しゴム',exact:true}).click();await page.mouse.click(r.x+r.width*.5,r.y+r.height*.5);
+  await page.screenshot({path:'test-results/editor.png'});expect(errors).toEqual([]);
+  await page.getByLabel('エディタを閉じる').click();await expect(page.locator('.editor')).not.toBeVisible();
+});

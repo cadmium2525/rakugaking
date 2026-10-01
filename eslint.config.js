@@ -1,0 +1,1 @@
+export default [{ files: ['src/**/*.js', 'tests/**/*.js'], languageOptions: { ecmaVersion: 'latest', sourceType: 'module' }, rules: { 'no-unused-vars': ['error', { argsIgnorePattern: '^_' }], 'no-unreachable': 'error', 'no-constant-condition': 'error', 'valid-typeof': 'error' } }];

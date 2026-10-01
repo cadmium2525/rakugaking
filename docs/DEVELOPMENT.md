@@ -1,0 +1,25 @@
+# 開発計画と検証記録
+
+## PHASE 0 — 調査 (2026-10-01)
+
+作業ディレクトリは空。既存ソース、package.json、README、AGENTS.md、Git、Pages、Firebase設定はいずれもなし。Node/npm/Git利用可。
+
+構成: JavaScript ES modules / Three.js / Rapier compat / Canvas Pointer Events / IndexedDB / Vite。UIフレームワークは追加しない。Three.jsは輪郭押し出しと描画、Rapierは壁・床・坂への安定した衝突に必要。WASMを含めビルド成果物内に配置し静的配信。解像度上限、固定物理ステップ、低ポリゴンで端末負荷を抑える。Viteは開発・相対パスビルド専用。ESLint、Node test、Playwrightは開発依存のみ。
+
+ディレクトリ: src/core (純粋ロジック)、src/game (描画・物理)、src/ui (操作・エディタ)、tests (単体・ブラウザ)、docs (仕様・QA)、public (静的ファイル)。
+
+起動: npm install、npm run dev。検証: npm run lint、npm test、npm run build、npm run test:e2e。
+
+順序: 1 操作/物理 → 2 エディタ → 3 立体化 → 4 リグ/アニメーション → 5 能力 → 6〜10 各ステージ → 11 成長 → 12 タイムアタック → 13 ランキング → 14 保存 → 15 スマホ → 16 総合QA。各フェーズの完了条件を満たして次へ進む。
+
+テスト: ロジックの単体テスト、実Rapierで衝突/接地/ジャンプ、ブラウザのキー/Pointer操作、WebGLレンダリング、画面寸法、console error、ビルド成果物の起動。実機Safari/Android、ネットワーク公開、ランキング本番は別途実測し、未確認を合格にしない。
+
+オンラインランキングの接続先・GitHub公開先は未設定。共有ランキングの稼働とPages実環境での動作をローカル検証で代替しない。
+
+参考: https://rapier.rs/docs/user_guides/javascript/character_controller/ 、https://threejs.org/docs/pages/WebGLRenderer.html
+
+## フェーズ状態
+
+- PHASE 0: 完了。空プロジェクトの調査と設計。
+- PHASE 1: 検証中。Rapier 0.21.0で静止/斜め移動時の沈み込みを再現。0.19.3固定で同じ6本の物理テストが成功。依存内の初期化deprecation警告は残るが実行エラーではない。
+- PHASE 2〜16: 未着手。
