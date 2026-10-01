@@ -13,11 +13,19 @@ export async function playStage(page,stage){
     await page.waitForTimeout(35);
   }
   for(const key of ['KeyW','KeyA','KeyD','Space'])await page.keyboard.up(key);
+  const state=await page.evaluate(()=>window.__qa.state());
+  if(!state.complete){console.log('Failed course state',JSON.stringify(state));await page.screenshot({path:`test-results/stage-${stage.id}-failure.png`});}
   await expect(page.locator('#result')).toBeVisible();
   expect((await page.evaluate(()=>window.__qa.state())).deaths).toBe(0);
 }
 test('full adventure unlocks and clears all five stages with keyboard input',async({page})=>{
-  test.setTimeout(180000);const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/');await page.locator('#adventure').click();await expect(page.locator('[data-stage="2"]')).toBeDisabled();
+  test.setTimeout(240000);const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/');await page.locator('#adventure').click();await expect(page.locator('[data-stage="2"]')).toBeDisabled();
   for(const stage of STAGES){await page.locator(`[data-stage="${stage.id}"]`).click();await playStage(page,stage);await page.screenshot({path:`test-results/stage-${stage.id}-clear.png`});await page.locator('#select-next').click();}
   await expect(page.locator('#player-level')).toContainText('LV.5');await expect(page.locator('#player-level')).toContainText('1200 EXP');expect(errors).toEqual([]);
+  await page.locator('[data-close]').click();await page.locator('#time-attack').click();
+  const initial=await page.evaluate(()=>window.__qa.state().run);
+  await page.getByLabel('一時停止').click();const pausedTime=await page.evaluate(()=>window.__qa.state().run.total);await page.waitForTimeout(250);expect(await page.evaluate(()=>window.__qa.state().run.total)).toBeGreaterThan(pausedTime+.2);await page.locator('#resume').click();
+  for(const stage of STAGES){await playStage(page,stage);const state=await page.evaluate(()=>window.__qa.state());expect(state.run.splits.length).toBe(stage.id);expect(state.run.stats).toEqual(initial.stats);const total=state.run.total;await page.waitForTimeout(150);expect(await page.evaluate(()=>window.__qa.state().run.total)).toBe(total);if(stage.id<5)await page.locator('#select-next').click();}
+  const final=await page.evaluate(()=>window.__qa.state());expect(final.records).toBe(1);expect(final.best).toBeGreaterThan(25);expect(final.run.valid).toBe(true);expect(errors).toEqual([]);await page.screenshot({path:'test-results/time-attack-finish.png'});
+  await page.reload();await page.waitForFunction(()=>window.__qa);expect(await page.evaluate(()=>window.__qa.state().run)).toBeNull();
 });
