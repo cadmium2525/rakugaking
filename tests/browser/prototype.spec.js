@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+test('very short key taps survive between simulation updates',async({page})=>{await page.goto('/');await page.waitForFunction(()=>window.__qa?.state().grounded);await page.keyboard.press('Space');await page.waitForFunction(()=>window.__qa.state().jumps===1);});
 test('renders, moves, jumps, pauses, and retries through real input',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');await page.waitForFunction(()=>window.__qa?.state().grounded);

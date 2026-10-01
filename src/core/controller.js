@@ -41,12 +41,15 @@ export class Simulation {
     this.jumpHeld=!!input.jump;
     if(jumping&&this.grounded){this.vy=this.stats.jump;this.grounded=false;this.jumps++;}
     const acceleration=1-Math.exp(-DT*(this.grounded?14:6)/Math.sqrt(this.stats.weight));
-    const water=environment.water? .65:1;
+    const water=environment.water? Math.max(.4,.95-this.stats.weight*.16-(this.stats.analysis?.bodyArea||.25)*.15):1;
     this.vx+=(x*this.stats.speed*water-this.vx)*acceleration;
     this.vz+=(z*this.stats.speed*water-this.vz)*acceleration;
     this.vy=Math.max(-30,this.vy-(environment.water?12:22)*DT);
     this.motion.x=(this.vx+(environment.wind||0)/this.stats.weight)*DT;
-    this.motion.y=this.vy*DT; this.motion.z=this.vz*DT;
+    // Pushing into headwind retains 12% of walking speed so every build can
+    // cross the mandatory bridge; releasing the stick still lets wind push.
+    const windZ=(environment.windZ||0)/this.stats.weight;
+    this.motion.y=this.vy*DT; this.motion.z=(this.vz+(z<-.5?Math.min(windZ,this.stats.speed*.88):windZ))*DT;
     this.controller.computeColliderMovement(this.collider,this.motion);
     const move=this.controller.computedMovement();
     this.grounded=this.controller.computedGrounded();

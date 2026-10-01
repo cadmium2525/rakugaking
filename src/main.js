@@ -5,19 +5,29 @@ import { GameView } from './game/view.js';
 import { Input } from './ui/input.js';
 import { Editor } from './ui/editor.js';
 import { calculateStats,statRows } from './core/stats.js';
+import { defaultDrawing } from './core/drawing.js';
+import { STAGES,getStage } from './game/stages.js';
+import { Course } from './core/course.js';
+import { createStageSelect } from './ui/stage-select.js';
 
 document.querySelector('#app').innerHTML=`<canvas id="world" aria-label="3Dアクションの練習場"></canvas><header><a class="brand" href="./">RAKU<span>GA</span><small>ラクガキの冒険</small></a><div class="stage-label"><i></i> PLAYGROUND <span>はじまりの広場</span></div><button id="pause" aria-label="一時停止">Ⅱ</button></header><section class="intro"><p class="eyebrow">YOUR LITTLE BIG ADVENTURE</p><h1>まずは、<br>動いてみよう。</h1><p>走って、跳んで。冒険の準備をしよう。</p><div class="pill">01 / 操作プロトタイプ</div></section><aside id="status" role="status">世界を準備しています…</aside><div class="controls"><div><div id="stick" aria-label="移動スティック"><span></span></div><label>MOVE</label></div><div class="buttons"><button id="action">↺<small>ACTION</small></button><button id="jump">↑<small>JUMP</small></button></div></div><footer>WASD / 矢印キーで移動 <b>·</b> SPACEでジャンプ <b>·</b> Eでリトライ</footer><div id="rotate">↻<strong>横向きにすると、もっと遊びやすい。</strong><span>スマートフォンを横向きにしてください</span></div><dialog id="pause-dialog"><p class="eyebrow">TAKE A BREATH</p><h2>ちょっと、ひとやすみ。</h2><button id="resume" class="primary">冒険にもどる →</button><button id="reset">スタートへ戻る</button></dialog>`;
 const $=s=>document.querySelector(s);
 try {
   await initPhysics();
-  const sim=new Simulation(prototypePlatforms);
+  let sim=new Simulation(prototypePlatforms),course=null,currentDrawing=defaultDrawing();
   const view=new GameView($('#world'),prototypePlatforms);
   const input=new Input($('#stick'),$('#jump'),$('#action'));
   const drawButton=document.createElement('button');drawButton.id='draw-open';drawButton.textContent='✎ ラクガキを描く';document.querySelector('#app').append(drawButton);
-  const editor=new Editor((drawing,name)=>{view.setCharacter(drawing);sim.stats=calculateStats(drawing);editor.root.close();sim.reset();document.querySelector('.intro h1').textContent=`${name}、誕生！`;document.querySelector('.intro>p:not(.eyebrow)').textContent='きみのラクガキで、動いてみよう。';document.querySelector('.pill').textContent=statRows(sim.stats).map(([k,v])=>`${k} ${v}`).join(' · ');});
+  const editor=new Editor((drawing,name)=>{currentDrawing=drawing;view.setCharacter(drawing);sim.stats=calculateStats(drawing);editor.root.close();sim.reset();document.querySelector('.intro h1').textContent=`${name}、誕生！`;document.querySelector('.intro>p:not(.eyebrow)').textContent='きみのラクガキで、動いてみよう。';document.querySelector('.pill').textContent=statRows(sim.stats).map(([k,v])=>`${k} ${v}`).join(' · ');});
   drawButton.onclick=()=>{paused=true;input.clear();editor.open();};
   editor.root.addEventListener('close',()=>{paused=false;last=performance.now();});
   let paused=false,last=performance.now(),accumulator=0,actionHeld=false,elapsed=0;
+  const select=createStageSelect(STAGES,id=>startStage(id));
+  const adventure=document.createElement('button');adventure.id='adventure';adventure.textContent='冒険にでかける →';document.querySelector('#app').append(adventure);adventure.onclick=()=>{paused=true;input.clear();select.showModal();};
+  select.addEventListener('close',()=>{paused=false;last=performance.now();});
+  const result=document.createElement('dialog');result.id='result';result.innerHTML='<p class="eyebrow">A LITTLE BRAVER THAN BEFORE</p><h2>ステージクリア！</h2><p id="clear-time"></p><button id="select-next" class="primary">ステージを選ぶ →</button>';document.body.append(result);
+  result.querySelector('button').onclick=()=>{result.close();select.showModal();};
+  function startStage(id){sim.dispose();course=new Course(getStage(id),calculateStats(currentDrawing));sim=course.sim;view.setStage(course.stage);view.setCharacter(currentDrawing);paused=false;accumulator=0;input.clear();document.body.classList.add('playing');document.querySelector('.stage-label').textContent=`0${id} / ${course.stage.name}`;document.querySelector('footer').textContent=course.stage.hint;}
   const pause=()=>{paused=true;input.clear();if(!$('#pause-dialog').open)$('#pause-dialog').showModal();};
   $('#pause').onclick=pause;
   $('#resume').onclick=()=>{$('#pause-dialog').close();paused=false;last=performance.now();};
@@ -25,7 +35,7 @@ try {
   $('#reset').onclick=()=>{sim.reset();$('#resume').click();};
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
   window.addEventListener('resize',()=>view.resize());
-  function frame(now){const delta=Math.min((now-last)/1000,.1);last=now;if(!paused){accumulator+=delta;while(accumulator>=DT){const controls=input.read();if(controls.action&&!actionHeld)sim.reset();actionHeld=controls.action;sim.step(controls);accumulator-=DT;elapsed+=DT;}}else accumulator=0;view.render(sim,delta);$('#status').textContent=`${sim.grounded?'● ON GROUND':'↑ IN THE AIR'}  ·  ${Math.hypot(sim.vx,sim.vz).toFixed(1)} m/s`;requestAnimationFrame(frame);}
-  if(import.meta.env.DEV)window.__qa={state:()=>({position:{...sim.position},grounded:sim.grounded,jumps:sim.jumps,deaths:sim.deaths,paused,elapsed,calls:view.renderer.info.render.calls,triangles:view.renderer.info.render.triangles}),reset:()=>sim.reset()};
+  function frame(now){const delta=Math.min((now-last)/1000,.1);last=now;if(!paused){accumulator+=delta;while(accumulator>=DT){const controls=input.read();if(controls.action&&!actionHeld&&!course)sim.reset();actionHeld=controls.action;const event=course?course.step(controls):sim.step(controls);accumulator-=DT;elapsed+=DT;if(event==='complete'){paused=true;input.clear();$('#clear-time').textContent=`${course.elapsed.toFixed(2)} 秒 · 落下 ${sim.deaths} 回`;result.showModal();break;}}}else accumulator=0;view.render(sim,delta);$('#status').textContent=`${sim.grounded?'● ON GROUND':'↑ IN THE AIR'}  ·  ${Math.hypot(sim.vx,sim.vz).toFixed(1)} m/s`;requestAnimationFrame(frame);}
+  if(import.meta.env.DEV)window.__qa={state:()=>({position:{...sim.position},grounded:sim.grounded,jumps:sim.jumps,deaths:sim.deaths,paused,elapsed,stage:course?.stage.id,complete:course?.complete,calls:view.renderer.info.render.calls,triangles:view.renderer.info.render.triangles}),reset:()=>sim.reset()};
   requestAnimationFrame(frame);
 }catch(error){$('#status').textContent='起動できませんでした。WebGL対応ブラウザで再読み込みしてください。';console.error(error);}
