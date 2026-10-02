@@ -50,6 +50,29 @@ test('diagonal movement is normalized', () => {
   a.dispose();
   b.dispose();
 });
+test('strong headwind cannot reverse diagonal forward input', () => {
+  const s = new Simulation([floor]);
+  steps(s, 90);
+  for (let i = 0; i < 60; i++) {
+    const previousZ = s.position.z;
+    s.step({ x: 1, z: -1 }, { windZ: 7.2 });
+    assert.ok(s.position.z < previousZ, 'forward input must retain forward movement');
+  }
+  s.dispose();
+});
+test('gentle forward stick input resists wind; releasing it allows drift', () => {
+  const s = new Simulation([floor]);
+  steps(s, 90);
+  for (const z of [-0.1, -0.49, -0.51]) {
+    const before = s.position.z;
+    for (let i = 0; i < 30; i++) s.step({ z }, { windZ: 7.2 });
+    assert.ok(s.position.z < before);
+  }
+  const before = s.position.z;
+  for (let i = 0; i < 30; i++) s.step({}, { windZ: 7.2 });
+  assert.ok(s.position.z > before);
+  s.dispose();
+});
 test('slope climbs without falling through', () => {
   const s = new Simulation([floor, { x: 2, y: 0.65, z: 0, w: 5, h: 0.3, d: 3, angle: 0.3 }], {
     x: -1,

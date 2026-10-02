@@ -8,7 +8,7 @@ import { validateRecord } from '../src/core/ranking.js';
 const fixture = () => ({
   player: 'テスター',
   character: 'らくがき',
-  version: '2.0.0',
+  version: '2.1.0',
   valid: true,
   level: 1,
   drawing: defaultDrawing(),
@@ -69,7 +69,7 @@ test('real SQLite integration: auth, create best, top 100, own rank, reject wors
     await env.DB.prepare(
       'INSERT INTO scores(uid,player,character,level,total,splits,stats,shape_hash,version,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)',
     )
-      .bind(`other-${i}`, 'Other', 'Body', 1, 30 + i, '[]', '{}', 'test', '2.0.0', 1)
+      .bind(`other-${i}`, 'Other', 'Body', 1, 30 + i, '[]', '{}', 'test', '2.1.0', 1)
       .run();
   const top = await (await request('/scores')).json();
   assert.equal(top.scores.length, 100);

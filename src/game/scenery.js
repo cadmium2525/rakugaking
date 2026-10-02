@@ -17,6 +17,12 @@ export function addScenery(world, stage) {
   for (const [i, p] of stage.platforms.entries()) {
     const y = p.y + p.h / 2;
     if (p.collapse) continue;
+    if (p.alternative) {
+      add('box', 0x547d73, p.x, y - 0.45, p.z, p.w, 0.7, p.d);
+      for (const side of [-1, 1])
+        add('box', 0xffd27d, p.x + side * (p.w / 2 - 0.12), y + 0.06, p.z, 0.15, 0.08, p.d);
+      continue;
+    }
     add(
       'cone',
       stage.id === 5 ? 0x73779c : 0x938777,

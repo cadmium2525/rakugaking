@@ -2,6 +2,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { freshSave, migrateSave, SaveStore } from '../src/core/save.js';
 import { calculateStats } from '../src/core/stats.js';
+test('exploration medals survive reload and malformed medal values are bounded',()=>{
+  const raw=freshSave();raw.player.medals={1:3,2:2,3:Infinity,4:-1};
+  const {data}=migrateSave(raw);assert.deepEqual(data.player.medals,{1:3,2:2,3:0,4:0,5:0});
+  assert.deepEqual(migrateSave(data).data.player.medals,data.player.medals);
+});
 test('new courses archive old timings while preserving characters and progression', () => {
   const raw = freshSave();
   raw.player.exp = 1200;

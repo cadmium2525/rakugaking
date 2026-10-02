@@ -6,6 +6,8 @@
 
 **公開URL:** https://cadmium2525.github.io/rakugaking/
 
+2.1では批評と修正を3回繰り返し、前方で合流する分岐、風の凪と予兆、崩壊床のひびとカウントダウンを追加。収集物はHPを回復し、クリア時の星として保存されます。[批評・改善記録](docs/STAGE_CRITIQUE.md)に評価と残る課題を記載しています。
+
 GitHub Pagesで起動・3D生成を確認済み。オンラインランキングは未設定、iPhone/Android実機は未検証です。
 
 ## 起動

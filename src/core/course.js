@@ -1,4 +1,22 @@
 import { Simulation, DT } from './controller.js';
+export function windPhase(zone, elapsed) {
+  const t = (elapsed + (zone.offset || 0)) % 7;
+  return t < 2.5
+    ? { name: '強風', force: 7.2, remaining: 2.5 - t }
+    : t < 6
+      ? { name: '凪', force: 0.35, remaining: 6 - t }
+      : { name: '予兆', force: 1.2, remaining: 7 - t };
+}
+export function insideZone(p, zone) {
+  return (
+    !!zone &&
+    p.z > zone.minZ &&
+    p.z < zone.maxZ &&
+    Math.abs(p.x - (zone.x || 0)) < (zone.width || 7) / 2 &&
+    p.y > (zone.minY ?? -20) &&
+    p.y < (zone.maxY ?? 100)
+  );
+}
 export class Course {
   constructor(stage, stats) {
     this.stage = stage;
@@ -14,6 +32,8 @@ export class Course {
     this.collected = new Set();
     this.checkpoint = -1;
     this.hp = stats.hp || 100;
+    this.notice = '';
+    this.noticeUntil = 0;
     this.collapseTimes = stage.platforms.map(() => null);
   }
   step(input) {
@@ -37,10 +57,17 @@ export class Course {
       ) {
         this.checkpoint = index;
         this.sim.spawn = { x: tile.x, y: tile.y + tile.h / 2 + 1, z: tile.z };
+        this.notice = '復帰地点を記録';
+        this.noticeUntil = this.elapsed + 2;
       }
     }
     for (const [i, item] of (this.stage.collectibles || []).entries()) {
-      if (Math.hypot(p.x - item.x, p.y - item.y, p.z - item.z) < 1.2) this.collected.add(i);
+      if (!this.collected.has(i) && Math.hypot(p.x - item.x, p.y - item.y, p.z - item.z) < 1.2) {
+        this.collected.add(i);
+        this.hp = Math.min(stats.hp || 100, this.hp + 8);
+        this.notice = `✦ ${this.collected.size}/${this.stage.collectibles.length} · HP +8`;
+        this.noticeUntil = this.elapsed + 1.5;
+      }
     }
     const attack = input.action && !this.actionHeld && this.elapsed >= this.nextAction;
     this.actionHeld = !!input.action;
@@ -99,14 +126,39 @@ export class Course {
   }
   environment() {
     const p = this.sim.position,
-      w = (this.stage.winds || [this.stage.wind]).find((w) => w && p.z > w.minZ && p.z < w.maxZ),
-      water = (this.stage.waters || [this.stage.water]).find(
-        (w) => w && p.z > w.minZ && p.z < w.maxZ,
-      );
+      w = (this.stage.winds || [this.stage.wind]).find((w) => insideZone(p, w)),
+      water = (this.stage.waters || [this.stage.water]).find((w) => insideZone(p, w));
     return {
-      windZ: w && p.z > w.minZ && p.z < w.maxZ ? 5.7 + Math.sin(this.elapsed * 1.4) * 2.5 : 0,
-      water: !!water && p.z > water.minZ && p.z < water.maxZ && p.y < water.surface + 1.2,
+      windZ: w ? windPhase(w, this.elapsed).force : 0,
+      water: !!water && p.y - 0.8 < water.surface + 0.08,
     };
+  }
+  guidance() {
+    const p = this.sim.position;
+    const tile = this.stage.platforms.find(
+      (tile, i) =>
+        this.collapseTimes[i] !== null &&
+        Math.abs(p.x - tile.x) < tile.w / 2 &&
+        Math.abs(p.z - tile.z) < tile.d / 2 &&
+        Math.abs(p.y - 0.8 - tile.y - tile.h / 2) < 0.3,
+    );
+    if (tile) {
+      const i = this.stage.platforms.indexOf(tile);
+      return `崩壊まで ${Math.max(0, tile.collapse - this.elapsed + this.collapseTimes[i]).toFixed(1)}秒 · 次の足場へ！`;
+    }
+    const w = (this.stage.winds || []).find(
+      (w) =>
+        Math.abs(p.x - (w.x || 0)) < (w.width || 7) / 2 + 2 && p.z > w.minZ && p.z < w.maxZ + 4,
+    );
+    if (w) {
+      const phase = windPhase(w, this.elapsed);
+      return `${phase.name} · ${phase.remaining.toFixed(1)}秒で${phase.name === '強風' ? '凪' : phase.name === '凪' ? '予兆' : '強風'} / 橋の端で待てます`;
+    }
+    const sign = (this.stage.signs || []).find(
+      (sign) => Math.hypot(p.x - sign.x, p.z - sign.z) < 7,
+    );
+    if (sign) return sign.text;
+    return this.elapsed < this.noticeUntil ? this.notice : '';
   }
   dispose() {
     this.sim.dispose();

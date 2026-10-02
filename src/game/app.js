@@ -161,7 +161,7 @@ export class GameApp {
     requestAnimationFrame(this.frame);
   }
   refreshPlayer() {
-    this.select.refresh(this.player.unlocked);
+    this.select.refresh(this.player.unlocked, this.player.medals);
     $('#player-level').textContent =
       `PLAYER LV.${levelFromExp(this.player.exp)} · ${this.player.exp} EXP`;
     $('#time-attack').disabled = !this.player.cleared.includes(5);
@@ -291,6 +291,18 @@ export class GameApp {
     this.paused = true;
     this.input.clear();
     const gained = awardClear(this.player, this.course.stage.id);
+    const totalStars = this.course.stage.collectibles?.length || 0;
+    const medal =
+      this.course.collected.size >= totalStars
+        ? 3
+        : this.course.collected.size >= Math.ceil(totalStars * 0.5)
+          ? 2
+          : 1;
+    this.player.medals ||= {};
+    this.player.medals[this.course.stage.id] = Math.max(
+      medal,
+      this.player.medals[this.course.stage.id] || 0,
+    );
     this.refreshPlayer();
     let time = this.course.elapsed;
     if (this.run) {
@@ -321,7 +333,7 @@ export class GameApp {
     $('#splits').textContent = this.run
       ? this.run.timer.splits.map((t, i) => `STAGE ${i + 1}  ${formatTime(t)}`).join(' / ') +
         (this.run.timer.valid ? '' : ` / ${this.run.timer.reason}`)
-      : `✦ 星のかけら ${this.course.collected.size}/${this.course.stage.collectibles?.length || 0}`;
+      : `${'★'.repeat(medal)}${'☆'.repeat(3 - medal)} · 星のかけら ${this.course.collected.size}/${totalStars} · 半分で★★ / 全部で★★★`;
     $('#select-next').textContent =
       this.run && !this.run.timer.finished ? '次のステージへ →' : 'ステージを選ぶ →';
     $('#result').showModal();
@@ -361,9 +373,10 @@ export class GameApp {
         this.ui.objective.textContent =
           Math.hypot(p.x - g.x, p.z - g.z) < 2.7 && !this.course.activated
             ? `ACTIONで封印を解こう · ${Math.max(0, Math.ceil(this.course.sealHP))}`
-            : this.course.elapsed < 4
-              ? this.course.stage.hint
-              : `${this.course.stage.zones?.[Math.min(2, Math.floor((Math.max(0, -p.z) / Math.abs(g.z)) * 3))] || ''} · ✦ ${this.course.collected.size}/${this.course.stage.collectibles?.length || 0}${this.course.checkpoint >= 0 ? ' · 復帰地点を記録' : ''}`;
+            : this.course.guidance() ||
+              (this.course.elapsed < 4
+                ? this.course.stage.hint
+                : `${this.course.stage.zones?.[Math.min(2, Math.floor((Math.max(0, -p.z) / Math.abs(g.z)) * 3))] || ''} · ✦ ${this.course.collected.size}/${this.course.stage.collectibles?.length || 0}${this.course.checkpoint >= 0 ? ' · 復帰地点を記録' : ''}`);
       }
     }
     requestAnimationFrame(this.frame);

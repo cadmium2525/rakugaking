@@ -59,6 +59,9 @@ export function migrateSave(raw) {
     };
   const data = freshSave();
   data.player.exp = Math.floor(finite(raw.player?.exp, 0, 200000, 0));
+  data.player.medals = {};
+  for (let id = 1; id <= 5; id++)
+    data.player.medals[id] = Math.floor(finite(raw.player?.medals?.[id], 0, 3, 0));
   data.player.cleared = [
     ...new Set(
       (Array.isArray(raw.player?.cleared) ? raw.player.cleared : []).filter(
@@ -88,7 +91,9 @@ export function migrateSave(raw) {
     .filter((r) => validateRecord({ ...r, player: r?.player || 'ゲスト' }).length === 0);
   data.legacyRecords = [
     ...(Array.isArray(raw.legacyRecords) ? raw.legacyRecords : []),
-    ...(Array.isArray(raw.records) ? raw.records.filter((r) => r?.version === '1.0.0') : []),
+    ...(Array.isArray(raw.records)
+      ? raw.records.filter((r) => ['1.0.0', '2.0.0'].includes(r?.version))
+      : []),
   ]
     .filter(
       (r) =>

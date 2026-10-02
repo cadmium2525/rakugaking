@@ -87,5 +87,8 @@ export function disposeCharacter(root) {
     o.geometry?.dispose();
     if (o.material) materials.add(o.material);
   });
-  materials.forEach((m) => m.dispose());
+  materials.forEach((m) => {
+    m.map?.dispose();
+    m.dispose();
+  });
 }

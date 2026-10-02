@@ -3,6 +3,7 @@ import { HALF_HEIGHT } from '../core/controller.js';
 import { buildCharacter, disposeCharacter } from './character.js';
 import { animateCharacter } from './animation.js';
 import { addScenery } from './scenery.js';
+import { windPhase } from '../core/course.js';
 
 export class GameView {
   constructor(canvas, platforms) {
@@ -144,6 +145,19 @@ export class GameView {
       );
       top.position.set(0, p.h / 2, 0);
       mesh.add(top);
+      mesh.userData.top = top;
+      if (p.collapse) {
+        const line = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(-p.w * 0.35, p.h / 2 + 0.07, -p.d * 0.35),
+            new THREE.Vector3(0.5, p.h / 2 + 0.07, -p.d * 0.12),
+            new THREE.Vector3(-0.5, p.h / 2 + 0.07, p.d * 0.1),
+            new THREE.Vector3(p.w * 0.35, p.h / 2 + 0.07, p.d * 0.35),
+          ]),
+          new THREE.LineBasicMaterial({ color: 0x643f45 }),
+        );
+        mesh.add(line);
+      }
     }
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(0.85, 0.1, 8, 24),
@@ -181,7 +195,44 @@ export class GameView {
       this.world.add(mesh);
       return mesh;
     });
+    for (const sign of stage.signs || []) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 384;
+      canvas.height = 144;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff9e8';
+      ctx.fillRect(0, 0, 384, 144);
+      ctx.strokeStyle = '#d7bd7d';
+      ctx.lineWidth = 8;
+      ctx.strokeRect(4, 4, 376, 136);
+      ctx.fillStyle = '#31564b';
+      ctx.font = 'bold 30px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const lines = {
+        1: ['↑ 広い道', '→ 樹冠の星'],
+        2: ['↑ 風の橋', '← 無風道'],
+        3: ['↑ 水路', '→ 水上の道'],
+        4: ['亀裂 → 赤 → 崩壊', '止まらず次へ'],
+        5: ['↑ 崩壊床', '→ 星の道'],
+      }[stage.id];
+      lines.forEach((line, i) => ctx.fillText(line, 192, 48 + i * 50, 350));
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthTest: true }));
+      const ground = stage.platforms.find(
+        (p) => Math.abs(p.x - sign.x) < p.w / 2 && Math.abs(p.z - sign.z) < p.d / 2,
+      );
+      sprite.position.set(
+        sign.x + (stage.id === 2 ? 1 : -1) * ((ground?.w || 12) / 2 + 0.3),
+        (ground?.y || 0) + 2.4,
+        sign.z,
+      );
+      sprite.scale.set(3, 1.125, 1);
+      this.world.add(sprite);
+    }
     this.initial = true;
+    this.windVanes = [];
     for (const wind of stage.winds || (stage.wind ? [stage.wind] : [])) {
       for (let i = 0; i < 8; i++) {
         const vane = new THREE.Mesh(
@@ -190,11 +241,12 @@ export class GameView {
         );
         vane.rotation.x = Math.PI / 2;
         vane.position.set(
-          (i % 2 ? 1 : -1) * 1.7,
-          2,
+          (wind.x || 0) + (i % 2 ? 1 : -1) * ((wind.width || 6) / 2 - 0.4),
+          (wind.maxY || 4) - 2,
           wind.maxZ - ((i + 1) * (wind.maxZ - wind.minZ)) / 9,
         );
         this.world.add(vane);
+        this.windVanes.push({ mesh: vane, zone: wind });
       }
     }
     for (const w of stage.waters || (stage.water ? [stage.water] : [])) {
@@ -209,7 +261,7 @@ export class GameView {
         }),
       );
       water.rotation.x = -Math.PI / 2;
-      water.position.set(0, w.surface, (w.minZ + w.maxZ) / 2);
+      water.position.set(w.x || 0, w.surface, (w.minZ + w.maxZ) / 2);
       this.world.add(water);
     }
     this.hazardMeshes = (stage.hazards || []).map((h) => {
@@ -232,6 +284,12 @@ export class GameView {
         p = course.stage.platforms[i];
       m.visible = course.sim.platforms[i].isEnabled();
       m.position.y = p.y + (start === null ? 0 : Math.sin((course.elapsed - start) * 45) * 0.025);
+      if (p.collapse) {
+        const t = start === null ? 0 : Math.min(1, (course.elapsed - start) / p.collapse);
+        m.userData.top.material.color
+          .setHex(p.color || course.stage.color)
+          .lerp(new THREE.Color(0xf04444), t);
+      }
     }
     if (this.goalRing) {
       this.goalRing.rotation.y = Math.sin(course.elapsed) * 0.2;
@@ -243,6 +301,13 @@ export class GameView {
       h.position.x = course.hazardPosition(course.stage.hazards[i]).x;
     });
     this.scenery.forEach((rotor) => (rotor.rotation.z = course.elapsed * 0.7));
+    this.windVanes.forEach(({ mesh, zone }) => {
+      const phase = windPhase(zone, course.elapsed);
+      mesh.material.color.setHex(
+        phase.name === '凪' ? 0x72dbc0 : phase.name === '予兆' ? 0xffc96a : 0xffffff,
+      );
+      mesh.scale.y = phase.name === '強風' ? 1.6 : 0.6;
+    });
     this.collectibleMeshes.forEach((mesh, i) => {
       mesh.visible = !course.collected.has(i);
       mesh.rotation.y = course.elapsed * 1.7;

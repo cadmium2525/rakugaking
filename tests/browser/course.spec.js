@@ -2,11 +2,16 @@ import { test, expect } from '@playwright/test';
 import { STAGES } from '../../src/game/stages.js';
 export async function playStage(page, stage) {
   let index = 0;
+  const held = new Set(),
+    trace = [];
   const tiles = stage.platforms.slice(0, stage.routeLength),
     last = tiles.length - 1;
   await page.keyboard.down('KeyW');
   for (let i = 0; i < 4000; i++) {
     const s = await page.evaluate(() => window.__qa.state());
+    trace.push({ index, position: s.position, grounded: s.grounded, jumps: s.jumps });
+    if (trace.length > 30) trace.shift();
+    expect(s.deaths, JSON.stringify({ index, state: s, trace })).toBe(0);
     if (s.complete) break;
     if (index === last && s.position.z < stage.goal.z + 0.7) await page.keyboard.up('KeyW');
     if (i % 6 === 0) await page.keyboard.press('KeyE');
@@ -22,11 +27,16 @@ export async function playStage(page, stage) {
       ['KeyA', target.x - s.position.x < -0.2],
       [
         'Space',
-        s.grounded && index < last && s.position.z - tiles[index].z + tiles[index].d / 2 < 1.1,
+        s.grounded && index < last && s.position.z - tiles[index].z + tiles[index].d / 2 < 1.25,
       ],
     ]) {
-      if (condition) await page.keyboard.down(key);
-      else await page.keyboard.up(key);
+      if (condition && !held.has(key)) {
+        await page.keyboard.down(key);
+        held.add(key);
+      } else if (!condition && held.has(key)) {
+        await page.keyboard.up(key);
+        held.delete(key);
+      }
     }
     await page.waitForTimeout(35);
   }
