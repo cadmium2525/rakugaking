@@ -44,7 +44,12 @@ try {
     if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`);
   });
   page.on('requestfailed', (request) => errors.push(request.url()));
-  await page.goto(`http://127.0.0.1:${server.address().port}/rakuga/`);
+  await page.goto(process.env.SMOKE_URL || `http://127.0.0.1:${server.address().port}/rakuga/`);
+  await page.waitForFunction(
+    () => /ON GROUND|IN THE AIR/.test(document.querySelector('#status')?.textContent),
+    null,
+    { timeout: 60000 },
+  );
   await page.locator('#draw-open').click();
   await page.getByRole('button', { name: '誕生させる ✦', exact: true }).click();
   await page.locator('.editor').waitFor({ state: 'hidden' });

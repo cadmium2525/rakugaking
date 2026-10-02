@@ -46,7 +46,7 @@ Windows、Node.js、Edge Chromium headless（ソフトウェアWebGL）。Playwr
 ## 未検証
 
 - iPhone Safari / Android Chromeの実機、画面ロック、端末熱・電池・GPUメモリ。
-- GitHub Pagesの本番URLと実ネットワークでの初回配信。
+- GitHub Pages上での5ステージ全通し（ローカルでは検証済み）。本番起動・アセット配信・3D生成は2026-10-02に確認済み。
 - ランキングの本番バックエンド（設定未提供）。
 
 Rapier依存内部から初期化のdeprecation警告あり。実行エラーはない。WASM同梱チャンクが2.235MB（gzip 842KB）、アプリJSが621KB（gzip 163KB）で500KB超のbuild警告が残る。初回ロードには物理初期化が必要。低速回線での時間は未実測。

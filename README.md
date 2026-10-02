@@ -2,7 +2,9 @@
 
 6つのパーツを描き、立体になったキャラクターで5つの短いコースを攻略する、スマートフォン向けブラウザゲームです。描画・立体化・物理・保存はブラウザ内で動作し、画像生成APIは使用しません。
 
-**現状:** ローカルで実装・自動検証済み。本番のGitHub Pagesとオンラインランキングは未公開、iPhone/Android実機は未検証です。
+**公開URL:** https://cadmium2525.github.io/rakugaking/
+
+GitHub Pagesで起動・3D生成を確認済み。オンラインランキングは未設定、iPhone/Android実機は未検証です。
 
 ## 起動
 
@@ -38,7 +40,7 @@ IndexedDBを優先し、使用不能ならlocalStorageへ保存します。キ�
 4. lint・単体テスト・ビルド・配信ビルド起動テストが成功後、distを公開します。
 5. 発行URLで実機操作とランキングの本番接続を確認します。
 
-Viteの相対baseによりリポジトリのサブパスへ配信できます。秘密鍵は不要です。ランキングendpointは `public/ranking-config.json` に公開HTTPS URLを設定して再ビルドします。GitHub操作は[公式Pages手順](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)に準拠。現在remote未設定のため、このワークフローのGitHub上での実行は未検証です。
+Viteの相対baseによりリポジトリのサブパスへ配信できます。秘密鍵は不要です。ランキングendpointは `public/ranking-config.json` に公開HTTPS URLを設定して再ビルドします。GitHub操作は[公式Pages手順](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)に準拠。masterブランチからのActions公開を確認済みです。
 
 ## 検証・構成
 
