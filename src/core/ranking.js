@@ -1,7 +1,7 @@
 import { calculateStats } from './stats.js';
 import { levelStats } from './progression.js';
 import { PARTS, COLORS } from './drawing.js';
-export const GAME_VERSION = '1.0.0';
+export const GAME_VERSION = '2.0.0';
 export const STAT_KEYS = ['hp', 'power', 'defense', 'speed', 'jump', 'weight'];
 export function validateRecord(record) {
   const errors = [];

@@ -1076,3 +1076,129 @@ dialog {
     display: none;
   }
 }
+/* Assembly editor: the playable model stays beside the drawing at every size. */
+.editor {
+  width: min(1380px, 98vw);
+}
+.editor-layout {
+  grid-template-columns: 80px minmax(220px, 1fr) minmax(170px, 0.75fr) 220px;
+  gap: 16px;
+}
+.assembly {
+  min-width: 0;
+  text-align: center;
+  background: #dfede5;
+  border: 1px solid #cbded3;
+  border-radius: 18px;
+  padding: 12px;
+  align-self: start;
+}
+.assembly-title {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.assembly img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 12px;
+}
+.assembly-angles {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+.assembly-angles button {
+  padding: 0 7px;
+  min-width: 44px;
+  flex: 1;
+  font-size: 11px;
+}
+.assembly-note {
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+@media (max-height: 500px) {
+  .editor-layout {
+    grid-template-columns: 48px minmax(155px, 1fr) minmax(120px, 0.72fr) 150px;
+    gap: 8px;
+  }
+  .parts {
+    display: flex;
+    gap: 3px;
+    max-height: 72dvh;
+    overflow: auto;
+  }
+  .parts button {
+    padding: 0 3px;
+    flex-shrink: 0;
+  }
+  .assembly {
+    padding: 6px;
+  }
+  .assembly-title {
+    font-size: 10px;
+  }
+  .assembly-note {
+    display: none;
+  }
+  .assembly-angles {
+    flex-wrap: wrap;
+  }
+  .assembly-angles button {
+    font-size: 10px;
+    padding: 0 2px;
+  }
+  .drawing-area canvas {
+    width: min(100%, 68dvh);
+    height: auto;
+  }
+}
+@media (max-width: 600px) and (orientation: portrait) {
+  .editor {
+    padding: 10px;
+  }
+  .editor-layout {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 8px;
+  }
+  .parts {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .drawing-area {
+    align-self: start;
+  }
+  .drawing-area canvas {
+    width: 100%;
+    height: auto;
+  }
+  .drawing-area p {
+    font-size: 12px;
+  }
+  .assembly {
+    padding: 6px;
+  }
+  .assembly-title {
+    font-size: 10px;
+  }
+  .assembly-note {
+    font-size: 10px;
+  }
+  .assembly-angles {
+    flex-wrap: wrap;
+  }
+  .editor-tools {
+    grid-column: 1/-1;
+  }
+  .swatches {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .tool-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -15,6 +15,7 @@ import { sanitizeDrawing } from '../core/shape.js';
 import { RankingPanel } from '../ui/ranking-panel.js';
 import { Library } from '../ui/library.js';
 import { SAVE_VERSION } from '../core/save.js';
+import { GAME_VERSION } from '../core/ranking.js';
 
 export class GameApp {
   constructor(store, data, notice) {
@@ -24,6 +25,7 @@ export class GameApp {
     this.active = data.active;
     this.settings = data.settings;
     this.records = data.records;
+    this.legacyRecords = data.legacyRecords || [];
     this.best = data.best;
     const active = this.characters.find((c) => c.id === this.active);
     this.drawing = active?.drawing || defaultDrawing();
@@ -35,6 +37,9 @@ export class GameApp {
     this.view.setStage({
       ...STAGES[0],
       platforms: prototypePlatforms,
+      routeLength: 0,
+      checkpoints: [],
+      collectibles: [],
       goal: { x: 0, y: 0, z: 100 },
     });
     this.view.setQuality(this.settings.quality);
@@ -47,7 +52,7 @@ export class GameApp {
     this.elapsed = 0;
     this.editor = new Editor(
       (drawing, name) => this.birth(drawing, name),
-      (drawing) => this.view.preview(drawing),
+      (drawing, angle, part) => this.view.preview(drawing, angle, part),
     );
     $('#quality').value = this.settings.quality;
     $('#quality').onchange = () => {
@@ -205,6 +210,7 @@ export class GameApp {
       characters: this.characters,
       active: this.active,
       records: this.records.slice(-20),
+      legacyRecords: this.legacyRecords,
       best: this.best,
       settings: this.settings,
     };
@@ -259,6 +265,9 @@ export class GameApp {
     this.view.setStage({
       ...STAGES[0],
       platforms: prototypePlatforms,
+      routeLength: 0,
+      checkpoints: [],
+      collectibles: [],
       goal: { x: 0, y: 0, z: 100 },
     });
     this.view.setCharacter(this.drawing);
@@ -289,7 +298,7 @@ export class GameApp {
       if (this.run.timer.finished) {
         const record = {
           id: crypto.randomUUID(),
-          version: '1.0.0',
+          version: GAME_VERSION,
           character: this.run.name,
           level: this.run.level,
           stats: this.run.stats,
@@ -312,7 +321,7 @@ export class GameApp {
     $('#splits').textContent = this.run
       ? this.run.timer.splits.map((t, i) => `STAGE ${i + 1}  ${formatTime(t)}`).join(' / ') +
         (this.run.timer.valid ? '' : ` / ${this.run.timer.reason}`)
-      : '';
+      : `✦ 星のかけら ${this.course.collected.size}/${this.course.stage.collectibles?.length || 0}`;
     $('#select-next').textContent =
       this.run && !this.run.timer.finished ? '次のステージへ →' : 'ステージを選ぶ →';
     $('#result').showModal();
@@ -354,7 +363,7 @@ export class GameApp {
             ? `ACTIONで封印を解こう · ${Math.max(0, Math.ceil(this.course.sealHP))}`
             : this.course.elapsed < 4
               ? this.course.stage.hint
-              : '';
+              : `${this.course.stage.zones?.[Math.min(2, Math.floor((Math.max(0, -p.z) / Math.abs(g.z)) * 3))] || ''} · ✦ ${this.course.collected.size}/${this.course.stage.collectibles?.length || 0}${this.course.checkpoint >= 0 ? ' · 復帰地点を記録' : ''}`;
       }
     }
     requestAnimationFrame(this.frame);
@@ -369,6 +378,8 @@ export class GameApp {
       elapsed: this.elapsed,
       stage: this.course?.stage.id,
       complete: this.course?.complete,
+      collected: this.course?.collected.size,
+      checkpoint: this.course?.checkpoint,
       exp: this.player.exp,
       characters: this.characters.length,
       name: this.name,

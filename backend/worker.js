@@ -1,4 +1,4 @@
-import { validateRecord, STAT_KEYS } from '../src/core/ranking.js';
+import { validateRecord, STAT_KEYS, GAME_VERSION } from '../src/core/ranking.js';
 const json = (value, status = 200) =>
   new Response(JSON.stringify(value), {
     status,
@@ -57,20 +57,26 @@ async function handle(request, env) {
   }
   if (request.method === 'GET' && path === '/scores') {
     const result = await env.DB.prepare(
-      'SELECT * FROM scores WHERE flagged=0 ORDER BY total ASC, uid ASC LIMIT 100',
-    ).all();
+      'SELECT * FROM scores WHERE flagged=0 AND version=? ORDER BY total ASC, uid ASC LIMIT 100',
+    )
+      .bind(GAME_VERSION)
+      .all();
     return json({ scores: result.results.map(publicScore) });
   }
   if (path === '/me' || path === '/scores') {
     const user = await account(request, env);
     if (!user) return json({ error: 'ランキングの認証に失敗しました' }, 401);
     if (request.method === 'GET' && path === '/me') {
-      const own = await env.DB.prepare('SELECT * FROM scores WHERE uid=? AND flagged=0')
-        .bind(user.uid)
+      const own = await env.DB.prepare(
+        'SELECT * FROM scores WHERE uid=? AND flagged=0 AND version=?',
+      )
+        .bind(user.uid, GAME_VERSION)
         .first();
       const count = own
-        ? await env.DB.prepare('SELECT COUNT(*) AS n FROM scores WHERE flagged=0 AND total < ?')
-            .bind(own.total)
+        ? await env.DB.prepare(
+            'SELECT COUNT(*) AS n FROM scores WHERE flagged=0 AND total < ? AND version=?',
+          )
+            .bind(own.total, GAME_VERSION)
             .first()
         : null;
       return json({ score: publicScore(own), rank: count ? count.n + 1 : null });
@@ -92,7 +98,7 @@ async function handle(request, env) {
       if (errors.length) return json({ error: errors.join(' / ') }, 422);
       const stats = Object.fromEntries(STAT_KEYS.map((k) => [k, record.stats[k]]));
       await env.DB.prepare(
-        'INSERT INTO scores(uid,player,character,level,total,splits,stats,shape_hash,version,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(uid) DO UPDATE SET player=excluded.player,character=excluded.character,level=excluded.level,total=excluded.total,splits=excluded.splits,stats=excluded.stats,shape_hash=excluded.shape_hash,version=excluded.version,updated_at=excluded.updated_at WHERE excluded.total < scores.total',
+        'INSERT INTO scores(uid,player,character,level,total,splits,stats,shape_hash,version,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(uid) DO UPDATE SET player=excluded.player,character=excluded.character,level=excluded.level,total=excluded.total,splits=excluded.splits,stats=excluded.stats,shape_hash=excluded.shape_hash,version=excluded.version,updated_at=excluded.updated_at WHERE excluded.version != scores.version OR excluded.total < scores.total',
       )
         .bind(
           user.uid,

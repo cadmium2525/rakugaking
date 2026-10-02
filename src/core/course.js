@@ -12,6 +12,7 @@ export class Course {
     this.nextDamage = 0;
     this.destroyed = new Set();
     this.collected = new Set();
+    this.checkpoint = -1;
     this.hp = stats.hp || 100;
     this.collapseTimes = stage.platforms.map(() => null);
   }
@@ -25,6 +26,22 @@ export class Course {
       g = this.stage.goal,
       stats = this.sim.stats;
     const distance = Math.hypot(p.x - g.x, p.z - g.z);
+    for (const index of this.stage.checkpoints || []) {
+      const tile = this.stage.platforms[index];
+      if (
+        index > this.checkpoint &&
+        this.sim.grounded &&
+        Math.abs(p.x - tile.x) < tile.w / 2 &&
+        Math.abs(p.z - tile.z) < tile.d / 2 &&
+        Math.abs(p.y - tile.y - tile.h / 2 - 0.8) < 0.3
+      ) {
+        this.checkpoint = index;
+        this.sim.spawn = { x: tile.x, y: tile.y + tile.h / 2 + 1, z: tile.z };
+      }
+    }
+    for (const [i, item] of (this.stage.collectibles || []).entries()) {
+      if (Math.hypot(p.x - item.x, p.y - item.y, p.z - item.z) < 1.2) this.collected.add(i);
+    }
     const attack = input.action && !this.actionHeld && this.elapsed >= this.nextAction;
     this.actionHeld = !!input.action;
     if (attack) {
@@ -36,7 +53,7 @@ export class Course {
     }
     for (const [i, h] of (this.stage.hazards || []).entries()) {
       if (this.destroyed.has(i)) continue;
-      const d = Math.hypot(p.x - h.x, p.z - h.z, p.y - h.y);
+      const d = Math.hypot(p.x - this.hazardPosition(h).x, p.z - h.z, p.y - h.y);
       if (attack && d < (stats.reach || 1) + 0.7) this.destroyed.add(i);
       else if (d < 0.8 && this.elapsed >= this.nextDamage) {
         this.hp -= Math.max(4, 25 - (stats.defense || 8) * 0.6);
@@ -82,8 +99,10 @@ export class Course {
   }
   environment() {
     const p = this.sim.position,
-      w = this.stage.wind,
-      water = this.stage.water;
+      w = (this.stage.winds || [this.stage.wind]).find((w) => w && p.z > w.minZ && p.z < w.maxZ),
+      water = (this.stage.waters || [this.stage.water]).find(
+        (w) => w && p.z > w.minZ && p.z < w.maxZ,
+      );
     return {
       windZ: w && p.z > w.minZ && p.z < w.maxZ ? 5.7 + Math.sin(this.elapsed * 1.4) * 2.5 : 0,
       water: !!water && p.z > water.minZ && p.z < water.maxZ && p.y < water.surface + 1.2,
@@ -91,5 +110,8 @@ export class Course {
   }
   dispose() {
     this.sim.dispose();
+  }
+  hazardPosition(h) {
+    return { ...h, x: h.x + Math.sin(this.elapsed * (h.speed || 1)) * (h.travel || 0) };
   }
 }

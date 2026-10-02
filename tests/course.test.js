@@ -14,9 +14,9 @@ const builds = {
 };
 export function drive(course) {
   let index = 0;
-  for (let frame = 0; frame < 3600 && !course.complete; frame++) {
+  for (let frame = 0; frame < 12000 && !course.complete; frame++) {
     const p = course.sim.position,
-      tiles = course.stage.platforms;
+      tiles = course.stage.platforms.slice(0, course.stage.routeLength);
     while (
       index < tiles.length - 1 &&
       p.z < tiles[index + 1].z + tiles[index + 1].d / 2 - 0.5 &&
@@ -56,10 +56,34 @@ test('returning from result never emits another clear reward event', () => {
   for (let i = 0; i < 120; i++) assert.notEqual(c.step({}), 'complete');
   c.dispose();
 });
+
+test('checkpoint survives a fall and collected fragments cannot be counted twice', () => {
+  const stage = STAGES[0],
+    p = stage.platforms[4];
+  const c = new Course(
+    { ...stage, spawn: { x: p.x, y: p.y + p.h / 2 + 0.82, z: p.z } },
+    builds.STANDARD,
+  );
+  for (let i = 0; i < 10; i++) c.step({});
+  assert.equal(c.checkpoint, 4);
+  const spawn = { ...c.sim.spawn };
+  c.sim.body.setTranslation({ x: 0, y: -15, z: 0 }, true);
+  c.step({});
+  assert.ok(Math.abs(c.sim.position.z - spawn.z) < 0.1);
+  const item = stage.collectibles[0];
+  c.sim.body.setTranslation(item, true);
+  c.step({});
+  const count = c.collected.size;
+  c.step({});
+  assert.equal(c.collected.size, count);
+  assert.ok(count > 0);
+  c.dispose();
+});
 test('collapsing platforms remove collision and retry restores it', () => {
   const original = STAGES.find((s) => s.id === 4);
   if (!original) return;
-  const stage = { ...original, spawn: { x: 0, y: 2, z: -7 } };
+  const t = original.platforms[1];
+  const stage = { ...original, spawn: { x: t.x, y: t.y + t.h / 2 + 0.82, z: t.z } };
   const c = new Course(stage, builds.STANDARD);
   for (let i = 0; i < 180; i++) c.step({});
   assert.equal(c.sim.platforms[1].isEnabled(), false);
@@ -73,7 +97,12 @@ test('power opens seals with fewer actions; defense reduces hazard damage', () =
   const tower = STAGES[4];
   for (const power of [10, 50]) {
     const c = new Course(
-      { ...tower, spawn: { x: 0, y: 3.52, z: -68 } },
+      {
+        ...tower,
+        sealHP: 55,
+        hazards: [],
+        spawn: { x: tower.goal.x, y: tower.goal.y + 0.82, z: tower.goal.z },
+      },
       { ...builds.STANDARD, power },
     );
     for (let i = 0; i < 2; i++) {
@@ -86,7 +115,7 @@ test('power opens seals with fewer actions; defense reduces hazard damage', () =
   const losses = [];
   for (const defense of [5, 25]) {
     const c = new Course(
-      { ...tower, spawn: { x: 0, y: 1.3, z: -26 } },
+      { ...tower, spawn: { ...tower.hazards[0] } },
       { ...builds.STANDARD, defense },
     );
     c.step({});
@@ -94,4 +123,41 @@ test('power opens seals with fewer actions; defense reduces hazard damage', () =
     c.dispose();
   }
   assert.ok(losses[0] > losses[1]);
+});
+
+test('jump build can explore every side island and return to the main route', () => {
+  for (const stage of STAGES)
+    for (const side of stage.sidePaths) {
+      const main = stage.platforms
+        .slice(0, stage.routeLength)
+        .reduce((a, b) => (Math.abs(a.z - side.z) < Math.abs(b.z - side.z) ? a : b));
+      const c = new Course(
+        { ...stage, spawn: { x: main.x, y: main.y + main.h / 2 + 0.82, z: main.z } },
+        builds.JUMP,
+      );
+      let returning = false,
+        done = false;
+      for (let frame = 0; frame < 1200 && !done; frame++) {
+        const p = c.sim.position,
+          target = returning ? main : side,
+          current = returning ? side : main;
+        if (Math.hypot(p.x - target.x, p.z - target.z) < 0.7 && c.sim.grounded) {
+          if (returning) done = true;
+          else returning = true;
+        }
+        const edge = current.w / 2 - Math.abs(p.x - current.x);
+        c.step({
+          x: Math.max(-1, Math.min(1, target.x - p.x)),
+          z: Math.max(-1, Math.min(1, target.z - p.z)),
+          jump: c.sim.grounded && edge < 1,
+          action: frame % 40 === 0,
+        });
+      }
+      assert.ok(
+        done,
+        `stage ${stage.id} side ${side.x},${side.z} at ${JSON.stringify(c.sim.position)}`,
+      );
+      assert.equal(c.sim.deaths, 0, `stage ${stage.id} side ${side.x},${side.z}`);
+      c.dispose();
+    }
 });

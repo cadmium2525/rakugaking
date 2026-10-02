@@ -1,7 +1,7 @@
 import { defaultDrawing } from './drawing.js';
 import { sanitizeDrawing } from './shape.js';
 import { newPlayer } from './progression.js';
-import { validateRecord } from './ranking.js';
+import { validateRecord, GAME_VERSION } from './ranking.js';
 import { calculateStats } from './stats.js';
 export const SAVE_VERSION = 2;
 const finite = (v, min, max, fallback) =>
@@ -14,6 +14,7 @@ export function freshSave() {
     characters: [{ id: 'starter', name: 'らくがきくん', drawing, stats: calculateStats(drawing) }],
     active: 'starter',
     records: [],
+    legacyRecords: [],
     best: null,
     settings: { quality: 'medium' },
   };
@@ -85,6 +86,18 @@ export function migrateSave(raw) {
   data.records = (Array.isArray(raw.records) ? raw.records : [])
     .slice(-20)
     .filter((r) => validateRecord({ ...r, player: r?.player || 'ゲスト' }).length === 0);
+  data.legacyRecords = [
+    ...(Array.isArray(raw.legacyRecords) ? raw.legacyRecords : []),
+    ...(Array.isArray(raw.records) ? raw.records.filter((r) => r?.version === '1.0.0') : []),
+  ]
+    .filter(
+      (r) =>
+        validateRecord({ ...r, version: GAME_VERSION, player: r?.player || 'ゲスト' }).length === 0,
+    )
+    .slice(-20);
+  if (data.legacyRecords.length && !raw.legacyRecords?.length)
+    notice =
+      'コースを一新しました。旧タイムは退避し、新コースのベストを別に記録します。キャラクターと進行はそのままです。';
   data.best = data.records.length ? Math.min(...data.records.map((r) => r.total)) : null;
   data.settings.quality = ['low', 'medium', 'high'].includes(raw.settings?.quality)
     ? raw.settings.quality

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { HALF_HEIGHT } from '../core/controller.js';
 import { buildCharacter, disposeCharacter } from './character.js';
 import { animateCharacter } from './animation.js';
+import { addScenery } from './scenery.js';
 
 export class GameView {
   constructor(canvas, platforms) {
@@ -79,11 +80,23 @@ export class GameView {
   celebrate() {
     this.birthElapsed = 0;
   }
-  preview(drawing) {
+  preview(drawing, angle = 0.4, part) {
     const avatar = buildCharacter(drawing),
       camera = new THREE.PerspectiveCamera(35, 1, 0.1, 20);
-    camera.position.set(1.3, 1.7, 4);
+    camera.position.set(Math.sin(angle) * 4.5, 1.6, Math.cos(angle) * 4.5);
     camera.lookAt(0, 1, 0);
+    if (part) {
+      avatar.updateMatrixWorld(true);
+      const box = new THREE.Box3().setFromObject(avatar.userData.joints[part]);
+      if (part === 'body') {
+        box.makeEmpty();
+        avatar.userData.joints.body.children
+          .filter((child) => child.isMesh)
+          .forEach((mesh) => box.expandByObject(mesh));
+      }
+      const marker = new THREE.Box3Helper(box, 0xed8063);
+      avatar.add(marker);
+    }
     this.scene.remove(this.avatar);
     this.scene.add(avatar);
     this.world.visible = false;
@@ -113,7 +126,7 @@ export class GameView {
     this.renderer.setClearColor(stage.sky);
     this.scene.fog.color.setHex(stage.sky);
     this.platformMeshes = [];
-    for (const [i, p] of stage.platforms.entries()) {
+    for (const p of stage.platforms) {
       const mesh = new THREE.Mesh(
         new THREE.BoxGeometry(p.w, p.h, p.d),
         new THREE.MeshStandardMaterial({
@@ -131,30 +144,6 @@ export class GameView {
       );
       top.position.set(0, p.h / 2, 0);
       mesh.add(top);
-      for (let n = 0; n < 3; n++) {
-        const stone = new THREE.Mesh(
-          new THREE.IcosahedronGeometry(0.2 + n * 0.07, 0),
-          new THREE.MeshStandardMaterial({ color: 0xf1db9c }),
-        );
-        stone.position.set(p.w / 2 - 0.7, p.h / 2 + 0.3, (n - 1) * 0.7);
-        mesh.add(stone);
-      }
-      if (i % 2 === 0) {
-        const trunk = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.12, 0.17, 1.2, 5),
-          new THREE.MeshStandardMaterial({ color: 0x8d8162 }),
-        );
-        trunk.position.set(-p.w / 2 + 0.6, p.h / 2 + 0.6, 0);
-        const leaves = new THREE.Mesh(
-          stage.id <= 2
-            ? new THREE.IcosahedronGeometry(0.8, 0)
-            : new THREE.BoxGeometry(0.7, 0.2, 0.7),
-          new THREE.MeshStandardMaterial({ color: stage.id <= 2 ? 0x668e6c : 0xe6dcc7 }),
-        );
-        leaves.position.y = 1;
-        trunk.add(leaves);
-        mesh.add(trunk);
-      }
     }
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(0.85, 0.1, 8, 24),
@@ -167,22 +156,50 @@ export class GameView {
     ring.position.set(stage.goal.x, stage.goal.y + 1.2, stage.goal.z);
     this.world.add(ring);
     this.goalRing = ring;
+    this.scenery = stage.routeLength ? addScenery(this.world, stage) : [];
+    this.collectibleMeshes = (stage.collectibles || []).map((item) => {
+      const mesh = new THREE.Mesh(
+        new THREE.OctahedronGeometry(0.32),
+        new THREE.MeshStandardMaterial({
+          color: 0xffcf6d,
+          emissive: 0xfab53d,
+          emissiveIntensity: 0.35,
+        }),
+      );
+      mesh.position.set(item.x, item.y, item.z);
+      this.world.add(mesh);
+      return mesh;
+    });
+    this.checkpointMeshes = (stage.checkpoints || []).map((index) => {
+      const p = stage.platforms[index];
+      const mesh = new THREE.Mesh(
+        new THREE.TorusGeometry(1.2, 0.08, 6, 24),
+        new THREE.MeshBasicMaterial({ color: 0x62d8df }),
+      );
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.set(p.x, p.y + p.h / 2 + 0.15, p.z);
+      this.world.add(mesh);
+      return mesh;
+    });
     this.initial = true;
-    if (stage.wind) {
+    for (const wind of stage.winds || (stage.wind ? [stage.wind] : [])) {
       for (let i = 0; i < 8; i++) {
         const vane = new THREE.Mesh(
           new THREE.ConeGeometry(0.15, 0.8, 4),
           new THREE.MeshStandardMaterial({ color: 0xf9fcf4 }),
         );
         vane.rotation.x = Math.PI / 2;
-        vane.position.set((i % 2 ? 1 : -1) * 1.7, 1, -6 - i * 2);
+        vane.position.set(
+          (i % 2 ? 1 : -1) * 1.7,
+          2,
+          wind.maxZ - ((i + 1) * (wind.maxZ - wind.minZ)) / 9,
+        );
         this.world.add(vane);
       }
     }
-    if (stage.water) {
-      const w = stage.water;
+    for (const w of stage.waters || (stage.water ? [stage.water] : [])) {
       const water = new THREE.Mesh(
-        new THREE.PlaneGeometry(7, w.maxZ - w.minZ),
+        new THREE.PlaneGeometry(w.width || 7, w.maxZ - w.minZ),
         new THREE.MeshStandardMaterial({
           color: 0x4cbdcf,
           transparent: true,
@@ -223,7 +240,19 @@ export class GameView {
     this.hazardMeshes.forEach((h, i) => {
       h.visible = !course.destroyed.has(i);
       h.rotation.y = course.elapsed;
+      h.position.x = course.hazardPosition(course.stage.hazards[i]).x;
     });
+    this.scenery.forEach((rotor) => (rotor.rotation.z = course.elapsed * 0.7));
+    this.collectibleMeshes.forEach((mesh, i) => {
+      mesh.visible = !course.collected.has(i);
+      mesh.rotation.y = course.elapsed * 1.7;
+      mesh.position.y = course.stage.collectibles[i].y + Math.sin(course.elapsed * 2 + i) * 0.15;
+    });
+    this.checkpointMeshes.forEach((mesh, i) =>
+      mesh.material.color.setHex(
+        course.checkpoint >= course.stage.checkpoints[i] ? 0xffcd77 : 0x62d8df,
+      ),
+    );
   }
   render(sim, dt) {
     const p = sim.position;

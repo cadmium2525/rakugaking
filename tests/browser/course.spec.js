@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 import { STAGES } from '../../src/game/stages.js';
 export async function playStage(page, stage) {
   let index = 0;
-  const tiles = stage.platforms,
+  const tiles = stage.platforms.slice(0, stage.routeLength),
     last = tiles.length - 1;
   await page.keyboard.down('KeyW');
-  for (let i = 0; i < 900; i++) {
+  for (let i = 0; i < 4000; i++) {
     const s = await page.evaluate(() => window.__qa.state());
     if (s.complete) break;
     if (index === last && s.position.z < stage.goal.z + 0.7) await page.keyboard.up('KeyW');
@@ -40,7 +40,7 @@ export async function playStage(page, stage) {
   expect((await page.evaluate(() => window.__qa.state())).deaths).toBe(0);
 }
 test('full adventure unlocks and clears all five stages with keyboard input', async ({ page }) => {
-  test.setTimeout(240000);
+  test.setTimeout(720000);
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.route('**/ranking-config.json', (route) =>

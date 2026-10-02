@@ -1,6 +1,31 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { freshSave, migrateSave, SaveStore } from '../src/core/save.js';
+import { calculateStats } from '../src/core/stats.js';
+test('new courses archive old timings while preserving characters and progression', () => {
+  const raw = freshSave();
+  raw.player.exp = 1200;
+  raw.records = [
+    {
+      version: '1.0.0',
+      character: '旧記録',
+      player: 'ゲスト',
+      level: 1,
+      drawing: raw.characters[0].drawing,
+      stats: calculateStats(raw.characters[0].drawing),
+      splits: [8, 15, 10, 8, 20],
+      total: 61,
+      valid: true,
+    },
+  ];
+  const { data } = migrateSave(raw);
+  assert.equal(data.best, null);
+  assert.equal(data.records.length, 0);
+  assert.equal(data.legacyRecords.length, 1);
+  assert.equal(data.player.exp, 1200);
+  assert.deepEqual(data.characters[0].drawing, raw.characters[0].drawing);
+  assert.equal(migrateSave(data).data.legacyRecords.length, 1);
+});
 test('old saves migrate; invalid fields cannot produce NaN or impossible progression', () => {
   const old = migrateSave({ version: 1, exp: 300, unlocked: 3, drawing: {} });
   assert.equal(old.data.player.exp, 300);
