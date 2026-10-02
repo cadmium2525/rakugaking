@@ -3,6 +3,7 @@ import { initPhysics } from './core/controller.js';
 import { GameApp } from './game/app.js';
 import { shell, $ } from './ui/shell.js';
 import { SaveStore } from './core/save.js';
+import { registerPwa } from './pwa.js';
 document.querySelector('#app').innerHTML = shell;
 const startupButtons = [...document.querySelectorAll('button')];
 startupButtons.forEach((button) => {
@@ -15,6 +16,7 @@ try {
     button.disabled = false;
   });
   new GameApp(store, loaded.data, loaded.notice);
+  registerPwa();
 } catch (error) {
   $('#status').textContent = '起動できませんでした。WebGL対応ブラウザで再読み込みしてください。';
   console.error(error);
