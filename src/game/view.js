@@ -4,6 +4,7 @@ import { buildCharacter, disposeCharacter } from './character.js';
 import { animateCharacter } from './animation.js';
 import { addScenery } from './scenery.js';
 import { windPhase } from '../core/course.js';
+import { buildField } from './field-view.js';
 
 export class GameView {
   constructor(canvas, platforms) {
@@ -119,6 +120,7 @@ export class GameView {
     this.scene.add(this.avatar);
   }
   setStage(stage) {
+    this.fieldMode = !!stage.field;
     this.platforms = stage.platforms;
     this.scene.remove(this.world);
     disposeCharacter(this.world);
@@ -126,6 +128,10 @@ export class GameView {
     this.scene.add(this.world);
     this.renderer.setClearColor(stage.sky);
     this.scene.fog.color.setHex(stage.sky);
+    this.scene.fog.near = stage.field ? 55 : 30;
+    this.scene.fog.far = stage.field ? 135 : 65;
+    this.camera.far = stage.field ? 180 : 100;
+    this.camera.updateProjectionMatrix();
     this.platformMeshes = [];
     for (const p of stage.platforms) {
       const mesh = new THREE.Mesh(
@@ -139,6 +145,7 @@ export class GameView {
       mesh.rotation.z = p.angle || 0;
       this.world.add(mesh);
       this.platformMeshes.push(mesh);
+      mesh.visible = p.visible !== false;
       const top = new THREE.Mesh(
         new THREE.BoxGeometry(p.w + 0.04, 0.12, p.d + 0.04),
         new THREE.MeshStandardMaterial({ color: p.color || stage.color, roughness: 1 }),
@@ -170,7 +177,8 @@ export class GameView {
     ring.position.set(stage.goal.x, stage.goal.y + 1.2, stage.goal.z);
     this.world.add(ring);
     this.goalRing = ring;
-    this.scenery = stage.routeLength ? addScenery(this.world, stage) : [];
+    this.scenery = stage.routeLength && !stage.field ? addScenery(this.world, stage) : [];
+    this.fieldView = stage.field ? buildField(this.world, stage) : null;
     this.collectibleMeshes = (stage.collectibles || []).map((item) => {
       const mesh = new THREE.Mesh(
         new THREE.OctahedronGeometry(0.32),
@@ -279,10 +287,11 @@ export class GameView {
     });
   }
   updateCourse(course) {
+    this.fieldView?.update(course);
     for (const [i, m] of this.platformMeshes.entries()) {
       const start = course.collapseTimes[i],
         p = course.stage.platforms[i];
-      m.visible = course.sim.platforms[i].isEnabled();
+      m.visible = course.sim.platforms[i].isEnabled() && p.visible !== false;
       m.position.y = p.y + (start === null ? 0 : Math.sin((course.elapsed - start) * 45) * 0.025);
       if (p.collapse) {
         const t = start === null ? 0 : Math.min(1, (course.elapsed - start) / p.collapse);
@@ -345,7 +354,7 @@ export class GameView {
     }
     const speed = Math.hypot(sim.vx, sim.vz);
     if (speed > 0.2) this.avatar.rotation.y = Math.atan2(sim.vx, sim.vz);
-    this.cameraTarget.set(p.x, p.y + 7, p.z + 12);
+    this.cameraTarget.set(p.x, p.y + (this.fieldMode ? 10 : 7), p.z + (this.fieldMode ? 16 : 12));
     this.camera.position.lerp(this.cameraTarget, this.initial ? 1 : 1 - Math.exp(-dt * 5));
     this.look.set(p.x, p.y + 0.3, p.z);
     this.camera.lookAt(this.look);

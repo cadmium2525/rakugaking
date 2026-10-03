@@ -1202,3 +1202,90 @@ dialog {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+.field-hud {
+  position: fixed;
+  right: 20px;
+  top: 108px;
+  width: 210px;
+  z-index: 12;
+  color: #294c3d;
+  background: #fff9e8ed;
+  border: 1px solid #ffffffb0;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px #264a3420;
+  padding: 10px;
+  font-size: 12px;
+}
+.field-hud[hidden] {
+  display: none;
+}
+.field-hud summary {
+  cursor: pointer;
+  font-weight: bold;
+  min-height: 26px;
+}
+.field-hud canvas {
+  width: 100%;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: contain;
+  background: #d4dfb4;
+}
+.field-hud button {
+  display: block;
+  width: 100%;
+  min-height: 38px;
+  padding: 5px;
+  margin-top: 4px;
+  font-size: 11px;
+  text-align: left;
+  background: #f3efd9;
+  border: 1px solid transparent;
+  border-radius: 7px;
+}
+.field-hud button[aria-pressed='true'] {
+  border-color: #55765e;
+  background: #dce9cb;
+}
+.field-hud p {
+  font-size: 10px;
+  margin: 6px 0 0;
+}
+.field-hud .field-bearing {
+  font-size: 12px;
+  font-weight: bold;
+}
+.field-playing #player-level {
+  display: none;
+}
+.field-hud-content {
+  max-height: calc(100dvh - 310px);
+  overflow-y: auto;
+}
+@media (max-width: 600px) {
+  .field-hud {
+    right: 10px;
+    top: 130px;
+    width: 175px;
+    padding: 8px;
+  }
+  .field-hud canvas {
+    height: 112px;
+  }
+}
+@media (max-height: 500px) {
+  .field-hud {
+    top: 64px;
+    width: 190px;
+    padding: 7px;
+  }
+  .field-hud-content {
+    max-height: calc(100dvh - 220px);
+  }
+  .field-hud canvas {
+    display: none;
+  }
+  .field-hud button {
+    min-height: 34px;
+  }
+}

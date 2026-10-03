@@ -2,10 +2,38 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { freshSave, migrateSave, SaveStore } from '../src/core/save.js';
 import { calculateStats } from '../src/core/stats.js';
-test('exploration medals survive reload and malformed medal values are bounded',()=>{
-  const raw=freshSave();raw.player.medals={1:3,2:2,3:Infinity,4:-1};
-  const {data}=migrateSave(raw);assert.deepEqual(data.player.medals,{1:3,2:2,3:0,4:0,5:0});
-  assert.deepEqual(migrateSave(data).data.player.medals,data.player.medals);
+test('field migration resets only the old stage 1 medal and archives 2.1 timings', () => {
+  const raw = freshSave();
+  delete raw.player.fieldMedalVersion;
+  raw.player.medals = { 1: 3, 2: 2 };
+  raw.player.exp = 1200;
+  raw.records = [
+    {
+      version: '2.1.0',
+      total: 90,
+      splits: [20, 20, 20, 15, 15],
+      valid: true,
+      character: '旧コースのキャラクター',
+      level: 1,
+      drawing: raw.characters[0].drawing,
+      stats: calculateStats(raw.characters[0].drawing),
+    },
+  ];
+  const { data } = migrateSave(raw);
+  assert.equal(data.player.medals[1], 0);
+  assert.equal(data.player.medals[2], 2);
+  assert.equal(data.player.exp, 1200);
+  assert.equal(data.legacyRecords.length, 1);
+  assert.equal(data.records.length, 0);
+  data.player.medals[1] = 2;
+  assert.equal(migrateSave(data).data.player.medals[1], 2);
+});
+test('exploration medals survive reload and malformed medal values are bounded', () => {
+  const raw = freshSave();
+  raw.player.medals = { 1: 3, 2: 2, 3: Infinity, 4: -1 };
+  const { data } = migrateSave(raw);
+  assert.deepEqual(data.player.medals, { 1: 3, 2: 2, 3: 0, 4: 0, 5: 0 });
+  assert.deepEqual(migrateSave(data).data.player.medals, data.player.medals);
 });
 test('new courses archive old timings while preserving characters and progression', () => {
   const raw = freshSave();

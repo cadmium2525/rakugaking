@@ -1,4 +1,5 @@
 import { Simulation, DT } from './controller.js';
+import { FieldMissions } from './field-missions.js';
 export function windPhase(zone, elapsed) {
   const t = (elapsed + (zone.offset || 0)) % 7;
   return t < 2.5
@@ -35,6 +36,7 @@ export class Course {
     this.notice = '';
     this.noticeUntil = 0;
     this.collapseTimes = stage.platforms.map(() => null);
+    this.field = stage.field ? new FieldMissions(stage) : null;
   }
   step(input) {
     if (this.complete) return 'finished';
@@ -73,7 +75,7 @@ export class Course {
     this.actionHeld = !!input.action;
     if (attack) {
       this.nextAction = this.elapsed + (stats.actionCooldown || 0.6) - (stats.luck || 0) * 0.8;
-      if (distance < (stats.reach || 1) + 1) {
+      if (!this.field && distance < (stats.reach || 1) + 1) {
         this.sealHP -= stats.power || 20;
         if (this.sealHP <= 0) this.activated = true;
       }
@@ -90,6 +92,14 @@ export class Course {
           this.retry();
           return 'death';
         }
+      }
+    }
+    if (this.field) {
+      this.field.update(this, attack);
+      if (this.hp <= 0) {
+        this.sim.deaths++;
+        this.retry();
+        return 'death';
       }
     }
     if (distance < 1.1 && Math.abs(p.y - (g.y + 0.8)) < 1.2 && this.activated) {
@@ -119,6 +129,7 @@ export class Course {
     this.collapseTimes.fill(null);
     this.sim.platforms.forEach((p) => p.setEnabled(true));
     this.destroyed.clear();
+    this.field?.resetCombat();
   }
   retry() {
     this.restore();
@@ -134,6 +145,7 @@ export class Course {
     };
   }
   guidance() {
+    if (this.field) return this.field.guidance(this);
     const p = this.sim.position;
     const tile = this.stage.platforms.find(
       (tile, i) =>

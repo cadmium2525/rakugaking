@@ -10,7 +10,7 @@ export function freshSave() {
   const drawing = defaultDrawing();
   return {
     version: SAVE_VERSION,
-    player: newPlayer(),
+    player: { ...newPlayer(), fieldMedalVersion: 1 },
     characters: [{ id: 'starter', name: 'らくがきくん', drawing, stats: calculateStats(drawing) }],
     active: 'starter',
     records: [],
@@ -62,6 +62,7 @@ export function migrateSave(raw) {
   data.player.medals = {};
   for (let id = 1; id <= 5; id++)
     data.player.medals[id] = Math.floor(finite(raw.player?.medals?.[id], 0, 3, 0));
+  if (raw.player?.fieldMedalVersion !== 1) data.player.medals[1] = 0;
   data.player.cleared = [
     ...new Set(
       (Array.isArray(raw.player?.cleared) ? raw.player.cleared : []).filter(
@@ -92,7 +93,7 @@ export function migrateSave(raw) {
   data.legacyRecords = [
     ...(Array.isArray(raw.legacyRecords) ? raw.legacyRecords : []),
     ...(Array.isArray(raw.records)
-      ? raw.records.filter((r) => ['1.0.0', '2.0.0'].includes(r?.version))
+      ? raw.records.filter((r) => ['1.0.0', '2.0.0', '2.1.0'].includes(r?.version))
       : []),
   ]
     .filter(

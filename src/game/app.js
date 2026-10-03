@@ -16,6 +16,7 @@ import { RankingPanel } from '../ui/ranking-panel.js';
 import { Library } from '../ui/library.js';
 import { SAVE_VERSION } from '../core/save.js';
 import { GAME_VERSION } from '../core/ranking.js';
+import { FieldHUD } from '../ui/field-hud.js';
 
 export class GameApp {
   constructor(store, data, notice) {
@@ -32,10 +33,12 @@ export class GameApp {
     this.name = active?.name || 'らくがきくん';
     this.sim = new Simulation(prototypePlatforms);
     this.course = null;
+    this.fieldHUD = new FieldHUD();
     this.run = null;
     this.view = new GameView($('#world'), prototypePlatforms);
     this.view.setStage({
       ...STAGES[0],
+      field: false,
       platforms: prototypePlatforms,
       routeLength: 0,
       checkpoints: [],
@@ -252,6 +255,7 @@ export class GameApp {
     this.input.clear();
     this.resume();
     document.body.classList.add('playing');
+    document.body.classList.toggle('field-playing', !!this.course.field);
     $('.stage-label').textContent = `0${id} / ${this.course.stage.name}`;
     $('footer').textContent = this.course.stage.hint;
     $('#run-hud').hidden = !this.run;
@@ -264,6 +268,7 @@ export class GameApp {
     this.sim = new Simulation(prototypePlatforms);
     this.view.setStage({
       ...STAGES[0],
+      field: false,
       platforms: prototypePlatforms,
       routeLength: 0,
       checkpoints: [],
@@ -272,6 +277,7 @@ export class GameApp {
     });
     this.view.setCharacter(this.drawing);
     document.body.classList.remove('playing');
+    document.body.classList.remove('field-playing');
     $('.stage-label').textContent = 'PLAYGROUND / はじまりの広場';
     $('#run-hud').hidden = true;
     this.resume();
@@ -362,6 +368,7 @@ export class GameApp {
     if (this.course) this.view.updateCourse(this.course);
     this.view.render(this.sim, this.paused ? 0 : delta);
     if (now - this.lastHud > 100) {
+      this.fieldHUD.update(this.course);
       this.lastHud = now;
       this.ui.status.textContent = `${this.course ? `HP ${Math.ceil(this.course.hp)} · ` : ''}${this.sim.grounded ? '● ON GROUND' : '↑ IN THE AIR'} · ${Math.hypot(this.sim.vx, this.sim.vz).toFixed(1)} m/s`;
       if (this.run)
@@ -371,7 +378,7 @@ export class GameApp {
         const p = this.sim.position,
           g = this.course.stage.goal;
         this.ui.objective.textContent =
-          Math.hypot(p.x - g.x, p.z - g.z) < 2.7 && !this.course.activated
+          !this.course.field && Math.hypot(p.x - g.x, p.z - g.z) < 2.7 && !this.course.activated
             ? `ACTIONで封印を解こう · ${Math.max(0, Math.ceil(this.course.sealHP))}`
             : this.course.guidance() ||
               (this.course.elapsed < 4
@@ -393,6 +400,7 @@ export class GameApp {
       complete: this.course?.complete,
       collected: this.course?.collected.size,
       checkpoint: this.course?.checkpoint,
+      field: this.course?.field?.snapshot(),
       exp: this.player.exp,
       characters: this.characters.length,
       name: this.name,

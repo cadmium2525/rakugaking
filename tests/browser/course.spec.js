@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { STAGES } from '../../src/game/stages.js';
+import { playField } from '../helpers/browser-field.js';
 export async function playStage(page, stage) {
+  if (stage.field) return playField(page);
   let index = 0;
   const held = new Set(),
     trace = [];

@@ -1,3 +1,4 @@
+import { FIELD_STAGE } from './field-stage.js';
 const tile = (x, z, top, w = 7, d = 5.5, extra = {}) => ({
   x,
   z,
@@ -9,34 +10,7 @@ const tile = (x, z, top, w = 7, d = 5.5, extra = {}) => ({
 });
 const crumble = { collapse: 2.1, color: 0xc0876e };
 export const STAGES = [
-  {
-    id: 1,
-    name: 'こもれびの大樹',
-    subtitle: '花の庭から、樹冠の展望台へ。',
-    theme: 'CANOPY GARDEN',
-    color: 0x93b982,
-    sky: 0xdcebe5,
-    hint: '花の道をたどって大樹へ。青い灯りが復帰地点。金のかけらは寄り道にも。',
-    zones: ['花咲く庭', 'こもれびの橋', '大樹の展望台'],
-    platforms: [
-      tile(0, 0, 0, 12, 10),
-      tile(0, -9, 0.2, 8, 6),
-      tile(2, -17, 0.6, 9, 7),
-      tile(3, -25, 1, 8, 6),
-      tile(1, -33, 1.4, 12, 8),
-      tile(-1, -42, 1.8, 7, 7),
-      tile(-3, -50, 2.2, 8, 6),
-      tile(-2, -58, 2.6, 10, 7),
-      tile(0, -67, 3, 12, 8),
-      tile(2, -76, 3.4, 7, 7),
-      tile(1, -84, 3.8, 8, 6),
-      tile(0, -93, 4.2, 15, 10),
-    ],
-    spawn: { x: 0, y: 1.8, z: 2 },
-    goal: { x: 0, y: 4.2, z: -95 },
-    checkpoints: [4, 8],
-    sidePaths: [tile(-11, -58, 3.2, 6, 6)],
-  },
+  FIELD_STAGE,
   {
     id: 2,
     name: '風車と雲の峡谷',
@@ -187,14 +161,6 @@ export const STAGES = [
 ];
 
 // Choices reconnect forward rather than sending the player down a dead end.
-STAGES[0].routes = [
-  {
-    name: '樹冠の細道',
-    from: 4,
-    to: 6,
-    platforms: [tile(10, -33, 2, 4, 6), tile(9, -41, 2.4, 4, 8), tile(5, -49, 2.2, 6, 8)],
-  },
-];
 STAGES[1].routes = [
   {
     name: '無風の外回廊',
@@ -245,8 +211,11 @@ const choices = [
   { x: 0, z: 0, text: 'ひび割れのない床で休み、赤くなる床は止まらず渡ろう' },
   { x: -2, z: -120, text: '直進：崩壊床 / 右：狭い星の道' },
 ];
-STAGES.forEach((stage, i) => (stage.signs = [choices[i]]));
+STAGES.forEach((stage, i) => {
+  if (!stage.field) stage.signs = [choices[i]];
+});
 for (const stage of STAGES) {
+  if (stage.field) continue;
   // The main route remains reachable by the slowest/heaviest legal body.
   // Side paths retain their larger gaps as optional jumping challenges.
   for (let i = 1; i < stage.platforms.length; i++) {

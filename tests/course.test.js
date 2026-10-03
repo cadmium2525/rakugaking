@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { initPhysics } from '../src/core/controller.js';
 import { Course } from '../src/core/course.js';
 import { STAGES } from '../src/game/stages.js';
+import { driveField } from './helpers/field-driver.js';
 before(initPhysics);
 const builds = {
   STANDARD: { speed: 6, jump: 8.5, weight: 1, hp: 100 },
@@ -13,6 +14,7 @@ const builds = {
   EXTREME: { speed: 4.3, jump: 7.5, weight: 0.7, hp: 80 },
 };
 export function drive(course) {
+  if (course.field) return driveField(course);
   let index = 0;
   for (let frame = 0; frame < 12000 && !course.complete; frame++) {
     const p = course.sim.position,
@@ -58,7 +60,7 @@ test('returning from result never emits another clear reward event', () => {
 });
 
 test('checkpoint survives a fall and collected fragments cannot be counted twice', () => {
-  const stage = STAGES[0],
+  const stage = STAGES[1],
     p = stage.platforms[4];
   const c = new Course(
     { ...stage, spawn: { x: p.x, y: p.y + p.h / 2 + 0.82, z: p.z } },
