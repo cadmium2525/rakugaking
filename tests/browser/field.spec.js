@@ -25,6 +25,10 @@ test('wide field missions, boss, emblems and gate work through real keyboard inp
     await page.screenshot({ path: `test-results/field-${size.width}.png` });
   }
   await page.setViewportSize({ width: 1280, height: 800 });
+  // Let resize clear held input before the pilot begins holding movement keys.
+  await page.evaluate(
+    () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+  );
   await playField(page, true);
   expect(errors).toEqual([]);
   await page.screenshot({ path: 'test-results/field-clear.png' });

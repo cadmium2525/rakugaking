@@ -1,6 +1,8 @@
 import { describeDrawing, area, clamp } from './shape.js';
 import { COLORS } from './drawing.js';
+import { sanitizeSketch, inkArea, sketchBounds } from './sketch.js';
 export function calculateStats(raw) {
+  if (raw?.kind === 'sketch') return sketchStats(raw);
   const { parts: p, drawing } = describeDrawing(raw);
   const arms = (p.armLeft.area + p.armRight.area) / 2,
     legs = (p.legLeft.height + p.legRight.height) / 2;
@@ -42,6 +44,42 @@ export function calculateStats(raw) {
       armArea: arms,
       colors,
       centerOfMass: (p.body.area + p.head.area * 1.6) / Math.max(0.01, p.body.area + p.head.area),
+    },
+  };
+}
+function sketchStats(raw) {
+  const d = sanitizeSketch(raw),
+    b = sketchBounds(d.strokes.flatMap((s) => s.points));
+  const coverage = clamp(
+    d.strokes.reduce((n, s) => n + inkArea(s), 0),
+    0.02,
+    1,
+  );
+  const volume = clamp(
+    d.strokes.reduce((n, s) => n + inkArea(s) * (s.depth / 0.3), 0),
+    0.02,
+    1,
+  );
+  const weight = clamp(0.7 + volume * 1.9, 0.7, 2.6);
+  const height = clamp(b.maxY - b.minY, 0.05, 1),
+    width = clamp(b.maxX - b.minX, 0.05, 1);
+  return {
+    hp: Math.round(75 + coverage * 90 + weight * 10),
+    power: Math.round(12 + width * 16 + volume * 10),
+    defense: Math.round(6 + volume * 18 + weight * 3),
+    speed: clamp(6.8 - (weight - 1) * 1.1, 4.3, 7.5),
+    jump: clamp(8.8 + height * 0.6 - (weight - 1) * 0.65, 7.5, 10),
+    weight,
+    reach: clamp(0.8 + width * 0.8, 0.8, 1.7),
+    actionCooldown: 0.48 + volume * 0.3,
+    luck: 0,
+    analysis: {
+      volume,
+      bodyArea: coverage,
+      legLength: height,
+      armArea: width,
+      colors: {},
+      centerOfMass: 1,
     },
   };
 }

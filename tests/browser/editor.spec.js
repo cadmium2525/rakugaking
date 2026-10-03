@@ -8,7 +8,7 @@ test('drawing editor handles strokes, single points, erase, undo, redo and mirro
   await page.locator('#draw-open').click();
   const canvas = page.getByLabel('ラクガキキャンバス'),
     r = await canvas.boundingBox();
-  await page.getByRole('button', { name: 'パーツ消去', exact: true }).click();
+  await page.getByLabel('下絵', { exact: true }).selectOption('blank');
   await page.mouse.move(r.x + r.width * 0.2, r.y + r.height * 0.3);
   await page.mouse.down();
   await page.mouse.move(r.x + r.width * 0.8, r.y + r.height * 0.7, { steps: 15 });
@@ -17,8 +17,10 @@ test('drawing editor handles strokes, single points, erase, undo, redo and mirro
   await page.mouse.click(r.x + r.width * 0.5, r.y + r.height * 0.5);
   await page.getByRole('button', { name: '↶ 戻す', exact: true }).click();
   await page.getByRole('button', { name: '↷ 進む', exact: true }).click();
-  await page.getByRole('button', { name: '左うで', exact: true }).click();
-  await page.getByRole('button', { name: '左右コピー', exact: true }).click();
+  await page.getByRole('button', { name: '選択・移動', exact: true }).click();
+  await page.mouse.click(r.x + r.width * 0.5, r.y + r.height * 0.7);
+  await page.getByRole('button', { name: '複製', exact: true }).click();
+  await page.getByRole('button', { name: '左右反転', exact: true }).click();
   await page.getByRole('button', { name: '消しゴム', exact: true }).click();
   await page.mouse.click(r.x + r.width * 0.5, r.y + r.height * 0.5);
   await page.screenshot({ path: 'test-results/editor.png' });

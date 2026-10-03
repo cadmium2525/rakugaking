@@ -3,7 +3,7 @@ import { sanitizeDrawing } from './shape.js';
 import { newPlayer } from './progression.js';
 import { validateRecord, GAME_VERSION } from './ranking.js';
 import { calculateStats } from './stats.js';
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 const finite = (v, min, max, fallback) =>
   Number.isFinite(v) ? Math.max(min, Math.min(max, v)) : fallback;
 export function freshSave() {
@@ -49,9 +49,10 @@ export function migrateSave(raw) {
       records: [],
       settings: raw.settings,
     };
-    notice = '旧セーブをバージョン2に移行しました。';
+    notice = '旧セーブを新しい形式へ移行しました。';
   }
-  if (raw.version !== 2)
+  if (raw.version === 2) raw = { ...raw, version: 3 };
+  if (raw.version !== 3)
     return {
       data: freshSave(),
       notice: 'セーブ形式を確認できません。元データは退避しました。',
@@ -93,7 +94,7 @@ export function migrateSave(raw) {
   data.legacyRecords = [
     ...(Array.isArray(raw.legacyRecords) ? raw.legacyRecords : []),
     ...(Array.isArray(raw.records)
-      ? raw.records.filter((r) => ['1.0.0', '2.0.0', '2.1.0'].includes(r?.version))
+      ? raw.records.filter((r) => ['1.0.0', '2.0.0', '2.1.0', '3.0.0'].includes(r?.version))
       : []),
   ]
     .filter(
@@ -103,7 +104,7 @@ export function migrateSave(raw) {
     .slice(-20);
   if (data.legacyRecords.length && !raw.legacyRecords?.length)
     notice =
-      'コースを一新しました。旧タイムは退避し、新コースのベストを別に記録します。キャラクターと進行はそのままです。';
+      'ゲームの更新に伴い、旧タイムは退避して新しいベストを別に記録します。キャラクターと進行はそのままです。';
   data.best = data.records.length ? Math.min(...data.records.map((r) => r.total)) : null;
   data.settings.quality = ['low', 'medium', 'high'].includes(raw.settings?.quality)
     ? raw.settings.quality

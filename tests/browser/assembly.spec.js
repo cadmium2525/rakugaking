@@ -8,7 +8,7 @@ test('assembled model changes while drawing and stays visible beside the canvas'
   await expect(model).toBeVisible();
   await expect(model).toHaveAttribute('src', /^data:image/);
   const before = await model.getAttribute('src');
-  await page.getByRole('button', { name: 'パーツ消去', exact: true }).click();
+  await page.getByLabel('下絵', { exact: true }).selectOption('blank');
   const r = await page.getByLabel('ラクガキキャンバス').boundingBox();
   await page.mouse.move(r.x + r.width * 0.2, r.y + r.height * 0.2);
   await page.mouse.down();
@@ -26,5 +26,8 @@ test('assembled model changes while drawing and stays visible beside the canvas'
     await page.setViewportSize({ width, height });
     await expect(model).toBeInViewport();
     await expect(page.getByLabel('ラクガキキャンバス')).toBeInViewport();
+    const paper = await page.getByLabel('ラクガキキャンバス').boundingBox();
+    expect(paper.y).toBeGreaterThanOrEqual(0);
+    expect(paper.y + paper.height).toBeLessThanOrEqual(height);
   }
 });

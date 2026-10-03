@@ -1,209 +1,390 @@
-import { PARTS, LABELS, COLORS, DrawingHistory, defaultDrawing, copy } from '../core/drawing.js';
+import { DrawingHistory, copy } from '../core/drawing.js';
+import { sanitizeDrawing } from '../core/shape.js';
+import {
+  INKS,
+  ROLES,
+  SKETCH_LIMIT,
+  legacyToSketch,
+  sketchTemplate,
+  sanitizeSketch,
+  hitStroke,
+  eraseSketch,
+  sketchBounds,
+} from '../core/sketch.js';
 export class Editor {
   constructor(onBirth, onPreview) {
-    this.history = new DrawingHistory();
-    this.part = 'body';
-    this.color = COLORS[0];
-    this.eraser = false;
-    this.stroke = null;
-    this.pointer = null;
-    this.onBirth = onBirth;
-    this.onPreview = onPreview;
-    this.previewAngle = 0;
-    this.previewRevision = 0;
+    Object.assign(this, {
+      onBirth,
+      onPreview,
+      history: new DrawingHistory(sketchTemplate('blank')),
+      color: INKS[0],
+      width: 0.018,
+      depth: 0.2,
+      role: 'body',
+      tool: 'pen',
+      selected: -1,
+      pointer: null,
+      stroke: null,
+      previewAngle: 0.35,
+      previewRevision: 0,
+    });
     this.root = document.createElement('dialog');
-    this.root.className = 'editor';
-    this.root.innerHTML = `<div class="editor-heading"><div><p class="eyebrow">DRAW YOUR OWN HERO</p><h2>線から、いのちが生まれる。</h2></div><button data-do="close" aria-label="エディタを閉じる">×</button></div><div class="editor-layout"><nav class="parts">${PARTS.map((p) => `<button data-part="${p}">${LABELS[p]}</button>`).join('')}</nav><div class="drawing-area"><p id="drawing-prompt">からだを描こう</p><canvas width="480" height="480" aria-label="ラクガキキャンバス"></canvas><small>指で輪郭を描いてね。線は自動でつながるよ。</small></div><div class="editor-tools"><div class="swatches">${COLORS.map((c) => `<button data-color="${c}" style="--swatch:${c}" aria-label="色 ${c}"></button>`).join('')}</div><div class="tool-grid"><button data-do="undo">↶ 戻す</button><button data-do="redo">↷ 進む</button><button data-do="erase">消しゴム</button><button data-do="clear">パーツ消去</button><button data-do="copy">左右コピー</button><button data-do="reset">やり直し</button></div><p class="editor-tip">どんなかたちも、きみの個性。<br>うまく描けなくても大丈夫。</p><label class="name-label">キャラクターの名前<input id="character-name" maxlength="20" value="らくがきくん" autocomplete="off"></label><button class="primary" data-do="birth">誕生させる ✦</button><p id="editor-feedback" role="status"></p></div></div>`;
+    this.root.className = 'editor sketch-editor';
+    this.root.innerHTML = `<div class="editor-heading"><div><p class="eyebrow">ONE CANVAS · ANY CREATURE</p><h2>全身を、ひとつの紙に。</h2></div><button data-do="close" aria-label="エディタを閉じる">×</button></div>
+      <div class="sketch-presets"><label>下絵 <select aria-label="下絵"><option value="">選んで描きかえる</option><option value="blank">白紙から自由に</option><option value="human">ひと</option><option value="dog">犬</option><option value="dragon">ドラゴン</option></select></label><span>切替も「戻す」で元に戻せます</span></div>
+      <div class="sketch-grid"><div class="sketch-main"><div class="sketch-toolbar" role="group" aria-label="描画道具"><button data-tool="pen">ペン</button><button data-tool="fill">面</button><button data-tool="select">選択・移動</button><button data-tool="erase">消しゴム</button><button data-do="undo" aria-label="↶ 戻す">↶</button><button data-do="redo" aria-label="↷ 進む">↷</button></div>
+      <div class="sketch-workspace"><div class="drawing-area"><canvas width="640" height="640" aria-label="ラクガキキャンバス"></canvas><small id="drawing-prompt">ペンは線を閉じません。面ツールだけ輪郭を閉じます。</small></div>
+      <section class="assembly"><p class="assembly-title">そのまま立体に</p><img alt="組み立て中のキャラクター" draggable="false"><div class="assembly-angles"><button data-angle="0">正面</button><button data-angle="0.65">斜め</button><button data-angle="1.57">横</button></div></section></div></div>
+      <aside class="editor-tools"><div class="ink-heading"><strong>色は自由に</strong><label>カスタム色<input type="color" aria-label="自由な色" value="${this.color}"></label></div><div class="swatches">${INKS.map((c) => `<button data-color="${c}" style="--swatch:${c}" aria-label="色 ${c}"></button>`).join('')}</div>
+      <div class="sketch-properties"><label>線の太さ<input data-prop="width" aria-label="線の太さ" type="range" min="0.004" max="0.16" step="0.002" value="${this.width}"></label><label>立体の厚み<input data-prop="depth" aria-label="立体の厚み" type="range" min="0.03" max="0.5" step="0.01" value="${this.depth}"></label><label>この線・面の動き<select aria-label="この線・面の動き">${Object.entries(
+        ROLES,
+      )
+        .map(([v, label]) => `<option value="${v}">${label}</option>`)
+        .join('')}</select></label></div>
+      <div class="selection-tools"><p data-selection>選択・移動で、線や面をつかんで配置</p><div class="tool-grid"><button data-do="smaller">縮小</button><button data-do="bigger">拡大</button><button data-do="rotate">回転 ↻</button><button data-do="flip">左右反転</button><button data-do="copy">複製</button><button data-do="delete">選択を削除</button></div></div>
+      <p class="editor-tip">犬も、羽のある生き物も。足・翼・しっぽは好きな本数に。<br>描いた絵に厚みをつけた立体になります。</p>
+      <label class="name-label">キャラクターの名前<input id="character-name" maxlength="20" value="らくがきくん" autocomplete="off"></label><button data-do="preview">大きく3Dを見る</button><button class="primary" data-do="birth">誕生させる ✦</button><p id="editor-feedback" role="status"></p></aside></div>`;
     document.body.append(this.root);
     this.canvas = this.root.querySelector('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.assembly = document.createElement('section');
-    this.assembly.className = 'assembly';
-    this.assembly.innerHTML =
-      '<p class="assembly-title">できあがりを見ながら描こう</p><img alt="組み立て中のキャラクター" draggable="false"><div class="assembly-angles"><button data-angle="0">正面</button><button data-angle="0.65">斜め</button><button data-angle="1.57">横</button></div><p class="assembly-note">オレンジ枠が編集中のパーツ。描くたびに完成形も変わります。</p>';
-    this.root.querySelector('.drawing-area').after(this.assembly);
+    this.assembly = this.root.querySelector('.assembly');
     this.previewPanel = document.createElement('div');
     this.previewPanel.className = 'preview-panel';
     this.previewPanel.hidden = true;
     this.previewPanel.innerHTML =
       '<img alt="ラクガキの3Dプレビュー"><button data-do="back-to-drawing">線に戻る</button>';
     this.root.querySelector('.drawing-area').append(this.previewPanel);
-    const previewButton = document.createElement('button');
-    previewButton.dataset.do = 'preview';
-    previewButton.textContent = '3Dプレビュー';
+    this.root.addEventListener('click', (e) => this.click(e));
+    this.root.querySelector('[aria-label="下絵"]').addEventListener('change', (e) => {
+      if (!e.target.value) return;
+      this.finish();
+      const d = sketchTemplate(e.target.value);
+      this.history.change((old) => {
+        old.strokes = d.strokes;
+      });
+      this.selected = -1;
+      this.feedback('下絵に描き足したり、選択・移動で組みかえられます。');
+      this.render();
+      e.target.value = '';
+    });
+    this.root.querySelector('[type="color"]').addEventListener('input', (e) => {
+      this.color = e.target.value;
+      this.render();
+    });
     this.root
-      .querySelector('.editor-tools')
-      .insertBefore(previewButton, this.root.querySelector('[data-do="birth"]'));
-    this.root.addEventListener('click', (e) => {
-      const button = e.target.closest('button');
-      if (!button) return;
-      if (button.dataset.part) {
-        this.finish();
-        this.part = button.dataset.part;
-      }
-      if (button.dataset.color) {
-        this.color = button.dataset.color;
-        this.eraser = false;
-      }
-      const op = button.dataset.do;
-      if (button.dataset.angle !== undefined) this.previewAngle = Number(button.dataset.angle);
-      if (op === 'preview') {
-        this.finish();
-        this.previewPanel.querySelector('img').src = onPreview(this.history.data);
-        this.previewPanel.hidden = false;
-      } else this.previewPanel.hidden = true;
-      if (op === 'undo') this.history.undo();
-      if (op === 'redo') this.history.redo();
-      if (op === 'erase') this.eraser = !this.eraser;
-      if (op === 'clear') this.history.change((d) => (d[this.part] = []));
-      if (op === 'reset')
-        this.history.change((d) => {
-          for (const p of PARTS) d[p] = [];
-        });
-      if (op === 'copy') {
-        const target = this.part.replace('Left', 'Right');
-        if (target !== this.part)
-          this.history.change(
-            (d) =>
-              (d[target] = d[this.part].map((s) => ({
-                ...copy(s),
-                points: s.points.map((p) => ({ x: 1 - p.x, y: p.y })),
-              }))),
-          );
-        else
-          this.root.querySelector('#editor-feedback').textContent =
-            '左うで・左あしを選ぶと、右側へコピーできます。';
-      }
-      if (op === 'close') this.root.close();
-      if (op === 'birth') {
-        this.finish();
-        this.onBirth(
-          copy(this.history.data),
-          this.root.querySelector('input').value.trim() || 'ななしのラクガキ',
-        );
-      }
-      this.render();
+      .querySelector('[type="color"]')
+      .addEventListener('change', () => this.applyProperty('color', this.color));
+    for (const el of this.root.querySelectorAll('[data-prop]')) {
+      el.addEventListener('input', () => {
+        this[el.dataset.prop] = Number(el.value);
+      });
+      el.addEventListener('change', () => this.applyProperty(el.dataset.prop, Number(el.value)));
+    }
+    this.root.querySelector('[aria-label="この線・面の動き"]').addEventListener('change', (e) => {
+      this.role = e.target.value;
+      this.applyProperty('role', this.role);
     });
-    const point = (e) => {
-      const r = this.canvas.getBoundingClientRect();
-      return {
-        x: Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)),
-        y: Math.max(0, Math.min(1, (e.clientY - r.top) / r.height)),
-      };
-    };
-    this.canvas.addEventListener('pointerdown', (e) => {
-      if (this.pointer !== null) return;
-      this.pointer = e.pointerId;
-      this.canvas.setPointerCapture(e.pointerId);
-      const p = point(e);
-      if (this.eraser) {
-        this.history.change(() => this.eraseAt(p));
-      } else this.stroke = { color: this.color, points: [p] };
-      this.render();
+    this.canvas.addEventListener('pointerdown', (e) => this.down(e));
+    this.canvas.addEventListener('pointermove', (e) => this.move(e));
+    this.canvas.addEventListener('pointerup', (e) => {
+      if (e.pointerId === this.pointer) this.finish();
     });
-    this.canvas.addEventListener('pointermove', (e) => {
-      if (e.pointerId !== this.pointer) return;
-      if (this.eraser) {
-        this.eraseAt(point(e));
+    for (const event of ['pointercancel', 'lostpointercapture'])
+      this.canvas.addEventListener(event, (e) => {
+        if (e.pointerId === this.pointer) {
+          this.stroke = null;
+          this.finish();
+        }
+      });
+    this.root.addEventListener('close', () => {
+      this.stroke = null;
+      this.pointer = null;
+      clearTimeout(this.previewPending);
+      this.previewPending = null;
+    });
+    this.root.addEventListener('keydown', (e) => {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.key.toLowerCase() === 'z' &&
+        !['INPUT', 'SELECT'].includes(e.target.tagName)
+      ) {
+        e.preventDefault();
+        this.finish();
+        if (e.shiftKey) this.history.redo();
+        else this.history.undo();
+        this.selected = -1;
         this.render();
+      }
+    });
+    window.addEventListener('resize', () => {
+      if (this.pointer !== null) {
+        this.stroke = null;
+        this.finish();
+      }
+    });
+  }
+  feedback(text) {
+    this.root.querySelector('#editor-feedback').textContent = text;
+  }
+  applyProperty(key, value) {
+    if (this.selected >= 0 && this.history.data.strokes[this.selected])
+      this.history.change((d) => {
+        d.strokes[this.selected][key] = value;
+      });
+    this.render();
+  }
+  click(e) {
+    const b = e.target.closest('button');
+    if (!b) return;
+    this.finish();
+    if (b.dataset.tool) {
+      this.tool = b.dataset.tool;
+      this.selected = -1;
+    }
+    if (b.dataset.color) {
+      this.color = b.dataset.color;
+      this.applyProperty('color', this.color);
+    }
+    if (b.dataset.angle !== undefined) this.previewAngle = Number(b.dataset.angle);
+    const op = b.dataset.do;
+    this.previewPanel.hidden = op !== 'preview';
+    if (op === 'close') {
+      this.root.close();
+      return;
+    }
+    if (op === 'undo' || op === 'redo') {
+      this.history[op]();
+      this.selected = -1;
+    }
+    if (op === 'preview') {
+      this.previewPanel.querySelector('img').src = this.onPreview(
+        this.history.data,
+        this.previewAngle,
+      );
+      this.previewPanel.hidden = false;
+    }
+    if (op === 'birth') {
+      const d = sanitizeSketch(this.history.data);
+      if (!d.strokes.length) {
+        this.feedback('線や面を描いてから誕生させてください。');
         return;
       }
-      if (!this.stroke) return;
-      const samples = e.getCoalescedEvents?.();
-      for (const sample of samples?.length ? samples : [e]) {
-        const p = point(sample),
-          last = this.stroke.points.at(-1);
-        if (Math.hypot(p.x - last.x, p.y - last.y) > 0.004 && this.stroke.points.length < 512)
-          this.stroke.points.push(p);
+      this.onBirth(
+        d,
+        this.root.querySelector('#character-name').value.trim() || 'ななしのラクガキ',
+      );
+    }
+    if (
+      ['smaller', 'bigger', 'rotate', 'flip', 'copy', 'delete'].includes(op) &&
+      this.selected >= 0
+    ) {
+      if (op === 'copy' && this.history.data.strokes.length >= SKETCH_LIMIT) {
+        this.feedback('線と面は96個まで。不要なものを消してから複製してください。');
+        return;
       }
-      this.render();
-    });
-    for (const type of ['pointerup', 'pointercancel', 'lostpointercapture'])
-      this.canvas.addEventListener(type, (e) => {
-        if (e.pointerId === this.pointer) this.finish();
+      this.history.change((d) => {
+        const s = d.strokes[this.selected];
+        if (!s) return;
+        if (op === 'delete') {
+          d.strokes.splice(this.selected, 1);
+          this.selected = -1;
+          return;
+        }
+        if (op === 'copy') {
+          const s2 = copy(s);
+          s2.points = s2.points.map((p) => ({
+            x: Math.min(0.99, p.x + 0.025),
+            y: Math.min(0.99, p.y + 0.025),
+          }));
+          d.strokes.push(s2);
+          this.selected = d.strokes.length - 1;
+          return;
+        }
+        const b = sketchBounds(s.points),
+          cx = (b.minX + b.maxX) / 2,
+          cy = (b.minY + b.maxY) / 2,
+          a = op === 'rotate' ? Math.PI / 12 : 0,
+          scale = op === 'bigger' ? 1.12 : op === 'smaller' ? 1 / 1.12 : 1;
+        const pts = s.points.map((p) => {
+          const x = (p.x - cx) * (op === 'flip' ? -1 : 1) * scale,
+            y = (p.y - cy) * scale;
+          return {
+            x: cx + x * Math.cos(a) - y * Math.sin(a),
+            y: cy + x * Math.sin(a) + y * Math.cos(a),
+          };
+        });
+        if (pts.every((p) => p.x >= 0 && p.x <= 1 && p.y >= 0 && p.y <= 1)) s.points = pts;
+        else this.feedback('紙からはみ出します。中央へ移動してから試してください。');
       });
+    }
+    this.render();
   }
-  eraseAt(point) {
-    this.history.data[this.part] = this.history.data[this.part].filter((stroke) => {
-      if (stroke.points.some((p) => Math.hypot(p.x - point.x, p.y - point.y) < 0.08)) return false;
-      let inside = false;
-      const points = stroke.points;
-      for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
-        const a = points[i],
-          b = points[j];
-        if (
-          a.y > point.y !== b.y > point.y &&
-          point.x < ((b.x - a.x) * (point.y - a.y)) / (b.y - a.y) + a.x
-        )
-          inside = !inside;
+  point(e) {
+    const r = this.canvas.getBoundingClientRect();
+    return {
+      x: Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)),
+      y: Math.max(0, Math.min(1, (e.clientY - r.top) / r.height)),
+    };
+  }
+  down(e) {
+    if (this.pointer !== null) return;
+    this.pointer = e.pointerId;
+    this.canvas.setPointerCapture(e.pointerId);
+    const p = this.point(e);
+    if (this.tool === 'select') {
+      this.selected = this.history.data.strokes.findLastIndex((s) => hitStroke(s, p));
+      if (this.selected >= 0) {
+        this.history.change(() => {});
+        this.drag = { start: p, stroke: copy(this.history.data.strokes[this.selected]) };
+        const s = this.drag.stroke;
+        this.color = s.color;
+        this.width = s.width;
+        this.depth = s.depth;
+        this.role = s.role;
       }
-      return !inside;
-    });
+    } else if (this.tool === 'erase') {
+      this.selected = -1;
+      this.history.change((d) => this.erase(d, p));
+    } else if (this.history.data.strokes.length >= SKETCH_LIMIT)
+      this.feedback('線と面は96個まで。消しゴムや選択削除で整理できます。');
+    else {
+      this.selected = -1;
+      this.stroke = {
+        color: this.color,
+        width: this.width,
+        depth: this.depth,
+        role: this.role,
+        closed: this.tool === 'fill',
+        points: [p],
+      };
+    }
+    this.render();
+  }
+  move(e) {
+    if (e.pointerId !== this.pointer) return;
+    const p = this.point(e);
+    if (this.tool === 'erase') {
+      this.erase(this.history.data, p);
+      this.render();
+      return;
+    }
+    if (this.drag) {
+      const b = sketchBounds(this.drag.stroke.points),
+        dx = Math.max(-b.minX, Math.min(1 - b.maxX, p.x - this.drag.start.x)),
+        dy = Math.max(-b.minY, Math.min(1 - b.maxY, p.y - this.drag.start.y));
+      this.history.data.strokes[this.selected].points = this.drag.stroke.points.map((q) => ({
+        x: q.x + dx,
+        y: q.y + dy,
+      }));
+      this.render();
+      return;
+    }
+    if (!this.stroke) return;
+    const samples = e.getCoalescedEvents?.();
+    for (const sample of samples?.length ? samples : [e]) {
+      const q = this.point(sample),
+        last = this.stroke.points.at(-1);
+      if (Math.hypot(q.x - last.x, q.y - last.y) > 0.002 && this.stroke.points.length < 2048)
+        this.stroke.points.push(q);
+    }
+    this.render();
   }
   finish() {
     if (this.stroke) {
-      const stroke = this.stroke;
-      this.history.change((d) => {
-        if (d[this.part].length >= 24) d[this.part].shift();
-        d[this.part].push(stroke);
-      });
+      const s = this.stroke;
+      this.history.change((d) => d.strokes.push(s));
     }
     this.stroke = null;
+    this.drag = null;
     this.pointer = null;
     this.render();
   }
   open(drawing) {
     this.previewPanel.hidden = true;
-    if (drawing) this.history = new DrawingHistory(drawing);
+    this.selected = -1;
+    this.tool = 'pen';
+    const source = JSON.stringify(drawing);
+    if (drawing && source !== this.source) {
+      this.history = new DrawingHistory(legacyToSketch(sanitizeDrawing(drawing)));
+      this.source = source;
+    }
     this.root.showModal();
     this.render();
+    this.root.scrollTop = 0;
+    this.root.querySelector('.editor-tools').scrollTop = 0;
+  }
+  erase(drawing, point) {
+    if (!eraseSketch(drawing, point))
+      this.feedback('線が96個を超えます。選択を削除で整理してから部分消去してください。');
   }
   render() {
-    const ctx = this.ctx;
-    ctx.clearRect(0, 0, 480, 480);
-    ctx.strokeStyle = '#dfdfd2';
+    if (!this.ctx) return;
+    const ctx = this.ctx,
+      size = 640;
+    ctx.clearRect(0, 0, size, size);
+    ctx.strokeStyle = '#e7e8de';
     ctx.lineWidth = 1;
-    for (let n = 24; n < 480; n += 24) {
+    for (let n = 32; n < size; n += 32) {
       ctx.beginPath();
       ctx.moveTo(n, 0);
-      ctx.lineTo(n, 480);
+      ctx.lineTo(n, size);
       ctx.moveTo(0, n);
-      ctx.lineTo(480, n);
+      ctx.lineTo(size, n);
       ctx.stroke();
     }
-    // Connection reference uses the same normalized part coordinates as the mesh builder.
-    ctx.setLineDash([8, 8]);
-    ctx.strokeStyle = '#e9a28a';
-    ctx.beginPath();
-    ctx.moveTo(240, 0);
-    ctx.lineTo(240, 480);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    for (const s of [...this.history.data[this.part], ...(this.stroke ? [this.stroke] : [])]) {
+    for (const s of [...this.history.data.strokes, ...(this.stroke ? [this.stroke] : [])]) {
       ctx.beginPath();
       s.points.forEach((p, i) =>
-        i ? ctx.lineTo(p.x * 480, p.y * 480) : ctx.moveTo(p.x * 480, p.y * 480),
+        i ? ctx.lineTo(p.x * size, p.y * size) : ctx.moveTo(p.x * size, p.y * size),
       );
-      if (s.points.length === 1)
-        ctx.arc(s.points[0].x * 480, s.points[0].y * 480, 6, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.fillStyle = s.color;
-      ctx.globalAlpha = 0.85;
-      ctx.fill();
-      ctx.globalAlpha = 1;
       ctx.strokeStyle = s.color;
-      ctx.lineWidth = 5;
+      ctx.fillStyle = s.color;
+      ctx.lineWidth = s.width * size;
       ctx.lineJoin = 'round';
-      ctx.stroke();
+      ctx.lineCap = 'round';
+      if (s.points.length === 1) {
+        ctx.arc(s.points[0].x * size, s.points[0].y * size, (s.width * size) / 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (s.closed) {
+        ctx.closePath();
+        ctx.fill();
+      } else ctx.stroke();
     }
-    this.root.querySelector('#drawing-prompt').textContent = `${LABELS[this.part]}を描こう`;
-    for (const b of this.root.querySelectorAll('[data-part]'))
-      b.classList.toggle('selected', b.dataset.part === this.part);
+    const selected = this.history.data.strokes[this.selected];
+    if (selected) {
+      const b = sketchBounds(selected.points);
+      ctx.strokeStyle = '#e88258';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([8, 5]);
+      ctx.strokeRect(
+        b.minX * size - 7,
+        b.minY * size - 7,
+        (b.maxX - b.minX) * size + 14,
+        (b.maxY - b.minY) * size + 14,
+      );
+      ctx.setLineDash([]);
+    }
+    this.root.querySelector('[data-selection]').textContent = selected
+      ? `選択中: ${selected.closed ? '面' : '線'} · ${ROLES[selected.role]} / ドラッグで移動`
+      : '選択・移動で、線や面をつかんで配置';
+    this.root.querySelector('#drawing-prompt').textContent =
+      this.tool === 'erase'
+        ? '線はなぞった部分を消去。面はまとめて消去します。'
+        : this.tool === 'select'
+          ? '全身のどこでも選んで移動。色・太さ・動きも変更できます。'
+          : 'ペンは線を閉じません。面ツールだけ輪郭を閉じます。';
+    for (const b of this.root.querySelectorAll('[data-tool]'))
+      b.setAttribute('aria-pressed', String(b.dataset.tool === this.tool));
     for (const b of this.root.querySelectorAll('[data-color]'))
       b.classList.toggle('selected', b.dataset.color === this.color);
-    this.root.querySelector('[data-do="erase"]').classList.toggle('selected', this.eraser);
+    for (const b of this.root.querySelectorAll('.selection-tools button')) b.disabled = !selected;
+    for (const key of ['width', 'depth'])
+      this.root.querySelector(`[data-prop="${key}"]`).value = this[key];
+    this.root.querySelector('[type="color"]').value = this.color;
+    this.root.querySelector('[aria-label="この線・面の動き"]').value = this.role;
     this.root.querySelector('[data-do="undo"]').disabled = !this.history.undoStack.length;
     this.root.querySelector('[data-do="redo"]').disabled = !this.history.redoStack.length;
+    this.root.querySelector('[data-do="birth"]').disabled = !this.history.data.strokes.length;
     this.queuePreview();
   }
   queuePreview() {
@@ -211,20 +392,15 @@ export class Editor {
     this.previewPending = setTimeout(() => {
       this.previewPending = null;
       if (!this.root.open) return;
-      const drawing = this.stroke ? copy(this.history.data) : this.history.data;
-      if (this.stroke) drawing[this.part].push(copy(this.stroke));
-      this.assembly.querySelector('img').src = this.onPreview(
-        drawing,
-        this.previewAngle,
-        this.part,
-      );
+      const d = copy(this.history.data);
+      if (this.stroke) d.strokes.push(copy(this.stroke));
+      this.assembly.querySelector('img').src = this.onPreview(d, this.previewAngle);
       this.assembly.dataset.revision = ++this.previewRevision;
-      for (const b of this.assembly.querySelectorAll('[data-angle]'))
-        b.classList.toggle('selected', Number(b.dataset.angle) === this.previewAngle);
-    }, 100);
+    }, 120);
   }
   reset() {
-    this.history = new DrawingHistory(defaultDrawing());
+    this.history = new DrawingHistory(sketchTemplate('blank'));
+    this.selected = -1;
     this.render();
   }
 }

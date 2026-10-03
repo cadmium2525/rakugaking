@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import { describeDrawing, clamp } from '../core/shape.js';
 import { PARTS } from '../core/drawing.js';
+import { buildSketchCharacter } from './sketch-character.js';
 
 export function buildCharacter(raw) {
+  if (raw?.kind === 'sketch') return buildSketchCharacter(raw);
   const { drawing, parts } = describeDrawing(raw);
   const root = new THREE.Group();
   root.name = 'root';

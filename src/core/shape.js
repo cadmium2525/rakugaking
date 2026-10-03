@@ -1,4 +1,5 @@
 import { PARTS, COLORS, defaultDrawing } from './drawing.js';
+import { sanitizeSketch } from './sketch.js';
 export const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 export function area(points) {
   let a = 0;
@@ -78,6 +79,7 @@ export function sanitizeStroke(stroke) {
   return { color: COLORS.includes(stroke?.color) ? stroke.color : COLORS[0], points };
 }
 export function sanitizeDrawing(raw) {
+  if (raw?.kind === 'sketch') return sanitizeSketch(raw);
   const fallback = defaultDrawing(),
     out = {};
   for (const part of PARTS) {

@@ -61,6 +61,10 @@ try {
     { timeout: 60000 },
   );
   await page.locator('#draw-open').click();
+  await page.getByLabel('下絵', { exact: true }).selectOption('dog');
+  await page.waitForFunction(() =>
+    document.querySelector('.assembly img')?.src.startsWith('data:'),
+  );
   await page.getByRole('button', { name: '誕生させる ✦', exact: true }).click();
   await page.locator('.editor').waitFor({ state: 'hidden' });
   await page.keyboard.press('Space');

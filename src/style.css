@@ -1289,3 +1289,333 @@ dialog {
     min-height: 34px;
   }
 }
+.sketch-editor {
+  max-width: calc(100vw - 16px);
+  width: min(1180px, calc(100vw - 24px));
+  padding: 20px;
+  max-height: calc(100dvh - 24px);
+}
+.sketch-editor button {
+  margin: 0;
+}
+.sketch-editor .sketch-toolbar button {
+  width: auto;
+  flex: 0 0 auto;
+}
+.sketch-editor .editor-heading h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+}
+.sketch-editor .editor-heading .eyebrow {
+  margin: 0 0 5px;
+}
+.sketch-presets {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-size: 12px;
+}
+.sketch-presets span {
+  font-size: 11px;
+  color: #63776d;
+}
+.sketch-editor select {
+  padding: 8px;
+  border: 1px solid #cad6c4;
+  border-radius: 8px;
+  background: #fffdf5;
+  color: #294c3d;
+  font: inherit;
+  min-height: 40px;
+}
+.sketch-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 278px;
+  gap: 20px;
+}
+.sketch-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.sketch-toolbar button {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 9px;
+  padding: 5px 12px;
+  background: #e5eadb;
+  font-size: 12px;
+}
+.sketch-toolbar button[aria-pressed='true'] {
+  color: #fff;
+  background: #456e5b;
+}
+.sketch-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  align-items: start;
+  gap: 12px;
+}
+.sketch-editor .drawing-area {
+  min-width: 0;
+  position: relative;
+}
+.sketch-editor .drawing-area canvas {
+  width: min(100%, calc(100dvh - 245px));
+  margin: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: none;
+  aspect-ratio: 1;
+  object-fit: fill;
+}
+.sketch-editor .drawing-area small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.sketch-editor .assembly {
+  min-width: 0;
+  padding: 8px;
+  margin: 0;
+  background: #e7eddf;
+  border-radius: 12px;
+}
+.sketch-editor .assembly img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+.sketch-editor .assembly-title {
+  font-size: 11px;
+  margin: 0;
+}
+.sketch-editor .assembly-angles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.sketch-editor .assembly-angles button {
+  flex: 1;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 11px;
+  padding: 3px;
+}
+.sketch-editor .editor-tools {
+  min-width: 0;
+  max-height: 68vh;
+  overflow: auto;
+  padding: 2px 5px 4px;
+  display: block;
+}
+.ink-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.ink-heading label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+}
+.ink-heading input {
+  width: 44px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid #bdcbb9;
+  border-radius: 6px;
+}
+.sketch-editor .swatches {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+.sketch-editor .swatches button {
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  border-width: 4px;
+}
+.sketch-properties {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+.sketch-properties label {
+  display: grid;
+  grid-template-columns: 95px minmax(0, 1fr);
+  align-items: center;
+  font-size: 11px;
+}
+.sketch-properties input {
+  width: 100%;
+  min-width: 0;
+  accent-color: #49795b;
+}
+.sketch-properties select {
+  width: 100%;
+}
+.sketch-editor .tool-grid {
+  margin-top: 6px;
+}
+.sketch-editor .tool-grid button {
+  min-height: 44px;
+}
+.sketch-editor [data-selection] {
+  font-size: 11px;
+  margin: 12px 0 4px;
+}
+.sketch-editor .editor-tip {
+  display: block;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.sketch-editor .name-label {
+  display: block;
+}
+.sketch-editor .editor-tools > button {
+  width: 100%;
+  margin-top: 8px;
+}
+.sketch-editor .preview-panel {
+  inset: 0;
+  z-index: 2;
+}
+@media (max-width: 900px) and (min-height: 501px) {
+  .sketch-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sketch-editor .editor-tools {
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+  }
+  .sketch-editor .swatches {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .sketch-workspace {
+    grid-template-columns: minmax(0, 1fr) 150px;
+  }
+}
+@media (max-width: 600px) and (min-height: 501px) {
+  .sketch-editor {
+    width: calc(100vw - 12px);
+    padding: 12px;
+    max-height: calc(100dvh - 12px);
+  }
+  .sketch-editor .editor-heading h2 {
+    font-size: 18px;
+    margin: 0;
+  }
+  .sketch-editor .editor-heading .eyebrow,
+  .sketch-presets span {
+    display: none;
+  }
+  .sketch-presets {
+    margin: 6px 0;
+  }
+  .sketch-workspace {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  .sketch-editor .assembly {
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    grid-template-rows: 20px 44px;
+    width: 100%;
+    padding: 5px;
+  }
+  .sketch-editor .assembly img {
+    width: 70px;
+    height: 70px;
+    grid-column: 1;
+    grid-row: 1/3;
+  }
+  .sketch-editor .assembly-title {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .sketch-editor .assembly-angles {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .sketch-editor .drawing-area {
+    width: 100%;
+  }
+  .sketch-toolbar {
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .sketch-toolbar button {
+    padding: 3px 7px;
+    font-size: 11px;
+  }
+}
+@media (max-height: 500px) {
+  .sketch-editor {
+    width: calc(100vw - 16px);
+    padding: 8px;
+    max-height: calc(100dvh - 16px);
+  }
+  .sketch-editor .editor-heading h2 {
+    font-size: 17px;
+    margin: 0;
+  }
+  .sketch-presets {
+    margin: 3px 0 6px;
+  }
+  .sketch-presets span {
+    display: none;
+  }
+  .sketch-editor .editor-heading > button {
+    min-height: 32px;
+  }
+  .sketch-grid {
+    grid-template-columns: minmax(0, 1fr) 228px;
+    gap: 10px;
+  }
+  .sketch-workspace {
+    grid-template-columns: minmax(0, 1fr) 106px;
+    gap: 6px;
+  }
+  .sketch-toolbar {
+    margin-bottom: 6px;
+    gap: 3px;
+  }
+  .sketch-toolbar button {
+    padding: 2px 4px;
+    font-size: 10px;
+    min-width: 36px;
+  }
+  .sketch-editor .drawing-area canvas {
+    width: min(100%, calc(100dvh - 175px));
+    height: auto;
+    margin: auto;
+  }
+  .sketch-editor .drawing-area small {
+    display: none;
+  }
+  .sketch-editor .assembly {
+    padding: 4px;
+  }
+  .sketch-editor .assembly-angles button {
+    min-width: 28px;
+    min-height: 36px;
+  }
+  .sketch-editor .editor-tools {
+    max-height: calc(100dvh - 108px);
+  }
+  .sketch-editor .swatches {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -87,7 +87,7 @@ export class GameView {
       camera = new THREE.PerspectiveCamera(35, 1, 0.1, 20);
     camera.position.set(Math.sin(angle) * 4.5, 1.6, Math.cos(angle) * 4.5);
     camera.lookAt(0, 1, 0);
-    if (part) {
+    if (part && avatar.userData.joints) {
       avatar.updateMatrixWorld(true);
       const box = new THREE.Box3().setFromObject(avatar.userData.joints[part]);
       if (part === 'body') {

@@ -1,7 +1,8 @@
 import { calculateStats } from './stats.js';
 import { levelStats } from './progression.js';
 import { PARTS, COLORS } from './drawing.js';
-export const GAME_VERSION = '3.0.0';
+import { validSketch } from './sketch.js';
+export const GAME_VERSION = '4.0.0';
 export const STAT_KEYS = ['hp', 'power', 'defense', 'speed', 'jump', 'weight'];
 export function validateRecord(record) {
   const errors = [];
@@ -34,29 +35,31 @@ export function validateRecord(record) {
     errors.push('合計タイムが不正です');
   const d = record.drawing;
   const shapeOK =
-    d &&
-    PARTS.every(
-      (part) =>
-        Array.isArray(d[part]) &&
-        d[part].length > 0 &&
-        d[part].length <= 12 &&
-        d[part].every(
-          (s) =>
-            s &&
-            COLORS.includes(s.color) &&
-            Array.isArray(s.points) &&
-            s.points.length >= 3 &&
-            s.points.length <= 64 &&
-            s.points.every(
-              (p) =>
-                p &&
-                Number.isFinite(p.x) &&
-                Number.isFinite(p.y) &&
-                Math.abs(p.x) <= 2 &&
-                Math.abs(p.y) <= 2,
+    d?.kind === 'sketch'
+      ? validSketch(d)
+      : d &&
+        PARTS.every(
+          (part) =>
+            Array.isArray(d[part]) &&
+            d[part].length > 0 &&
+            d[part].length <= 12 &&
+            d[part].every(
+              (s) =>
+                s &&
+                COLORS.includes(s.color) &&
+                Array.isArray(s.points) &&
+                s.points.length >= 3 &&
+                s.points.length <= 64 &&
+                s.points.every(
+                  (p) =>
+                    p &&
+                    Number.isFinite(p.x) &&
+                    Number.isFinite(p.y) &&
+                    Math.abs(p.x) <= 2 &&
+                    Math.abs(p.y) <= 2,
+                ),
             ),
-        ),
-    );
+        );
   if (!shapeOK) errors.push('キャラクター形状が不正です');
   if (shapeOK && Number.isInteger(record.level)) {
     const expected = levelStats(calculateStats(d), record.level);

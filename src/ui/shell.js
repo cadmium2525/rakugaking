@@ -1,6 +1,6 @@
 export const shell = `<canvas id="world" aria-label="3Dアクションの世界"></canvas>
 <header><a class="brand" href="./">RAKU<span>GA</span><small>ラクガキの冒険</small></a><div class="stage-label"><i></i> PLAYGROUND <span>はじまりの広場</span></div><button id="pause" aria-label="一時停止">Ⅱ</button></header>
-<section class="intro"><p class="eyebrow">YOUR LITTLE BIG ADVENTURE</p><h1>そのラクガキに、<br>冒険を。</h1><p>描いたかたちが、きみだけのヒーローになる。</p><div class="pill">6つのパーツ。5つの世界。ひとつの冒険。</div></section>
+<section class="intro"><p class="eyebrow">YOUR LITTLE BIG ADVENTURE</p><h1>そのラクガキに、<br>冒険を。</h1><p>犬もドラゴンも、ひとつの紙から生まれる。</p><div class="pill">自由なかたち。5つの世界。ひとつの冒険。</div></section>
 <div id="home-actions"><button id="draw-open" class="primary">✎ ラクガキを描く</button><button id="adventure">冒険にでかける →</button><button id="time-attack">ALL STAGES TIME ATTACK</button><div class="home-links"><button id="library-open">なかま一覧</button><button id="ranking-open">ランキング ↗</button></div></div><div id="save-status" role="status"></div>
 <div id="player-level"></div><div id="run-hud" hidden></div><div id="objective"></div><div id="birth-banner" hidden>HELLO, WORLD ✦</div><aside id="status" role="status">世界を準備しています…</aside>
 <div class="controls"><div><div id="stick" aria-label="移動スティック"><span></span></div><label>MOVE</label></div><div class="buttons"><button id="action">✦<small>ACTION</small></button><button id="jump">↑<small>JUMP</small></button></div></div>

@@ -39,8 +39,8 @@ export async function playField(page, screenshots = false) {
     await page.waitForTimeout(35);
   }
   for (const key of held) await page.keyboard.up(key);
-  await expect(page.locator('#result')).toBeVisible();
   const final = await page.evaluate(() => window.__qa.state());
+  await expect(page.locator('#result'), JSON.stringify(final)).toBeVisible();
   expect(final.field.rewards).toHaveLength(3);
   expect(final.deaths).toBe(0);
 }
