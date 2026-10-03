@@ -15,6 +15,13 @@ test('wide field missions, boss, emblems and gate work through real keyboard inp
   await page.locator('[data-mission="ruins"]').click();
   await expect(page.locator('[data-mission="ruins"]')).toHaveAttribute('aria-pressed', 'true');
   await page.screenshot({ path: 'test-results/field-start.png' });
+  const metrics = await page.evaluate(() => window.__qa.state());
+  console.log(
+    'Field render budget',
+    JSON.stringify({ calls: metrics.calls, triangles: metrics.triangles }),
+  );
+  expect(metrics.calls).toBeLessThan(200);
+  expect(metrics.triangles).toBeLessThan(60000);
   for (const size of [
     { width: 390, height: 844 },
     { width: 844, height: 390 },

@@ -5,6 +5,7 @@ import { animateCharacter } from './animation.js';
 import { addScenery } from './scenery.js';
 import { windPhase } from '../core/course.js';
 import { buildField } from './field-view.js';
+import { fieldHeight } from './field-terrain.js';
 
 export class GameView {
   constructor(canvas, platforms) {
@@ -21,6 +22,20 @@ export class GameView {
     const sun = new THREE.DirectionalLight(0xfff2d0, 1.7);
     sun.position.set(-5, 12, 8);
     this.scene.add(sun);
+    this.sun = sun;
+    this.scene.add(sun.target);
+    sun.shadow.mapSize.set(1024, 1024);
+    Object.assign(sun.shadow.camera, {
+      left: -36,
+      right: 36,
+      top: 36,
+      bottom: -36,
+      near: 1,
+      far: 110,
+    });
+    sun.shadow.normalBias = 0.12;
+    sun.shadow.bias = -0.0003;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.world = new THREE.Group();
     this.scene.add(this.world);
     for (const p of platforms) {
@@ -73,10 +88,13 @@ export class GameView {
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, cap, Math.sqrt(budget / (w * h))));
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
+    this.camera.fov = this.fieldMode ? (h < 500 ? 50 : 60) : 48;
     this.camera.updateProjectionMatrix();
   }
   setQuality(quality) {
     this.quality = quality;
+    this.renderer.shadowMap.enabled = !!this.fieldMode && quality !== 'low';
+    this.sun.castShadow = this.renderer.shadowMap.enabled;
     this.resize();
   }
   celebrate() {
@@ -117,10 +135,15 @@ export class GameView {
     this.scene.remove(this.avatar);
     disposeCharacter(this.avatar);
     this.avatar = buildCharacter(drawing);
+    this.avatar.traverse((o) => {
+      if (o.isMesh) o.castShadow = true;
+    });
     this.scene.add(this.avatar);
   }
   setStage(stage) {
     this.fieldMode = !!stage.field;
+    this.renderer.shadowMap.enabled = this.fieldMode && this.quality !== 'low';
+    this.sun.castShadow = this.renderer.shadowMap.enabled;
     this.platforms = stage.platforms;
     this.scene.remove(this.world);
     disposeCharacter(this.world);
@@ -131,9 +154,16 @@ export class GameView {
     this.scene.fog.near = stage.field ? 55 : 30;
     this.scene.fog.far = stage.field ? 135 : 65;
     this.camera.far = stage.field ? 180 : 100;
+    this.camera.fov = stage.field ? (innerHeight < 500 ? 50 : 60) : 48;
     this.camera.updateProjectionMatrix();
     this.platformMeshes = [];
     for (const p of stage.platforms) {
+      if (p.terrain) {
+        const placeholder = new THREE.Group();
+        placeholder.visible = false;
+        this.platformMeshes.push(placeholder);
+        continue;
+      }
       const mesh = new THREE.Mesh(
         new THREE.BoxGeometry(p.w, p.h, p.d),
         new THREE.MeshStandardMaterial({
@@ -179,6 +209,13 @@ export class GameView {
     this.goalRing = ring;
     this.scenery = stage.routeLength && !stage.field ? addScenery(this.world, stage) : [];
     this.fieldView = stage.field ? buildField(this.world, stage) : null;
+    if (stage.field)
+      this.world.traverse((o) => {
+        if (o.isMesh) {
+          o.receiveShadow = true;
+          o.castShadow = o.isInstancedMesh || o.geometry?.type === 'CylinderGeometry';
+        }
+      });
     this.collectibleMeshes = (stage.collectibles || []).map((item) => {
       const mesh = new THREE.Mesh(
         new THREE.OctahedronGeometry(0.32),
@@ -257,7 +294,7 @@ export class GameView {
         this.windVanes.push({ mesh: vane, zone: wind });
       }
     }
-    for (const w of stage.waters || (stage.water ? [stage.water] : [])) {
+    for (const w of stage.field ? [] : stage.waters || (stage.water ? [stage.water] : [])) {
       const water = new THREE.Mesh(
         new THREE.PlaneGeometry(w.width || 7, w.maxZ - w.minZ),
         new THREE.MeshStandardMaterial({
@@ -339,9 +376,10 @@ export class GameView {
       this.avatar.position.y += (1 - t) * (1 - t) * 1.4;
     }
     this.shadow.visible = false;
-    let top = -Infinity;
+    let top = this.fieldMode ? fieldHeight(p.x, p.z) : -Infinity;
     for (let i = 0; i < this.platforms.length; i++) {
       const ground = this.platforms[i];
+      if (ground.terrain) continue;
       if (this.platformMeshes?.[i]?.visible === false) continue;
       if (Math.abs(p.x - ground.x) < ground.w / 2 && Math.abs(p.z - ground.z) < ground.d / 2)
         top = Math.max(top, ground.y + ground.h / 2);
@@ -354,10 +392,24 @@ export class GameView {
     }
     const speed = Math.hypot(sim.vx, sim.vz);
     if (speed > 0.2) this.avatar.rotation.y = Math.atan2(sim.vx, sim.vz);
-    this.cameraTarget.set(p.x, p.y + (this.fieldMode ? 10 : 7), p.z + (this.fieldMode ? 16 : 12));
+    const portrait = this.camera.aspect < 0.8;
+    const compact = innerHeight < 500;
+    this.cameraTarget.set(
+      p.x,
+      p.y + (this.fieldMode ? (portrait ? 15 : compact ? 6 : 8.5) : 7),
+      p.z + (this.fieldMode ? (portrait ? 22 : compact ? 10 : 15) : 12),
+    );
     this.camera.position.lerp(this.cameraTarget, this.initial ? 1 : 1 - Math.exp(-dt * 5));
-    this.look.set(p.x, p.y + 0.3, p.z);
+    this.look.set(
+      p.x,
+      p.y + (this.fieldMode ? 1.5 : 0.3),
+      p.z - (this.fieldMode ? (compact ? 3 : 5) : 0),
+    );
     this.camera.lookAt(this.look);
+    if (this.fieldMode) {
+      this.sun.position.set(p.x - 25, p.y + 35, p.z + 15);
+      this.sun.target.position.set(p.x, 0, p.z - 15);
+    }
     this.initial = false;
     this.renderer.render(this.scene, this.camera);
   }

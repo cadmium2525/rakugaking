@@ -1,5 +1,6 @@
 import { DrawingHistory, copy } from '../core/drawing.js';
 import { sanitizeDrawing } from '../core/shape.js';
+import { bucketFill } from '../core/bucket.js';
 import {
   INKS,
   ROLES,
@@ -32,7 +33,7 @@ export class Editor {
     this.root.className = 'editor sketch-editor';
     this.root.innerHTML = `<div class="editor-heading"><div><p class="eyebrow">ONE CANVAS · ANY CREATURE</p><h2>全身を、ひとつの紙に。</h2></div><button data-do="close" aria-label="エディタを閉じる">×</button></div>
       <div class="sketch-presets"><label>下絵 <select aria-label="下絵"><option value="">選んで描きかえる</option><option value="blank">白紙から自由に</option><option value="human">ひと</option><option value="dog">犬</option><option value="dragon">ドラゴン</option></select></label><span>切替も「戻す」で元に戻せます</span></div>
-      <div class="sketch-grid"><div class="sketch-main"><div class="sketch-toolbar" role="group" aria-label="描画道具"><button data-tool="pen">ペン</button><button data-tool="fill">面</button><button data-tool="select">選択・移動</button><button data-tool="erase">消しゴム</button><button data-do="undo" aria-label="↶ 戻す">↶</button><button data-do="redo" aria-label="↷ 進む">↷</button></div>
+      <div class="sketch-grid"><div class="sketch-main"><div class="sketch-toolbar" role="group" aria-label="描画道具"><button data-tool="pen">ペン</button><button data-tool="bucket">塗りつぶし</button><button data-tool="fill">面</button><button data-tool="select">選択・移動</button><button data-tool="erase">消しゴム</button><button data-do="undo" aria-label="↶ 戻す">↶</button><button data-do="redo" aria-label="↷ 進む">↷</button></div>
       <div class="sketch-workspace"><div class="drawing-area"><canvas width="640" height="640" aria-label="ラクガキキャンバス"></canvas><small id="drawing-prompt">ペンは線を閉じません。面ツールだけ輪郭を閉じます。</small></div>
       <section class="assembly"><p class="assembly-title">そのまま立体に</p><img alt="組み立て中のキャラクター" draggable="false"><div class="assembly-angles"><button data-angle="0">正面</button><button data-angle="0.65">斜め</button><button data-angle="1.57">横</button></div></section></div></div>
       <aside class="editor-tools"><div class="ink-heading"><strong>色は自由に</strong><label>カスタム色<input type="color" aria-label="自由な色" value="${this.color}"></label></div><div class="swatches">${INKS.map((c) => `<button data-color="${c}" style="--swatch:${c}" aria-label="色 ${c}"></button>`).join('')}</div>
@@ -192,10 +193,12 @@ export class Editor {
         }
         if (op === 'copy') {
           const s2 = copy(s);
-          s2.points = s2.points.map((p) => ({
+          const move = (p) => ({
             x: Math.min(0.99, p.x + 0.025),
             y: Math.min(0.99, p.y + 0.025),
-          }));
+          });
+          s2.points = s2.points.map(move);
+          if (s2.holes) s2.holes = s2.holes.map((p) => p.map(move));
           d.strokes.push(s2);
           this.selected = d.strokes.length - 1;
           return;
@@ -205,16 +208,19 @@ export class Editor {
           cy = (b.minY + b.maxY) / 2,
           a = op === 'rotate' ? Math.PI / 12 : 0,
           scale = op === 'bigger' ? 1.12 : op === 'smaller' ? 1 / 1.12 : 1;
-        const pts = s.points.map((p) => {
+        const transform = (p) => {
           const x = (p.x - cx) * (op === 'flip' ? -1 : 1) * scale,
             y = (p.y - cy) * scale;
           return {
             x: cx + x * Math.cos(a) - y * Math.sin(a),
             y: cy + x * Math.sin(a) + y * Math.cos(a),
           };
-        });
-        if (pts.every((p) => p.x >= 0 && p.x <= 1 && p.y >= 0 && p.y <= 1)) s.points = pts;
-        else this.feedback('紙からはみ出します。中央へ移動してから試してください。');
+        };
+        const pts = s.points.map(transform);
+        if (pts.every((p) => p.x >= 0 && p.x <= 1 && p.y >= 0 && p.y <= 1)) {
+          s.points = pts;
+          if (s.holes) s.holes = s.holes.map((p) => p.map(transform));
+        } else this.feedback('紙からはみ出します。中央へ移動してから試してください。');
       });
     }
     this.render();
@@ -231,7 +237,29 @@ export class Editor {
     this.pointer = e.pointerId;
     this.canvas.setPointerCapture(e.pointerId);
     const p = this.point(e);
-    if (this.tool === 'select') {
+    if (this.tool === 'bucket') {
+      this.selected = -1;
+      let result;
+      this.history.change((d) => {
+        result = bucketFill(d, p, {
+          color: this.color,
+          width: 0.004,
+          depth: this.depth,
+          role: this.role,
+        });
+      });
+      this.feedback(
+        {
+          filled: '囲んだ場所を塗りつぶしました。線はそのまま残ります。',
+          painted: '面の色を変更しました。',
+          same: 'すでにこの色です。',
+          open: '線が開いています。囲んだ内側をタップしてください。',
+          line: '線の上ではなく、囲んだ内側をタップしてください。',
+          limit: '線と面は96個まで。不要なものを削除してください。',
+          complex: '輪郭が複雑すぎます。小さな範囲に分けて塗ってください。',
+        }[result],
+      );
+    } else if (this.tool === 'select') {
       this.selected = this.history.data.strokes.findLastIndex((s) => hitStroke(s, p));
       if (this.selected >= 0) {
         this.history.change(() => {});
@@ -276,6 +304,10 @@ export class Editor {
         x: q.x + dx,
         y: q.y + dy,
       }));
+      if (this.drag.stroke.holes)
+        this.history.data.strokes[this.selected].holes = this.drag.stroke.holes.map((loop) =>
+          loop.map((q) => ({ x: q.x + dx, y: q.y + dy })),
+        );
       this.render();
       return;
     }
@@ -347,7 +379,13 @@ export class Editor {
         ctx.fill();
       } else if (s.closed) {
         ctx.closePath();
-        ctx.fill();
+        for (const loop of s.holes || []) {
+          loop.forEach((p, i) =>
+            i ? ctx.lineTo(p.x * size, p.y * size) : ctx.moveTo(p.x * size, p.y * size),
+          );
+          ctx.closePath();
+        }
+        ctx.fill('evenodd');
       } else ctx.stroke();
     }
     const selected = this.history.data.strokes[this.selected];
@@ -370,9 +408,11 @@ export class Editor {
     this.root.querySelector('#drawing-prompt').textContent =
       this.tool === 'erase'
         ? '線はなぞった部分を消去。面はまとめて消去します。'
-        : this.tool === 'select'
-          ? '全身のどこでも選んで移動。色・太さ・動きも変更できます。'
-          : 'ペンは線を閉じません。面ツールだけ輪郭を閉じます。';
+        : this.tool === 'bucket'
+          ? '囲んだ内側をタップ。面をタップすると色を変更します。'
+          : this.tool === 'select'
+            ? '全身のどこでも選んで移動。色・太さ・動きも変更できます。'
+            : 'ペンは線を閉じません。面ツールだけ輪郭を閉じます。';
     for (const b of this.root.querySelectorAll('[data-tool]'))
       b.setAttribute('aria-pressed', String(b.dataset.tool === this.tool));
     for (const b of this.root.querySelectorAll('[data-color]'))

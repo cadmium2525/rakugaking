@@ -53,11 +53,32 @@ export function sanitizeSketch(raw) {
         (p, i) => !i || Math.hypot(p.x - points[i - 1].x, p.y - points[i - 1].y) > 0.001,
       );
       if (!points.length) return [];
-      if (points.length > 128) {
+      const rawHoles = s.closed && Array.isArray(s.holes) ? s.holes.slice(0, 8) : [];
+      const holes = rawHoles.flatMap((loop) => {
+        if (!Array.isArray(loop)) return [];
+        let p = loop
+          .slice(0, 2048)
+          .filter((q) => q && Number.isFinite(q.x) && Number.isFinite(q.y))
+          .map((q) => ({
+            x: Math.round(clamp(q.x, 0, 1) * 10000) / 10000,
+            y: Math.round(clamp(q.y, 0, 1) * 10000) / 10000,
+          }));
+        const limit = Math.min(32, Math.floor(64 / Math.max(1, rawHoles.length)));
+        if (p.length > limit) {
+          const source = p;
+          p = Array.from(
+            { length: limit },
+            (_, i) => source[Math.floor((i * source.length) / limit)],
+          );
+        }
+        return p.length >= 3 ? [p] : [];
+      });
+      const limit = 128 - holes.reduce((n, p) => n + p.length, 0);
+      if (points.length > limit) {
         const source = points;
         points = Array.from(
-          { length: 128 },
-          (_, i) => source[Math.round((i * (source.length - 1)) / 127)],
+          { length: limit },
+          (_, i) => source[Math.round((i * (source.length - 1)) / (limit - 1))],
         );
       }
       return [
@@ -68,6 +89,7 @@ export function sanitizeSketch(raw) {
           depth: clamp(Number.isFinite(s.depth) ? s.depth : 0.18, 0.03, 0.5),
           closed: s.closed === true,
           role: Object.hasOwn(ROLES, s.role) ? s.role : 'body',
+          ...(holes.length ? { holes } : {}),
         },
       ];
     });
@@ -95,6 +117,27 @@ export function validSketch(raw) {
         Array.isArray(s.points) &&
         s.points.length > 0 &&
         s.points.length <= 128 &&
+        (s.holes === undefined ||
+          (s.closed &&
+            Array.isArray(s.holes) &&
+            s.holes.length <= 8 &&
+            s.holes.every(
+              (p) =>
+                Array.isArray(p) &&
+                p.length >= 3 &&
+                p.length <= 32 &&
+                p.every(
+                  (q) =>
+                    q &&
+                    Number.isFinite(q.x) &&
+                    Number.isFinite(q.y) &&
+                    q.x >= 0 &&
+                    q.x <= 1 &&
+                    q.y >= 0 &&
+                    q.y <= 1,
+                ),
+            ) &&
+            s.points.length + s.holes.reduce((n, p) => n + p.length, 0) <= 128)) &&
         s.points.every(
           (p) =>
             p &&
@@ -115,7 +158,8 @@ export function inkArea(s) {
       const q = s.points[(i + 1) % s.points.length];
       area += p.x * q.y - q.x * p.y;
     });
-    return Math.abs(area) / 2;
+    const holes = (s.holes || []).reduce((n, p) => n + inkArea({ points: p, closed: true }), 0);
+    return Math.max(0, Math.abs(area) / 2 - holes);
   }
   let length = 0;
   s.points.forEach((p, i) => {
@@ -133,10 +177,13 @@ export function hitStroke(s, p, radius = 0.015) {
   if (s.points.some((v, i) => distanceToSegment(p, v, s.points[i + 1] || v) < radius + s.width / 2))
     return true;
   if (!s.closed) return false;
+  return insideLoop(s.points, p) && !(s.holes || []).some((loop) => insideLoop(loop, p));
+}
+function insideLoop(points, p) {
   let inside = false;
-  for (let i = 0, j = s.points.length - 1; i < s.points.length; j = i++) {
-    const a = s.points[i],
-      b = s.points[j];
+  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+    const a = points[i],
+      b = points[j];
     if (a.y > p.y !== b.y > p.y && p.x < ((b.x - a.x) * (p.y - a.y)) / (b.y - a.y) + a.x)
       inside = !inside;
   }

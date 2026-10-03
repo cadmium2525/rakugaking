@@ -69,6 +69,15 @@ try {
   await page.locator('.editor').waitFor({ state: 'hidden' });
   await page.keyboard.press('Space');
   await page.screenshot({ path: 'test-results/production.png' });
+  await page.locator('#adventure').click();
+  await page.locator('[data-stage="1"]').click();
+  await page.locator('.field-hud').waitFor({ state: 'visible' });
+  await page.keyboard.down('KeyW');
+  await page.waitForTimeout(300);
+  await page.keyboard.up('KeyW');
+  await page.screenshot({ path: 'test-results/production-field.png' });
+  await page.locator('#pause').click();
+  await page.locator('#home').click();
   assert.equal(await page.evaluate(() => typeof window.__qa), 'undefined');
   const manifest = await page.evaluate(async () => {
     const response = await fetch(document.querySelector('link[rel="manifest"]').href);

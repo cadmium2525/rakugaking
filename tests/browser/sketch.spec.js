@@ -16,6 +16,52 @@ async function saved(page) {
       }),
   );
 }
+test('tap bucket fills a pen outline, undoes, recolors, and survives birth and reload', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.locator('#draw-open').click();
+  await page.getByLabel('下絵', { exact: true }).selectOption('blank');
+  const r = await page.getByLabel('ラクガキキャンバス').boundingBox();
+  const p = (x, y) => [r.x + r.width * x, r.y + r.height * y];
+  await page.mouse.move(...p(0.2, 0.2));
+  await page.mouse.down();
+  for (const [x, y] of [
+    [0.8, 0.2],
+    [0.8, 0.8],
+    [0.2, 0.8],
+    [0.2, 0.2],
+  ])
+    await page.mouse.move(...p(x, y), { steps: 10 });
+  await page.mouse.up();
+  await page.locator('[data-color="#659dcc"]').click();
+  await page.locator('[data-tool="bucket"]').click();
+  await page.mouse.click(...p(0.5, 0.5));
+  await expect(page.locator('#editor-feedback')).toContainText('塗りつぶしました');
+  const pixel = () =>
+    page
+      .locator('.editor canvas')
+      .evaluate((c) => Array.from(c.getContext('2d').getImageData(300, 300, 1, 1).data));
+  expect(await pixel()).toEqual([101, 157, 204, 255]);
+  await page.locator('[data-do="undo"]').click();
+  expect((await pixel())[3]).toBe(0);
+  await page.locator('[data-do="redo"]').click();
+  await page.locator('[data-color="#e55353"]').click();
+  await page.mouse.click(...p(0.5, 0.5));
+  expect(await pixel()).toEqual([229, 83, 83, 255]);
+  await page.screenshot({ path: 'test-results/bucket-filled.png' });
+  await page.locator('[data-do="birth"]').click();
+  await expect(page.locator('#save-status')).toContainText('保存しました');
+  const data = await saved(page),
+    d = data.characters.find((c) => c.id === data.active).drawing;
+  expect(d.strokes).toHaveLength(2);
+  expect(d.strokes[0].closed).toBe(true);
+  expect(d.strokes[0].color).toBe('#e55353');
+  expect(d.strokes[1].closed).toBe(false);
+  await page.reload();
+  await page.locator('#draw-open').click();
+  expect(await pixel()).toEqual([229, 83, 83, 255]);
+});
 test('open custom-color stroke stays open after birth and reload; canvas selection transforms it', async ({
   page,
 }) => {

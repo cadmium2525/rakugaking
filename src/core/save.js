@@ -3,7 +3,7 @@ import { sanitizeDrawing } from './shape.js';
 import { newPlayer } from './progression.js';
 import { validateRecord, GAME_VERSION } from './ranking.js';
 import { calculateStats } from './stats.js';
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 const finite = (v, min, max, fallback) =>
   Number.isFinite(v) ? Math.max(min, Math.min(max, v)) : fallback;
 export function freshSave() {
@@ -52,7 +52,8 @@ export function migrateSave(raw) {
     notice = '旧セーブを新しい形式へ移行しました。';
   }
   if (raw.version === 2) raw = { ...raw, version: 3 };
-  if (raw.version !== 3)
+  if (raw.version === 3) raw = { ...raw, version: 4 };
+  if (raw.version !== 4)
     return {
       data: freshSave(),
       notice: 'セーブ形式を確認できません。元データは退避しました。',
@@ -94,7 +95,9 @@ export function migrateSave(raw) {
   data.legacyRecords = [
     ...(Array.isArray(raw.legacyRecords) ? raw.legacyRecords : []),
     ...(Array.isArray(raw.records)
-      ? raw.records.filter((r) => ['1.0.0', '2.0.0', '2.1.0', '3.0.0'].includes(r?.version))
+      ? raw.records.filter((r) =>
+          ['1.0.0', '2.0.0', '2.1.0', '3.0.0', '4.0.0'].includes(r?.version),
+        )
       : []),
   ]
     .filter(

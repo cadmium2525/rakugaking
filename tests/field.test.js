@@ -4,8 +4,51 @@ import { initPhysics } from '../src/core/controller.js';
 import { Course } from '../src/core/course.js';
 import { FIELD_STAGE as stage } from '../src/game/field-stage.js';
 import { driveField } from './helpers/field-driver.js';
+import { fieldHeight } from '../src/game/field-terrain.js';
 before(initPhysics);
 const stats = { speed: 6, jump: 8.5, weight: 1, hp: 100, power: 20, defense: 12 };
+test('west hillside and cave reward are reached through movement and jumping without teleportation', () => {
+  for (const route of [
+    [
+      [0, -8],
+      [-21, -18],
+      [-25, -29],
+      [-29, -36],
+      [-29, -41],
+    ],
+    [
+      [-18, 0],
+      [-31, -3],
+      [-31, -8],
+    ],
+  ]) {
+    const c = new Course(stage, { ...stats, speed: 4.3, jump: 7.5, weight: 2.6 });
+    let cursor = 0;
+    for (let i = 0; i < 6000 && cursor < route.length; i++) {
+      const [x, z] = route[cursor],
+        p = c.sim.position,
+        dx = x - p.x,
+        dz = z - p.z,
+        d = Math.hypot(dx, dz);
+      if (d < 0.45 && c.sim.grounded) {
+        cursor++;
+        continue;
+      }
+      c.step({
+        x: dx / (d || 1),
+        z: dz / (d || 1),
+        jump: c.sim.grounded && cursor === route.length - 1 && z === -41 && d < 5,
+      });
+    }
+    assert.equal(cursor, route.length, JSON.stringify(c.sim.position));
+    assert.equal(c.sim.deaths, 0);
+    const target = route.at(-1);
+    assert.ok(c.sim.position.y > fieldHeight(...target) + 0.6);
+    assert.ok(c.collected.has(target[1] === -41 ? 6 : 7));
+    assert.ok(c.field.discovered.has(target[1] === -41 ? 'lookout' : 'cave'));
+    c.dispose();
+  }
+});
 test('sealed gate blocks walking until all emblems have been collected', () => {
   const c = new Course({ ...stage, spawn: { x: 0, y: 0.82, z: -61 } }, stats);
   for (let i = 0; i < 100; i++) c.step({ z: -1 });
@@ -13,6 +56,36 @@ test('sealed gate blocks walking until all emblems have been collected', () => {
   c.field.rewards = new Set(['orchard', 'ruins', 'boss']);
   for (let i = 0; i < 100 && !c.complete; i++) c.step({ z: -1 });
   assert.ok(c.complete);
+  c.dispose();
+});
+test('ruin stone steps reward is attainable with the slow heavy build using movement and jump', () => {
+  const c = new Course(stage, { ...stats, speed: 4.3, jump: 7.5, weight: 2.6 });
+  const route = [
+    [0, -8],
+    [13, -15],
+    [27, -20],
+    [31, -23],
+    [31, -27],
+  ];
+  let cursor = 0;
+  for (let i = 0; i < 6000 && !c.collected.has(8); i++) {
+    const [x, z] = route[cursor],
+      p = c.sim.position,
+      dx = x - p.x,
+      dz = z - p.z,
+      d = Math.hypot(dx, dz);
+    if (cursor < route.length - 1 && d < 0.5 && c.sim.grounded) {
+      cursor++;
+      continue;
+    }
+    c.step({
+      x: dx / (d || 1),
+      z: dz / (d || 1),
+      jump: cursor === route.length - 1 && c.sim.grounded,
+    });
+  }
+  assert.ok(c.collected.has(8), JSON.stringify(c.sim.position));
+  assert.equal(c.sim.deaths, 0);
   c.dispose();
 });
 test('field gate cannot be opened by reaching it or repeatedly attacking it', () => {

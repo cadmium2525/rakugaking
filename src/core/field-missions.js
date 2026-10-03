@@ -18,6 +18,7 @@ export class FieldMissions {
     this.slamHit = false;
     this.selected = 'orchard';
     this.attackFlash = 0;
+    this.discovered = new Set();
   }
   done(id) {
     return id === 'orchard'
@@ -45,6 +46,16 @@ export class FieldMissions {
     const p = course.sim.position,
       stats = course.sim.stats;
     this.attackFlash = Math.max(0, this.attackFlash - DT);
+    for (const place of this.stage.discoveries || []) {
+      if (
+        !this.discovered.has(place.id) &&
+        Math.hypot(p.x - place.x, p.z - place.z) < place.radius
+      ) {
+        this.discovered.add(place.id);
+        course.notice = `探索発見 · ${place.name}`;
+        course.noticeUntil = course.elapsed + 3;
+      }
+    }
     if (attack) this.attackFlash = 0.2;
     const hurt = (damage) => {
       if (course.elapsed < course.nextDamage) return;

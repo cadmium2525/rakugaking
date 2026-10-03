@@ -4,11 +4,11 @@ import worker from '../backend/worker.js';
 import { localDatabase } from '../backend/local-db.js';
 import { defaultDrawing } from '../src/core/drawing.js';
 import { calculateStats } from '../src/core/stats.js';
-import { validateRecord } from '../src/core/ranking.js';
+import { validateRecord, GAME_VERSION } from '../src/core/ranking.js';
 const fixture = () => ({
   player: 'テスター',
   character: 'らくがき',
-  version: '4.0.0',
+  version: GAME_VERSION,
   valid: true,
   level: 1,
   drawing: defaultDrawing(),
@@ -69,7 +69,7 @@ test('real SQLite integration: auth, create best, top 100, own rank, reject wors
     await env.DB.prepare(
       'INSERT INTO scores(uid,player,character,level,total,splits,stats,shape_hash,version,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)',
     )
-      .bind(`other-${i}`, 'Other', 'Body', 1, 30 + i, '[]', '{}', 'test', '4.0.0', 1)
+      .bind(`other-${i}`, 'Other', 'Body', 1, 30 + i, '[]', '{}', 'test', GAME_VERSION, 1)
       .run();
   const top = await (await request('/scores')).json();
   assert.equal(top.scores.length, 100);

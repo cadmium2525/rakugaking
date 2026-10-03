@@ -1,3 +1,4 @@
+import { FIELD_PATHS } from '../game/field-terrain.js';
 export class FieldHUD {
   constructor() {
     this.root = document.createElement('aside');
@@ -55,14 +56,24 @@ export class FieldHUD {
     ctx.fillStyle = '#d4dfb4';
     ctx.fillRect(0, 0, 200, 180);
     ctx.strokeStyle = '#f3ebce';
-    ctx.lineWidth = 7;
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#7caeb1';
     ctx.beginPath();
-    ctx.moveTo(...map(0, 8));
-    ctx.lineTo(...map(0, -65));
-    ctx.moveTo(...map(-21, -18));
-    ctx.lineTo(...map(0, -18));
-    ctx.lineTo(...map(22, -24));
+    ctx.moveTo(...map(-12, -32));
+    ctx.lineTo(...map(13, -34));
     ctx.stroke();
+    ctx.strokeStyle = '#f3ebce';
+    ctx.beginPath();
+    for (const path of FIELD_PATHS)
+      path.forEach(([x, z], i) => (i ? ctx.lineTo(...map(x, z)) : ctx.moveTo(...map(x, z))));
+    ctx.stroke();
+    for (const place of stage.discoveries || []) {
+      const [x, y] = map(place.x, place.z);
+      ctx.fillStyle = course.field.discovered.has(place.id) ? '#d69b35' : '#65795a';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('✦', x, y);
+    }
     ctx.fillStyle = '#355c4a';
     ctx.font = 'bold 11px sans-serif';
     ctx.fillText('N ↑', 6, 13);

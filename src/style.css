@@ -1014,6 +1014,11 @@ dialog {
     bottom: 115px;
     max-width: 65%;
   }
+  body:has(.field-hud:not([hidden])) #objective {
+    bottom: 42dvh;
+    left: calc(50% - 60px);
+    max-width: 50%;
+  }
   dialog {
     padding: 22px;
   }

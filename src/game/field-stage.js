@@ -1,3 +1,4 @@
+import { FIELD_TERRAIN, fieldHeight } from './field-terrain.js';
 const ground = (x, z, top, w, d, color = 0x93b97e) => ({
   x,
   z,
@@ -11,20 +12,26 @@ export const FIELD_STAGE = {
   id: 1,
   field: true,
   name: 'こもれびの大樹の里',
-  subtitle: '草原を探索し、3つの紋章で北の門を開こう。',
+  subtitle: '川を渡り、丘の遺跡と大樹を巡る冒険。',
   theme: 'SUNLIT COMMONS',
   color: 0x93b97e,
   sky: 0xc9e5e4,
   hint: '好きな順で3つのミッションへ。ACTIONで攻撃・仕掛けを起動。紋章を拾うと北の門が開く。',
   zones: ['はじまりの草原', '果樹園と古代遺跡', '大樹の闘技場'],
   platforms: [
-    ground(0, -28, 0, 80, 100),
-    ground(22, -24, 0.6, 18, 22, 0xb4bd8a),
-    ground(23, -29, 1.2, 12, 12, 0xc3c6a0),
-    ground(-40, -28, 4, 3, 100, 0x7b9271),
-    ground(40, -28, 4, 3, 100, 0x7b9271),
-    ground(0, 22, 4, 80, 3, 0x7b9271),
-    ground(0, -78, 4, 80, 3, 0x7b9271),
+    FIELD_TERRAIN,
+    { ...ground(0, -33, 0.4, 6, 10, 0xa77f54), h: 0.35, y: 0.225, bridge: true },
+    ...[-1, 1].map((side) => ({ ...ground(side * 40, -28, 14, 2, 104), visible: false })),
+    ...[-78, 22].map((z) => ({ ...ground(0, z, 14, 82, 2), visible: false })),
+    { ...ground(-29, -41, fieldHeight(-29, -41) + 0.35, 7, 6, 0xbba178), lookout: true },
+    ...[0, 1, 2].map((i) => ({
+      ...ground(31, -27, fieldHeight(31, -27) + i * 0.65, 4.5 - i * 0.5, 4.5 - i * 0.5, 0xb9b497),
+      ruinStep: true,
+    })),
+    { x: -12, y: 7, z: -61, w: 4.6, h: 14, d: 4.6, visible: false },
+    ...[-34, -28].map((x) => ({ x, y: 1.8, z: -8, w: 2.3, h: 3.6, d: 4, visible: false })),
+    { x: -31, y: 4, z: -8, w: 8, h: 2, d: 5, visible: false },
+    { x: -31, y: 1.6, z: -10.8, w: 6, h: 3.2, d: 0.6, visible: false },
   ],
   spawn: { x: 0, y: 1.8, z: 8 },
   goal: { x: 0, y: 0, z: -68 },
@@ -34,6 +41,7 @@ export const FIELD_STAGE = {
   routes: [],
   signs: [],
   hazards: [],
+  waters: [{ x: 0, width: 24, minZ: -36, maxZ: -30, surface: -0.6, minY: -3, maxY: 1 }],
   requiresAction: true,
   missions: [
     {
@@ -85,13 +93,19 @@ export const FIELD_STAGE = {
     { x: 28, y: 1.8, z: -19 },
     { x: -15, y: 1.1, z: -36 },
     { x: 10, y: 1.1, z: -43 },
+    { x: -29, y: fieldHeight(-29, -41) + 1.4, z: -41 },
+    { x: -31, y: 1.1, z: -8 },
+    { x: 31, y: fieldHeight(31, -27) + 2.4, z: -27 },
+  ],
+  discoveries: [
+    { id: 'lookout', name: '風見の展望台', x: -29, z: -41, radius: 4 },
+    { id: 'cave', name: 'こもれびの洞窟', x: -31, z: -8, radius: 3 },
+    { id: 'ruin-top', name: '遺跡の見晴らし', x: 31, z: -27, radius: 3 },
   ],
 };
-// The valley rim is solid down to the base terrain, not a floating overhead wall.
-for (const rim of FIELD_STAGE.platforms.slice(3)) {
-  rim.h = 8;
-  rim.y = 0;
-}
+for (const r of FIELD_STAGE.runes) r.y = fieldHeight(r.x, r.z);
+FIELD_STAGE.missions[1].reward.y = fieldHeight(22, -23) + 1.1;
+for (const c of FIELD_STAGE.collectibles.slice(0, 6)) c.y = fieldHeight(c.x, c.z) + 1.1;
 FIELD_STAGE.platforms.push({
   x: 0,
   y: 2.5,

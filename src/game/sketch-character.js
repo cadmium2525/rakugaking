@@ -26,6 +26,17 @@ export function buildSketchCharacter(raw) {
         i ? shape.lineTo(p.x - pivot.x, p.y - pivot.y) : shape.moveTo(p.x - pivot.x, p.y - pivot.y),
       );
       shape.closePath();
+      for (const loop of stroke.holes || []) {
+        const path = new THREE.Path();
+        loop.forEach((p, i) => {
+          const x = (p.x - cx) * 2.8 - pivot.x,
+            y = (bottom - p.y) * 2.8 - pivot.y;
+          if (i) path.lineTo(x, y);
+          else path.moveTo(x, y);
+        });
+        path.closePath();
+        shape.holes.push(path);
+      }
       geometry = new THREE.ExtrudeGeometry(shape, {
         depth: stroke.depth,
         bevelEnabled: false,
