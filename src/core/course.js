@@ -1,5 +1,6 @@
 import { Simulation, DT } from './controller.js';
 import { FieldMissions } from './field-missions.js';
+import { ExpeditionMissions } from './expedition-missions.js';
 export function windPhase(zone, elapsed) {
   const t = (elapsed + (zone.offset || 0)) % 7;
   return t < 2.5
@@ -15,7 +16,9 @@ export function insideZone(p, zone) {
     p.z < zone.maxZ &&
     Math.abs(p.x - (zone.x || 0)) < (zone.width || 7) / 2 &&
     p.y > (zone.minY ?? -20) &&
-    p.y < (zone.maxY ?? 100)
+    p.y < (zone.maxY ?? 100) &&
+    (!zone.radius ||
+      Math.hypot(p.x - (zone.x || 0), p.z - (zone.minZ + zone.maxZ) / 2) < zone.radius)
   );
 }
 export class Course {
@@ -36,7 +39,11 @@ export class Course {
     this.notice = '';
     this.noticeUntil = 0;
     this.collapseTimes = stage.platforms.map(() => null);
-    this.field = stage.field ? new FieldMissions(stage) : null;
+    this.field = stage.expedition
+      ? new ExpeditionMissions(stage)
+      : stage.field
+        ? new FieldMissions(stage)
+        : null;
   }
   step(input) {
     if (this.complete) return 'finished';
@@ -140,8 +147,13 @@ export class Course {
       w = (this.stage.winds || [this.stage.wind]).find((w) => insideZone(p, w)),
       water = (this.stage.waters || [this.stage.water]).find((w) => insideZone(p, w));
     return {
-      windZ: w ? windPhase(w, this.elapsed).force : 0,
-      water: !!water && p.y - 0.8 < water.surface + 0.08,
+      windZ: w
+        ? windPhase(w, this.elapsed).force * (w.effect && this.field?.done(w.effect) ? 0.08 : 1)
+        : 0,
+      water:
+        !!water &&
+        p.y - 0.8 < water.surface + 0.08 &&
+        !(water.effect && this.field?.done(water.effect)),
     };
   }
   guidance() {

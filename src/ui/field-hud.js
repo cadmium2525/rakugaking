@@ -24,14 +24,20 @@ export class FieldHUD {
       this.portrait = portrait;
     }
     const selected = stage.missions.find((m) => m.id === f.selected);
-    const target = f.unlocked ? stage.goal : selected?.reward || stage.missions[0].reward;
+    const target = f.target
+      ? f.target(f.selected)
+      : f.unlocked
+        ? stage.goal
+        : selected?.reward || stage.missions[0].reward;
     const dx = target.x - course.sim.position.x,
       dz = target.z - course.sim.position.z;
     const direction = (Math.round(Math.atan2(dx, -dz) / (Math.PI / 4)) + 8) % 8;
     this.root.querySelector('.field-bearing').textContent =
-      `${['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'][direction]} ${f.unlocked ? '北の門' : selected?.short || '果樹園'} · ${Math.round(Math.hypot(dx, dz))}m`;
+      `${['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'][direction]} ${f.unlocked ? '北の門' : selected?.short || stage.missions[0].short} · ${Math.round(Math.hypot(dx, dz))}m`;
     const holder = this.root.querySelector('[data-missions]');
-    if (!holder.children.length) {
+    if (this.stageId !== stage.id) {
+      this.stageId = stage.id;
+      holder.replaceChildren();
       for (const m of stage.missions) {
         const button = document.createElement('button');
         button.dataset.mission = m.id;
@@ -41,8 +47,9 @@ export class FieldHUD {
     this.root.querySelector('[data-count]').textContent = `${f.rewards.size}/3`;
     for (const [i, button] of [...holder.children].entries()) {
       const m = stage.missions[i];
-      const progress =
-        m.id === 'orchard'
+      const progress = f.progress
+        ? f.progress(m.id)
+        : m.id === 'orchard'
           ? `${f.enemies.filter((e) => e.hp <= 0).length}/3`
           : m.id === 'ruins'
             ? `${f.runes.size}/3`
@@ -52,19 +59,38 @@ export class FieldHUD {
       button.title = m.name;
     }
     const ctx = this.root.querySelector('canvas').getContext('2d');
-    const map = (x, z) => [100 + x * 2, 15 + (z + 78) * 1.5];
-    ctx.fillStyle = '#d4dfb4';
+    const map = (x, z) =>
+      stage.expedition ? [100 + x * 1.8, 14 + (z + 88) * 1.38] : [100 + x * 2, 15 + (z + 78) * 1.5];
+    ctx.fillStyle = stage.expedition ? `#${stage.color.toString(16)}` : '#d4dfb4';
     ctx.fillRect(0, 0, 200, 180);
+    for (const water of stage.waters || [])
+      if (stage.expedition) {
+        const [x, y] = map(water.x || 0, (water.minZ + water.maxZ) / 2);
+        ctx.fillStyle = water.effect && f.done(water.effect) ? '#abc1a2' : '#5ab8ce';
+        ctx.beginPath();
+        ctx.ellipse(
+          x,
+          y,
+          (water.width || 7) * 0.9,
+          (water.maxZ - water.minZ) * 0.69,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+      }
     ctx.strokeStyle = '#f3ebce';
     ctx.lineWidth = 5;
-    ctx.strokeStyle = '#7caeb1';
-    ctx.beginPath();
-    ctx.moveTo(...map(-12, -32));
-    ctx.lineTo(...map(13, -34));
-    ctx.stroke();
+    if (!stage.expedition) {
+      ctx.strokeStyle = '#7caeb1';
+      ctx.beginPath();
+      ctx.moveTo(...map(-12, -32));
+      ctx.lineTo(...map(13, -34));
+      ctx.stroke();
+    }
     ctx.strokeStyle = '#f3ebce';
     ctx.beginPath();
-    for (const path of FIELD_PATHS)
+    for (const path of stage.paths || FIELD_PATHS)
       path.forEach(([x, z], i) => (i ? ctx.lineTo(...map(x, z)) : ctx.moveTo(...map(x, z))));
     ctx.stroke();
     for (const place of stage.discoveries || []) {
@@ -92,7 +118,13 @@ export class FieldHUD {
       ctx.textAlign = 'center';
       ctx.fillText(f.rewards.has(m.id) ? '✓' : String(i + 1), x, y + 4);
     });
-    const [gx, gy] = map(0, -65);
+    for (const [i, r] of (stage.runes || []).entries())
+      if (stage.expedition && !f.runes.has(i)) {
+        const [x, y] = map(r.x, r.z);
+        ctx.fillStyle = '#fff4c4';
+        ctx.fillRect(x - 2, y - 2, 4, 4);
+      }
+    const [gx, gy] = map(stage.goal.x, stage.goal.z);
     ctx.fillStyle = f.unlocked ? '#d99b38' : '#85649d';
     ctx.fillRect(gx - 7, gy - 4, 14, 8);
     ctx.fillStyle = '#355c4a';

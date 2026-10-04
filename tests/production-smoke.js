@@ -3,6 +3,8 @@ import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
+import { freshSave } from '../src/core/save.js';
+import { STAGES } from '../src/game/stages.js';
 
 // Serve the actual dist under a repository subpath, with no SPA fallback.
 const root = resolve('dist');
@@ -48,6 +50,13 @@ try {
     hasTouch: true,
   });
   const page = await context.newPage();
+  const fixture = freshSave();
+  fixture.player.cleared = [1, 2, 3, 4];
+  fixture.player.exp = 1200;
+  await context.addInitScript((data) => {
+    if (!localStorage.getItem('rakuga.save'))
+      localStorage.setItem('rakuga.save', JSON.stringify(data));
+  }, fixture);
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('response', (response) => {
@@ -78,6 +87,20 @@ try {
   await page.screenshot({ path: 'test-results/production-field.png' });
   await page.locator('#pause').click();
   await page.locator('#home').click();
+  // Prior-clear fixture only unlocks selection; movement uses the shipped public controls.
+  for (const stage of STAGES.filter((s) => s.expedition)) {
+    await page.locator('#adventure').click();
+    await page.locator(`[data-stage="${stage.id}"]`).click();
+    await page.locator(`[data-mission="${stage.missions[0].id}"]`).waitFor({ state: 'visible' });
+    assert.match(await page.locator('.stage-label').textContent(), new RegExp(`0${stage.id}`));
+    await page.keyboard.down('KeyW');
+    await page.waitForTimeout(150);
+    await page.keyboard.up('KeyW');
+    await page.keyboard.press('Space');
+    await page.screenshot({ path: `test-results/production-stage-${stage.id}.png` });
+    await page.locator('#pause').click();
+    await page.locator('#home').click();
+  }
   assert.equal(await page.evaluate(() => typeof window.__qa), 'undefined');
   const manifest = await page.evaluate(async () => {
     const response = await fetch(document.querySelector('link[rel="manifest"]').href);
@@ -136,7 +159,7 @@ try {
   }
   assert.deepEqual(errors, []);
   console.log(
-    'PASS: production boot, icons, installability, offline reload/birth, safe update lifecycle, no page/request errors',
+    `PASS: production boot of all five fields, icons, installability, offline reload/birth${process.env.SMOKE_URL ? '' : ', safe update lifecycle'}, no page/request errors`,
   );
 } finally {
   await browser?.close();

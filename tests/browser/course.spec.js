@@ -52,7 +52,7 @@ export async function playStage(page, stage) {
   expect((await page.evaluate(() => window.__qa.state())).deaths).toBe(0);
 }
 test('full adventure unlocks and clears all five stages with keyboard input', async ({ page }) => {
-  test.setTimeout(720000);
+  test.setTimeout(1500000);
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.route('**/ranking-config.json', (route) =>

@@ -1,25 +1,75 @@
 import { expect } from '@playwright/test';
 import { fieldControls } from './field-driver.js';
-export async function playField(page, screenshots = false) {
+import { STAGES } from '../../src/game/stages.js';
+export async function playField(page, screenshots = false, order) {
   const held = new Set(),
     captured = new Set();
   for (let i = 0; i < 4500; i++) {
     const state = await page.evaluate(() => window.__qa.state());
+    if (i % 400 === 0)
+      console.log(
+        'Field pilot',
+        JSON.stringify({
+          stage: state.stage,
+          position: state.position,
+          elapsed: state.field,
+          calls: state.calls,
+          triangles: state.triangles,
+        }),
+      );
     expect(state.deaths, JSON.stringify(state)).toBe(0);
     if (state.complete) break;
     if (screenshots) {
       const label =
-        state.field.bossPhase === 'windup'
-          ? 'boss-warning'
-          : state.field.rewards.length === 3
-            ? 'gate-open'
-            : null;
+        state.stage === 4 &&
+        state.field.runes.length > 0 &&
+        state.field.runes.length < 4 &&
+        !captured.has('timer-active')
+          ? 'timer-active'
+          : state.stage === 3 &&
+              [0, 1, 2].every((i) => state.field.runes.includes(i)) &&
+              !captured.has('water-drained')
+            ? 'water-drained'
+            : state.field.bossPhase === 'windup'
+              ? 'boss-warning'
+              : state.field.rewards.length === 3
+                ? 'gate-open'
+                : null;
       if (label && !captured.has(label)) {
-        await page.screenshot({ path: `test-results/field-${label}.png` });
+        await page.screenshot({
+          path:
+            typeof screenshots === 'string'
+              ? `docs/screenshots/expedition/${screenshots}-${label}.png`
+              : `test-results/field-${label}.png`,
+        });
         captured.add(label);
+        if (label === 'timer-active')
+          await expect(page.locator('#objective')).toContainText('残り');
       }
     }
-    const input = fieldControls(state, i * 4);
+    const stage = STAGES.find((s) => s.id === state.stage);
+    let input = fieldControls(state, i * 4, order || stage.missions.map((m) => m.id), stage);
+    if (state.stage === 3 && typeof screenshots === 'string') {
+      const drained = [0, 1, 2].every((i) => state.field.runes.includes(i)),
+        dx = 25 - state.position.x,
+        dz = -27 - state.position.z,
+        d = Math.hypot(dx, dz);
+      if (!drained && d < 11 && !captured.has('water-before')) {
+        await page.screenshot({
+          path: `docs/screenshots/expedition/${screenshots}-water-before.png`,
+        });
+        captured.add('water-before');
+      }
+      if (drained && !captured.has('water-after')) {
+        input = { x: dx / Math.max(1, d), z: dz / Math.max(1, d), jump: false, action: false };
+        if (d < 2) {
+          await page.screenshot({
+            path: `docs/screenshots/expedition/${screenshots}-water-after.png`,
+          });
+          captured.add('water-after');
+        }
+      }
+    }
     for (const [key, on] of [
       ['KeyA', input.x < -0.1],
       ['KeyD', input.x > 0.1],

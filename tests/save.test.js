@@ -2,6 +2,35 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { freshSave, migrateSave, SaveStore } from '../src/core/save.js';
 import { calculateStats } from '../src/core/stats.js';
+test('campaign replacement preserves characters and progression, resets replaced medals and archives 4.1 timings', () => {
+  const raw = freshSave();
+  delete raw.player.expeditionMedalVersion;
+  raw.player.exp = 1500;
+  raw.player.cleared = [1, 2, 3, 4, 5];
+  raw.player.medals = { 1: 3, 2: 3, 3: 3, 4: 3, 5: 3 };
+  raw.records = [
+    {
+      version: '4.1.0',
+      total: 200,
+      splits: [60, 30, 30, 30, 50],
+      valid: true,
+      character: 'らくがきくん',
+      level: 1,
+      drawing: raw.characters[0].drawing,
+      stats: calculateStats(raw.characters[0].drawing),
+    },
+  ];
+  const { data } = migrateSave(raw);
+  assert.equal(data.player.exp, 1500);
+  assert.equal(data.player.unlocked, 5);
+  assert.deepEqual(data.player.cleared, [1, 2, 3, 4, 5]);
+  assert.deepEqual(data.player.medals, { 1: 3, 2: 0, 3: 0, 4: 0, 5: 0 });
+  assert.deepEqual(data.characters[0].drawing, raw.characters[0].drawing);
+  assert.equal(data.records.length, 0);
+  assert.equal(data.legacyRecords.length, 1);
+  data.player.medals[2] = 3;
+  assert.equal(migrateSave(data).data.player.medals[2], 3);
+});
 test('field migration resets only the old stage 1 medal and archives 2.1 timings', () => {
   const raw = freshSave();
   delete raw.player.fieldMedalVersion;

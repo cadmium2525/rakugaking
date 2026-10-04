@@ -6,6 +6,7 @@ import { addScenery } from './scenery.js';
 import { windPhase } from '../core/course.js';
 import { buildField } from './field-view.js';
 import { fieldHeight } from './field-terrain.js';
+import { buildExpedition } from './expedition-view.js';
 
 export class GameView {
   constructor(canvas, platforms) {
@@ -142,6 +143,7 @@ export class GameView {
   }
   setStage(stage) {
     this.fieldMode = !!stage.field;
+    this.terrainHeight = stage.height || fieldHeight;
     this.renderer.shadowMap.enabled = this.fieldMode && this.quality !== 'low';
     this.sun.castShadow = this.renderer.shadowMap.enabled;
     this.platforms = stage.platforms;
@@ -208,7 +210,11 @@ export class GameView {
     this.world.add(ring);
     this.goalRing = ring;
     this.scenery = stage.routeLength && !stage.field ? addScenery(this.world, stage) : [];
-    this.fieldView = stage.field ? buildField(this.world, stage) : null;
+    this.fieldView = stage.expedition
+      ? buildExpedition(this.world, stage)
+      : stage.field
+        ? buildField(this.world, stage)
+        : null;
     if (stage.field)
       this.world.traverse((o) => {
         if (o.isMesh) {
@@ -348,7 +354,10 @@ export class GameView {
     });
     this.scenery.forEach((rotor) => (rotor.rotation.z = course.elapsed * 0.7));
     this.windVanes.forEach(({ mesh, zone }) => {
-      const phase = windPhase(zone, course.elapsed);
+      const phase =
+        zone.effect && course.field?.done(zone.effect)
+          ? { name: '凪' }
+          : windPhase(zone, course.elapsed);
       mesh.material.color.setHex(
         phase.name === '凪' ? 0x72dbc0 : phase.name === '予兆' ? 0xffc96a : 0xffffff,
       );
@@ -376,7 +385,7 @@ export class GameView {
       this.avatar.position.y += (1 - t) * (1 - t) * 1.4;
     }
     this.shadow.visible = false;
-    let top = this.fieldMode ? fieldHeight(p.x, p.z) : -Infinity;
+    let top = this.fieldMode ? this.terrainHeight(p.x, p.z) : -Infinity;
     for (let i = 0; i < this.platforms.length; i++) {
       const ground = this.platforms[i];
       if (ground.terrain) continue;

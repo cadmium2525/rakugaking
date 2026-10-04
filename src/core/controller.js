@@ -19,7 +19,9 @@ export class Simulation {
       const desc = (
         p.terrain
           ? RAPIER.ColliderDesc.trimesh(p.vertices, p.indices)
-          : RAPIER.ColliderDesc.cuboid(p.w / 2, p.h / 2, p.d / 2)
+          : p.hull
+            ? RAPIER.ColliderDesc.convexHull(p.hull)
+            : RAPIER.ColliderDesc.cuboid(p.w / 2, p.h / 2, p.d / 2)
       ).setTranslation(p.x, p.y, p.z);
       if (p.angle)
         desc.setRotation({ x: 0, y: 0, z: Math.sin(p.angle / 2), w: Math.cos(p.angle / 2) });

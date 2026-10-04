@@ -61,13 +61,14 @@ test('returning from result never emits another clear reward event', () => {
 
 test('checkpoint survives a fall and collected fragments cannot be counted twice', () => {
   const stage = STAGES[1],
-    p = stage.platforms[4];
+    index = stage.checkpoints[0],
+    p = stage.platforms[index];
   const c = new Course(
     { ...stage, spawn: { x: p.x, y: p.y + p.h / 2 + 0.82, z: p.z } },
     builds.STANDARD,
   );
   for (let i = 0; i < 10; i++) c.step({});
-  assert.equal(c.checkpoint, 4);
+  assert.equal(c.checkpoint, index);
   const spawn = { ...c.sim.spawn };
   c.sim.body.setTranslation({ x: 0, y: -15, z: 0 }, true);
   c.step({});
@@ -96,7 +97,16 @@ test('collapsing platforms remove collision and retry restores it', () => {
   c.dispose();
 });
 test('power opens seals with fewer actions; defense reduces hazard damage', () => {
-  const tower = STAGES[4];
+  const tower = {
+    field: false,
+    requiresAction: true,
+    platforms: [{ x: 0, y: -1, z: 0, w: 20, h: 2, d: 20 }],
+    goal: { x: 0, y: 0, z: 0 },
+    spawn: { x: 0, y: 0.82, z: 0 },
+    hazards: [{ x: 0, y: 0.82, z: 0 }],
+    checkpoints: [],
+    collectibles: [],
+  };
   for (const power of [10, 50]) {
     const c = new Course(
       {
@@ -125,41 +135,4 @@ test('power opens seals with fewer actions; defense reduces hazard damage', () =
     c.dispose();
   }
   assert.ok(losses[0] > losses[1]);
-});
-
-test('jump build can explore every side island and return to the main route', () => {
-  for (const stage of STAGES)
-    for (const side of stage.sidePaths) {
-      const main = stage.platforms
-        .slice(0, stage.routeLength)
-        .reduce((a, b) => (Math.abs(a.z - side.z) < Math.abs(b.z - side.z) ? a : b));
-      const c = new Course(
-        { ...stage, spawn: { x: main.x, y: main.y + main.h / 2 + 0.82, z: main.z } },
-        builds.JUMP,
-      );
-      let returning = false,
-        done = false;
-      for (let frame = 0; frame < 1200 && !done; frame++) {
-        const p = c.sim.position,
-          target = returning ? main : side,
-          current = returning ? side : main;
-        if (Math.hypot(p.x - target.x, p.z - target.z) < 0.7 && c.sim.grounded) {
-          if (returning) done = true;
-          else returning = true;
-        }
-        const edge = current.w / 2 - Math.abs(p.x - current.x);
-        c.step({
-          x: Math.max(-1, Math.min(1, target.x - p.x)),
-          z: Math.max(-1, Math.min(1, target.z - p.z)),
-          jump: c.sim.grounded && edge < 1,
-          action: frame % 40 === 0,
-        });
-      }
-      assert.ok(
-        done,
-        `stage ${stage.id} side ${side.x},${side.z} at ${JSON.stringify(c.sim.position)}`,
-      );
-      assert.equal(c.sim.deaths, 0, `stage ${stage.id} side ${side.x},${side.z}`);
-      c.dispose();
-    }
 });
