@@ -174,5 +174,5 @@ Received: 1
   97  |   expect(final.field.rewards).toHaveLength(3);
   98  |   expect(final.deaths).toBe(0);
   99  | }
-  100 | 
+  100 |
 ```
