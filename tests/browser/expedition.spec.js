@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { STAGES } from '../../src/game/stages.js';
 import { freshSave } from '../../src/core/save.js';
-import { playField } from '../helpers/browser-field.js';
+import { playField, viewControls } from '../helpers/browser-field.js';
 import { fieldControls } from '../helpers/field-driver.js';
 for (const stage of STAGES.filter((s) => s.expedition))
   test(`expedition ${stage.id}: reviewed field clears with keyboard input`, async ({ page }) => {
@@ -23,7 +23,7 @@ for (const stage of STAGES.filter((s) => s.expedition))
     await expect(page.locator(`[data-mission="${stage.missions[0].id}"]`)).toContainText(
       stage.missions[0].short,
     );
-    await page.screenshot({ path: `docs/screenshots/expedition/stage-${stage.id}-start.png` });
+    await page.screenshot({ path: `test-results/expedition/stage-${stage.id}-start.png` });
     for (const size of [
       { width: 390, height: 844 },
       { width: 844, height: 390 },
@@ -33,7 +33,7 @@ for (const stage of STAGES.filter((s) => s.expedition))
         () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
       );
       await page.screenshot({
-        path: `docs/screenshots/expedition/stage-${stage.id}-${size.width}.png`,
+        path: `test-results/expedition/stage-${stage.id}-${size.width}.png`,
       });
       const box = await page.locator('.field-bearing').boundingBox();
       expect(box.x).toBeGreaterThanOrEqual(0);
@@ -48,7 +48,7 @@ for (const stage of STAGES.filter((s) => s.expedition))
       `stage-${stage.id}`,
       stage.id === 3 ? ['pearls', 'sluice', 'boss'] : undefined,
     );
-    await page.screenshot({ path: `docs/screenshots/expedition/stage-${stage.id}-clear.png` });
+    await page.screenshot({ path: `test-results/expedition/stage-${stage.id}-clear.png` });
     expect(errors).toEqual([]);
   });
 test('city timer stays visible with the portrait mission map folded', async ({ page }) => {
@@ -73,7 +73,7 @@ test('city timer stays visible with the portrait mission map folded', async ({ p
       started = true;
       break;
     }
-    const input = fieldControls(state, i, ['lamps', 'guards', 'boss'], stage);
+    const input = viewControls(fieldControls(state, i, ['lamps', 'guards', 'boss'], stage), state);
     for (const [key, on] of [
       ['KeyA', input.x < -0.1],
       ['KeyD', input.x > 0.1],
@@ -95,5 +95,5 @@ test('city timer stays visible with the portrait mission map folded', async ({ p
   await expect(page.locator('.field-hud details')).not.toHaveAttribute('open', '');
   await expect(page.locator('#objective')).toContainText('残り');
   await expect(page.locator('#objective')).toContainText('次は2番');
-  await page.screenshot({ path: 'docs/screenshots/expedition/stage-4-timer-portrait.png' });
+  await page.screenshot({ path: 'test-results/expedition/stage-4-timer-portrait.png' });
 });

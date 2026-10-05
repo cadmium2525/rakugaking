@@ -1,0 +1,233 @@
+[
+  {
+    "file": "qa/v6/action-home-miss-0.png",
+    "capturedAt": "2026-10-05T12:44:15.445Z",
+    "state": {
+      "position": {
+        "x": -0.0005549187189899385,
+        "y": 0.8199455142021179,
+        "z": 4.450343132019043
+      },
+      "grounded": true,
+      "jumps": 0,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 5.783333333333318,
+      "combat": {
+        "attacking": true,
+        "combo": 1,
+        "airborne": false,
+        "name": "薙ぎ払い",
+        "elapsed": 0.24999999999999997,
+        "duration": 0.38437817825580833,
+        "windup": 0.09,
+        "active": 0.15,
+        "phase": "recover",
+        "facing": {
+          "x": 0,
+          "z": 1
+        },
+        "reach": 2.1479999999999997,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 5.533333333333319,
+          "x": -0.0005037191440351307,
+          "y": 0.8200998902320862,
+          "z": 3.888695240020752,
+          "combo": 1,
+          "airborne": false,
+          "name": "薙ぎ払い",
+          "facing": {
+            "x": 0,
+            "z": 1
+          }
+        }
+      ],
+      "practiceHits": 0,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.0005039639049911806,
+          "y": 7.820110991016779,
+          "z": 15.946714882237078
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 1,
+      "name": "らくがきくん",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 30,
+      "triangles": 2676,
+      "geometries": 31,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  },
+  {
+    "file": "qa/v6/action-home-miss-1.png",
+    "capturedAt": "2026-10-05T12:44:15.747Z",
+    "state": {
+      "position": {
+        "x": -0.0006046061753295362,
+        "y": 0.819013237953186,
+        "z": 4.456504821777344
+      },
+      "grounded": true,
+      "jumps": 0,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 6.099999999999984,
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0,
+          "z": 1
+        },
+        "reach": 2.1479999999999997,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 5.533333333333319,
+          "x": -0.0005037191440351307,
+          "y": 0.8200998902320862,
+          "z": 3.888695240020752,
+          "combo": 1,
+          "airborne": false,
+          "name": "薙ぎ払い",
+          "facing": {
+            "x": 0,
+            "z": 1
+          }
+        }
+      ],
+      "practiceHits": 0,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.0005717172896135906,
+          "y": 7.819343409036041,
+          "z": 16.3526445149411
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 1,
+      "name": "らくがきくん",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 28,
+      "triangles": 2516,
+      "geometries": 31,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  },
+  {
+    "file": "qa/v6/action-home-miss-2.png",
+    "capturedAt": "2026-10-05T12:44:15.998Z",
+    "state": {
+      "position": {
+        "x": -0.0006132796406745911,
+        "y": 0.8191633224487305,
+        "z": 4.456655979156494
+      },
+      "grounded": true,
+      "jumps": 0,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 6.333333333333316,
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0,
+          "z": 1
+        },
+        "reach": 2.1479999999999997,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 5.533333333333319,
+          "x": -0.0005037191440351307,
+          "y": 0.8200998902320862,
+          "z": 3.888695240020752,
+          "combo": 1,
+          "airborne": false,
+          "name": "薙ぎ払い",
+          "facing": {
+            "x": 0,
+            "z": 1
+          }
+        }
+      ],
+      "practiceHits": 0,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.0006000003537394921,
+          "y": 7.819084844961617,
+          "z": 16.424690087799036
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 1,
+      "name": "らくがきくん",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 28,
+      "triangles": 2516,
+      "geometries": 31,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  }
+]

@@ -1,5 +1,26 @@
 import * as THREE from 'three';
 
+// Five overlapping low-poly billows share the caller's instanced material.
+export function addCloud(add, x, y, z, size = 12, color = 0xf7f3de) {
+  for (const [dx, dy, dz, radius] of [
+    [-0.62, -0.06, 0.08, 0.34],
+    [-0.29, 0.17, -0.03, 0.45],
+    [0.08, 0.06, 0.06, 0.5],
+    [0.42, -0.03, -0.1, 0.34],
+    [0.02, 0.25, 0.25, 0.32],
+  ])
+    add(
+      'ico',
+      color,
+      x + dx * size,
+      y + dy * size,
+      z + dz * size,
+      radius * size,
+      radius * size * 0.78,
+      radius * size * 0.85,
+    );
+}
+
 // Repeated scenery is instanced: hundreds of details cost a handful of draw calls.
 export function addScenery(world, stage) {
   const groups = new Map(),
@@ -99,7 +120,7 @@ export function addScenery(world, stage) {
       );
       add('cone', stage.id === 5 ? 0x655b93 : 0xb0c5c0, side * 16, y + 7, p.z, 5, 5, 5);
     }
-    add('ico', 0xf6f2e8, side * 22, y - 8, p.z, 10, 2, 6);
+    addCloud(add, side * 22, y - 8, p.z, 10, 0xf6f2e8);
   }
   const g = stage.goal;
   if (stage.id === 1) tree(g.x, g.y, g.z - 8, 4);

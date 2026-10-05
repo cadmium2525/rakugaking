@@ -1,4 +1,17 @@
-import { finishExpedition, smooth, mound, icoHull, coneHull } from './expedition-terrain.js';
+import {
+  finishExpedition,
+  smooth,
+  mound,
+  icoHull,
+  coneHull,
+  distanceToPath,
+} from './expedition-terrain.js';
+const causeway = [
+  [53, -55],
+  [36, -68],
+  [25, -77],
+  [8, -86],
+];
 export const STAR_STAGE = finishExpedition(
   {
     id: 5,
@@ -11,6 +24,17 @@ export const STAR_STAGE = finishExpedition(
     accent: 0xe9d28e,
     hint: '星座を番号順にACTION、守衛4体を撃破すると巨人の盾が消える。二連続の赤い衝撃波の後に攻撃。',
     zones: ['星座の観測庭', '月の守衛広場', '巨人の玉座'],
+    causeway,
+    terrainColor(x, y, z) {
+      if (Math.hypot(x - 32, z + 51) < 11) return 0x88aebb;
+      if (x < -41) return y > 5 ? 0xc2b9db : 0xaaa4cb;
+      if (x > 41) return 0x799ba6;
+      return y > 3 ? 0xa6a7c3 : 0x818caa;
+    },
+    overlooks: [
+      { x: -54, z: -24, name: '星読みの展望丘', color: 0xe7d5ff },
+      { x: 53, z: -55, name: '月を望む天空庭', color: 0xbde3e5 },
+    ],
     missions: [
       {
         id: 'stars',
@@ -101,10 +125,35 @@ export const STAR_STAGE = finishExpedition(
         [0, -47],
         [5, -61],
       ],
+      [
+        [-23, -15],
+        [-45, -7],
+        [-54, -24],
+        [-53, -43],
+        [-34, -55],
+        [5, -61],
+      ],
+      [
+        [26, -29],
+        [48, -20],
+        [57, -36],
+        [53, -55],
+        [36, -68],
+        [25, -77],
+        [8, -86],
+        [0, -78],
+      ],
+      [
+        [-18, -37],
+        [-4, -30],
+        [10, -26],
+        [26, -29],
+      ],
     ],
     discoveries: [
       { id: 'moonpool', name: '月映しの泉', x: 32, z: -51, radius: 4 },
       { id: 'observatory', name: '星読みの小塔', x: -34, z: -23, radius: 3 },
+      { id: 'causeway', name: '星の尾根の回廊', x: 25, z: -77, radius: 5 },
     ],
     stars: [
       [-11, -3],
@@ -114,13 +163,15 @@ export const STAR_STAGE = finishExpedition(
       [32, -51],
       [0, -39],
       [-16, -52],
-      [19, -67],
-      [0, -71],
+      [25, -77],
+      [8, -86],
+      [-54, -24],
+      [-53, -43],
+      [53, -55],
+      [57, -36],
     ],
   },
   (x, z) => {
-    const rim =
-      11 * Math.max(smooth(40, 48, Math.abs(x)), smooth(16, 24, z), 1 - smooth(-88, -80, z));
     const flat = Math.max(
       mound(x, z, 0, 10, 8, 16),
       mound(x, z, -23, -24, 14, 23),
@@ -129,14 +180,31 @@ export const STAR_STAGE = finishExpedition(
       mound(x, z, 0, -47, 5, 12),
     );
     return (
-      rim +
       1.8 * (1 - flat) -
       2 * mound(x, z, 32, -51, 4, 10) -
       1.8 * (1 - smooth(2, 6, Math.abs(z + 39))) * (1 - smooth(5, 10, Math.abs(x))) +
-      3 * mound(x, z, 0, -78, 6, 17)
+      3 * mound(x, z, 0, -78, 6, 17) +
+      10 * mound(x, z, -54, -24, 7, 24) +
+      5.5 * mound(x, z, 53, -55, 7, 27) +
+      2.5 * mound(x, z, 32, 18, 7, 27) +
+      3 * (1 - smooth(3, 8, distanceToPath(x, z, causeway)))
     );
   },
 );
+STAR_STAGE.causewayArches = [
+  [36, -68],
+  [25, -77],
+].map(([x, z]) => {
+  const y = Math.max(STAR_STAGE.height(x - 4, z), STAR_STAGE.height(x + 4, z)) + 5;
+  for (const side of [-1, 1]) {
+    const px = x + side * 4,
+      ground = STAR_STAGE.height(px, z),
+      h = y - ground;
+    STAR_STAGE.platforms.push({ x: px, y: ground + h / 2, z, w: 0.9, h, d: 1.4, visible: false });
+  }
+  STAR_STAGE.platforms.push({ x, y, z, w: 9, h: 0.55, d: 1.4, visible: false });
+  return { x, y, z };
+});
 const h = STAR_STAGE.height(0, -78);
 STAR_STAGE.platforms.push({
   x: -36,

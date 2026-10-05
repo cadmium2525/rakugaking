@@ -1,0 +1,32 @@
+[
+  {
+    "stage": 4,
+    "position": {
+      "x": 0.8318929672241211,
+      "y": 1.5887936353683472,
+      "z": 9.669323921203613
+    },
+    "collected": 4,
+    "deaths": 0,
+    "calls": 170,
+    "triangles": 97260,
+    "errors": []
+  },
+  {
+    "stage": 5,
+    "position": {
+      "x": 0.4005398154258728,
+      "y": 5.5434722900390625,
+      "z": -78.80494689941406
+    },
+    "collected": 5,
+    "deaths": 0,
+    "calls": 50,
+    "triangles": 80646,
+    "errors": [],
+    "lockedNorth": {
+      "complete": false,
+      "rewards": []
+    }
+  }
+]

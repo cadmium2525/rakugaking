@@ -1,8 +1,10 @@
 import * as THREE from 'three';
+import { addCloud } from './scenery.js';
 export function buildExpedition(world, stage) {
   const height = stage.height,
     batches = new Map(),
-    animated = [];
+    animated = [],
+    labels = [];
   const add = (kind, color, x, y, z, sx, sy, sz, rotation = 0) => {
     const key = `${kind}-${color}`;
     if (!batches.has(key)) batches.set(key, { kind, color, items: [] });
@@ -36,7 +38,7 @@ export function buildExpedition(world, stage) {
     world.add(m);
     return m;
   };
-  const label = (text, color, x, y, z) => {
+  const label = (text, color, x, y, z, category = 'area') => {
     const c = document.createElement('canvas');
     c.width = 256;
     c.height = 96;
@@ -53,8 +55,9 @@ export function buildExpedition(world, stage) {
       new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: true }),
     );
     m.position.set(x, y, z);
-    m.scale.set(4.8, 1.8, 1);
+    m.scale.set(category === 'node' ? 3.2 : 4.8, category === 'node' ? 1.2 : 1.8, 1);
     world.add(m);
+    labels.push({ m, x, z, category });
     return m;
   };
   const data = stage.platforms[0],
@@ -68,8 +71,10 @@ export function buildExpedition(world, stage) {
     const x = data.vertices[i],
       y = data.vertices[i + 1],
       z = data.vertices[i + 2],
-      c = base.clone().lerp(rocky, Math.max(0, Math.min(0.65, (y - 2) / 15)));
-    c.multiplyScalar(0.94 + 0.06 * Math.sin(x * 0.4 + z * 0.3));
+      c = stage.terrainColor
+        ? new THREE.Color(stage.terrainColor(x, y, z))
+        : base.clone().lerp(rocky, Math.max(0, Math.min(0.65, (y - 2) / 15)));
+    c.multiplyScalar(0.96 + 0.05 * Math.sin(x * 0.21 + z * 0.17));
     c.toArray(colors, i);
   }
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
@@ -81,12 +86,73 @@ export function buildExpedition(world, stage) {
     ),
   );
   const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(400, 400),
-    new THREE.MeshStandardMaterial({ color: stage.color, roughness: 1 }),
+    new THREE.PlaneGeometry(800, 800),
+    new THREE.MeshStandardMaterial({
+      color: stage.id === 3 ? 0x74b4bc : stage.id === 5 ? 0xd0ccea : stage.color,
+      roughness: stage.id === 3 ? 0.35 : 1,
+    }),
   );
   floor.rotation.x = -Math.PI / 2;
-  floor.position.set(0, -5, -32);
+  floor.position.set(0, -8.5, -32);
   world.add(floor);
+  // A continuous, sparse outer mesh carries the horizon past the safe playable
+  // edge. Unlike the previous repeated cliff props it remains open from every
+  // camera bearing, with the water garden meeting the sea on its eastern side.
+  const farVertices = [],
+    farIndices = [],
+    farColors = [],
+    xs = [
+      ...new Set([-200, 200, -78, 78, ...Array.from({ length: 41 }, (_, i) => -200 + i * 10)]),
+    ].sort((a, b) => a - b),
+    zs = [
+      ...new Set([-232, 168, -106, 42, ...Array.from({ length: 41 }, (_, i) => -232 + i * 10)]),
+    ].sort((a, b) => a - b);
+  for (let zi = 0; zi < zs.length - 1; zi++)
+    for (let xi = 0; xi < xs.length - 1; xi++) {
+      const x = xs[xi],
+        z = zs[zi],
+        nx = xs[xi + 1],
+        nz = zs[zi + 1];
+      if (x >= -78 && nx <= 78 && z >= -106 && nz <= 42) continue;
+      const first = farVertices.length / 3;
+      for (const [px, pz] of [
+        [x, z],
+        [x, nz],
+        [nx, z],
+        [nx, nz],
+      ]) {
+        let py = stage.landscapeHeight(px, pz) - 0.04;
+        if (stage.id === 3) py -= Math.max(0, px - 74) * 0.2;
+        if (stage.id === 5) py -= Math.max(0, Math.abs(px) - 80) * 0.24;
+        farVertices.push(px, py, pz);
+        new THREE.Color(stage.terrainColor(px, py, pz)).toArray(farColors, farColors.length);
+      }
+      farIndices.push(first, first + 1, first + 2, first + 2, first + 1, first + 3);
+    }
+  const horizon = new THREE.BufferGeometry();
+  horizon.setAttribute('position', new THREE.Float32BufferAttribute(farVertices, 3));
+  horizon.setAttribute('color', new THREE.Float32BufferAttribute(farColors, 3));
+  horizon.setIndex(farIndices);
+  horizon.computeVertexNormals();
+  world.add(
+    new THREE.Mesh(
+      horizon,
+      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, flatShading: true }),
+    ),
+  );
+  for (const wall of stage.boundaries) {
+    add(
+      'box',
+      stage.id === 2 ? 0x937853 : stage.id === 4 ? 0x75655d : stage.stone,
+      wall.x,
+      wall.y,
+      wall.z,
+      wall.w,
+      wall.h,
+      wall.d,
+      wall.rotation || 0,
+    );
+  }
   for (const nodes of stage.paths) {
     const curve = new THREE.CatmullRomCurve3(nodes.map(([x, z]) => new THREE.Vector3(x, 0, z))),
       pts = curve.getPoints(90),
@@ -166,27 +232,53 @@ export function buildExpedition(world, stage) {
     hub.scale.setScalar(0.55);
     animated.push({ kind: 'mill', root: rotor, index });
   };
-  // Background cliff masses are staggered, leaving the destination silhouette readable.
-  for (let i = 0; i < 23; i++) {
-    const side = i % 2 ? -1 : 1,
-      x = side * (55 + (i % 4) * 7),
-      z = 17 - Math.floor(i / 2) * 11,
-      y = 7 + (i % 5) * 2;
-    add(
-      'ico',
-      i % 3 ? stage.stone : stage.color,
-      x,
-      y,
-      z,
-      9 + (i % 4),
-      14 + (i % 5) * 2,
-      12,
-      i * 0.3,
-    );
-    if (stage.id === 2) {
-      add('ico', 0xf5f5ea, x, y + 12, z, 8, 1.6, 4);
-      add('ico', 0xf5f5ea, x + 7, y + 12, z, 6, 1, 3);
+  // Landmark silhouettes are separated by long stretches of visible horizon;
+  // their placement belongs to the theme rather than forming two side walls.
+  const mountains =
+    stage.id === 2
+      ? [
+          [-138, -87, 35, 26],
+          [-160, 55, 23, 33],
+          [112, -174, 24, 31],
+        ]
+      : stage.id === 3
+        ? [
+            [-149, -126, 19, 27],
+            [-172, 36, 16, 38],
+          ]
+        : stage.id === 4
+          ? [
+              [-138, -156, 14, 34],
+              [150, 92, 11, 43],
+            ]
+          : [
+              [-150, -122, 12, 35],
+              [145, -164, 14, 38],
+            ];
+  for (const [x, z, h, width] of mountains)
+    add('ico', stage.id === 2 ? 0x91aa85 : stage.stone, x, h / 2, z, width, h, width * 0.7);
+  for (let i = 0; i < 9; i++) {
+    const a = i * 2.4 + stage.id,
+      x = Math.cos(a) * (103 + (i % 3) * 21),
+      z = -30 + Math.sin(a) * (115 + (i % 4) * 19);
+    addCloud(add, x, 22 + (i % 3) * 6, z, 10 + (i % 3) * 4, stage.id === 5 ? 0xe2def4 : 0xf7f3de);
+  }
+  for (const o of stage.overlooks) {
+    const y = height(o.x, o.z);
+    // Open terraces sit on the terrain; the columns mark a view, not a room.
+    for (const side of [-1, 1]) {
+      add(
+        'cylinder',
+        o.color,
+        o.x + side * 4,
+        height(o.x + side * 4, o.z + 3) + 1.8,
+        o.z + 3,
+        0.15,
+        3.6,
+        0.15,
+      );
     }
+    label(o.name, o.color, o.x, y + 3.8, o.z - 2.8);
   }
   if (stage.id === 2) {
     stage.mills.forEach(([x, z], i) => mill(x, z, i));
@@ -221,10 +313,11 @@ export function buildExpedition(world, stage) {
   if (stage.id === 3) {
     // A raised aqueduct, with walkable ground under its open spans.
     for (const z of [-13, -26, -39]) {
-      const y = height(-38, z);
-      add('box', stage.stone, -38, y + 4, z, 2.2, 8, 2.2);
-      add('box', 0x96bebb, -38, y + 8.2, z - 5.5, 2.5, 0.8, 13);
-      add('box', 0x3f919f, -38, y + 8.7, z - 5.5, 1.5, 0.12, 13);
+      const y = height(-38, z),
+        h = stage.aqueductDeck - 0.2 - y;
+      add('box', stage.stone, -38, y + h / 2, z, 2.2, h, 2.2);
+      add('box', 0x96bebb, -38, stage.aqueductDeck, z - 5.5, 2.5, 0.8, 13);
+      add('box', 0x3f919f, -38, stage.aqueductDeck + 0.5, z - 5.5, 1.5, 0.12, 13);
     }
     for (const [x, z] of [
       [-26, -16],
@@ -303,12 +396,14 @@ export function buildExpedition(world, stage) {
     animated.push({ kind: 'clock', root: hands });
   };
   if (stage.id === 4) {
-    for (const [x, z, h] of stage.houses) {
+    const houseColors = [0xbfa588, 0xb5977c, 0xd0b391, 0xa4aaa0, 0xc4a17d, 0xbda791];
+    for (const [index, [x, z, h]] of stage.houses.entries()) {
       const y = height(x, z);
-      add('box', x < 0 ? 0xb58c75 : 0xa88071, x, y + h / 2, z, 6, h, 5);
+      add('box', houseColors[index % houseColors.length], x, y + h / 2, z, 6, h, 5);
       add('box', 0x985f54, x, y + h + 0.3, z, 7, 0.6, 6);
       for (const side of [-1, 1]) {
         add('box', 0xf2d49f, x + side * 1.6, y + h * 0.65, z + 2.54, 1, 0.95, 0.08);
+        if (h >= 6) add('box', 0xf2d49f, x + side * 1.6, y + h * 0.35, z + 2.54, 1, 0.95, 0.08);
         add('box', stage.stone, x + side * 2.7, y + h / 2, z + 2.58, 0.25, h, 0.15);
       }
       add('box', 0x625355, x, y + 1, z + 2.56, 1.3, 2, 0.08);
@@ -341,6 +436,63 @@ export function buildExpedition(world, stage) {
     for (const side of [-1, 1])
       for (const z of [-34, -38, -42])
         add('box', stage.stone, side * 4, height(side * 4, z) + 0.25, z, 1.5, 0.5, 2.5);
+    const park = stage.park,
+      fountain = park.fountain;
+    for (const p of park.solids)
+      add(
+        p.kind || 'box',
+        p.color,
+        p.x,
+        p.y,
+        p.z,
+        p.w / (p.kind === 'ico' ? 2 : 1),
+        p.h / (p.kind === 'ico' ? 2 : 1),
+        p.d / (p.kind === 'ico' ? 2 : 1),
+      );
+    for (const [x, z, w, d, top] of park.beds) {
+      for (let n = 0; n < 15; n++) {
+        const px = x + ((n % 3) - 1) * w * 0.25,
+          pz = z + (Math.floor(n / 3) - 2) * d * 0.16,
+          y = top;
+        add('cone', 0x608367, px, y + 0.22, pz, 0.14, 0.45, 0.14);
+        add('ico', n % 2 ? 0xf0c98b : 0xd99b88, px, y + 0.45, pz, 0.2, 0.16, 0.2);
+      }
+    }
+    for (const [y, size] of [
+      [0.18, 4.8],
+      [1.92, 1.8],
+    ]) {
+      const water = new THREE.Mesh(
+        new THREE.PlaneGeometry(size, size),
+        new THREE.MeshStandardMaterial({
+          color: 0x6dbecb,
+          roughness: 0.25,
+          transparent: true,
+          opacity: 0.75,
+          depthWrite: false,
+        }),
+      );
+      water.rotation.x = -Math.PI / 2;
+      water.position.set(fountain.x, fountain.y + y, fountain.z);
+      world.add(water);
+    }
+    const stream = [];
+    for (let n = 0; n < 4; n++) {
+      const a = (n * Math.PI) / 2;
+      const point = (t) =>
+        new THREE.Vector3(
+          fountain.x + Math.cos(a) * t * 1.75,
+          fountain.y + 1.94 + Math.sin(t * Math.PI) * 1.55 - t * 1.75,
+          fountain.z + Math.sin(a) * t * 1.75,
+        );
+      for (let i = 0; i < 10; i++) stream.push(point(i / 10), point((i + 1) / 10));
+    }
+    const jets = new THREE.LineSegments(
+      new THREE.BufferGeometry().setFromPoints(stream),
+      new THREE.LineBasicMaterial({ color: 0xbcebf1, transparent: true, opacity: 0.8 }),
+    );
+    world.add(jets);
+    animated.push({ kind: 'fountain', root: jets });
   }
   const waterMeshes = (stage.waters || []).map((w) => {
     const m = new THREE.Mesh(
@@ -361,6 +513,17 @@ export function buildExpedition(world, stage) {
     return { m, w };
   });
   if (stage.id === 5) {
+    for (const a of stage.causewayArches) {
+      for (const side of [-1, 1]) {
+        const x = a.x + side * 4,
+          y = height(x, a.z),
+          h = a.y - y;
+        add('box', 0xb9c3e2, x, y + h / 2, a.z, 0.9, h, 1.4);
+        add('ico', 0xe4d9ac, x, a.y + 0.6, a.z, 0.4, 0.4, 0.4);
+      }
+      add('box', 0xb9c3e2, a.x, a.y, a.z, 9, 0.55, 1.4);
+      add('box', 0xcac09f, a.x, a.y + 0.31, a.z, 8.6, 0.08, 1.2);
+    }
     for (const side of [-1, 1]) {
       const x = side * 13,
         z = -78,
@@ -385,14 +548,15 @@ export function buildExpedition(world, stage) {
       add('ico', 0xded5ea, x + 0.5, y + 1.1, z + 0.5, 0.7, 1.6, 0.7);
     }
     const moon = mesh('ico', 0xffedc8);
-    moon.position.set(-42, 40, -79);
-    moon.scale.setScalar(7);
+    moon.position.set(-54, 24, -124);
+    moon.scale.setScalar(8);
+    moon.material.fog = false;
     moon.material.emissive.setHex(0xffe6b4);
     moon.material.emissiveIntensity = 0.7;
     for (let i = 0; i < 50; i++) {
-      const x = Math.sin(i * 12.3) * 85,
-        z = -65 + Math.cos(i * 7.7) * 65;
-      add('ico', 0xf5e7be, x, 25 + (i % 11) * 2, z, 0.16, 0.16, 0.16);
+      const x = Math.sin(i * 12.3) * 115,
+        z = -60 + Math.cos(i * 7.7) * 112;
+      add('ico', 0xf5e7be, x, 18 + (i % 11) * 1.7, z, 0.3, 0.3, 0.3);
     }
     const positions = stage.runes.map((r) => new THREE.Vector3(r.x, r.y + 1.2, r.z));
     for (let i = 1; i < positions.length; i++) {
@@ -405,12 +569,24 @@ export function buildExpedition(world, stage) {
     }
   }
   for (const m of stage.missions) {
-    disc(m.x, m.z, m.radius * 0.78, stage.id === 5 ? 0x8583ab : 0xb9b89a);
+    if (stage.id === 4 && m.type === 'combat')
+      for (let x = m.x - 9; x <= m.x + 9; x += 2)
+        for (let z = m.z - 9; z <= m.z + 9; z += 2)
+          add(
+            'box',
+            (x + z) % 4 ? 0xcab7a0 : 0xbfae97,
+            x,
+            height(x, z) + 0.035,
+            z,
+            1.85,
+            0.025,
+            1.85,
+          );
     label(m.short, m.color, m.x, height(m.x, m.z) + 5, m.z - 4);
   }
   for (let i = 0; i < 230; i++) {
-    const x = Math.sin(i * 19.3) * 40,
-      z = -30 + Math.cos(i * 13.7) * 47;
+    const x = Math.sin(i * 19.3) * 65,
+      z = -30 + Math.cos(i * 13.7) * 61;
     if (Math.hypot(x - stage.spawn.x, z - stage.spawn.z) < 16 || (Math.abs(x) < 7 && z > 0))
       continue;
     if (
@@ -418,11 +594,19 @@ export function buildExpedition(world, stage) {
       stage.paths.some((path) => path.some(([px, pz]) => Math.hypot(x - px, z - pz) < 5))
     )
       continue;
+    if (
+      stage.park &&
+      (Math.hypot(x - stage.park.fountain.x, z - stage.park.fountain.z) < 4.5 ||
+        stage.park.beds.some(
+          ([bx, bz, w, d]) => Math.abs(x - bx) < w / 2 + 0.5 && Math.abs(z - bz) < d / 2 + 0.5,
+        ))
+    )
+      continue;
     const y = height(x, z);
     add('ico', stage.stone, x, y + 0.25, z, 0.4, 0.3, 0.5);
-    if (i % 4 === 0 && stage.id !== 4) {
+    if (i % 7 === 0 && stage.id !== 4) {
       add('cylinder', 0x68734e, x, y + 1.3, z, 0.18, 2.6, 0.18);
-      add('cone', stage.id === 5 ? 0x8a88b4 : 0x608367, x, y + 3, z, 1.2, 3, 1.2);
+      add('ico', stage.id === 5 ? 0x8a88b4 : 0x608367, x, y + 3, z, 1.8, 1.4, 1.8);
     } else add('cone', stage.id === 2 ? 0xc0b566 : stage.color, x, y + 0.23, z, 0.15, 0.45, 0.15);
   }
   const gate = stage.gate;
@@ -554,6 +738,7 @@ export function buildExpedition(world, stage) {
       r.x,
       r.y + 3,
       r.z,
+      'node',
     );
     return { root, gem, halo, tag };
   });
@@ -568,10 +753,20 @@ export function buildExpedition(world, stage) {
   const attackRing = mesh('ring', 0xffedba);
   attackRing.rotation.x = -Math.PI / 2;
   return {
+    enemies,
+    boss,
     update(course) {
       const f = course.field,
         p = course.sim.position,
         t = course.elapsed;
+      for (const tag of labels)
+        if (tag.category === 'area') {
+          tag.m.material.opacity = Math.min(
+            1,
+            Math.max(0, (Math.hypot(p.x - tag.x, p.z - tag.z) - 5) / 8),
+          );
+          tag.m.visible = tag.m.material.opacity > 0.02;
+        }
       waterMeshes.forEach(({ m, w }) => {
         const level = w.effect && f.done(w.effect) ? w.drainedSurface : w.surface;
         m.position.y = THREE.MathUtils.lerp(m.position.y, level, 0.03);
@@ -586,6 +781,7 @@ export function buildExpedition(world, stage) {
           a.root.visible = f.runes.has(a.index - 1) && f.runes.has(a.index);
         if (a.kind === 'halo') a.root.rotation.y = t * 0.6;
         if (a.kind === 'pendulum') a.root.rotation.z = Math.sin(t * 3) * 0.4;
+        if (a.kind === 'fountain') a.root.material.opacity = 0.7 + Math.sin(t * 4) * 0.1;
         if (a.kind === 'lotus') {
           const level = f.done('sluice') ? stage.waters[0].drainedSurface + 0.05 : 0.85;
           a.root.position.y = THREE.MathUtils.lerp(
@@ -598,21 +794,25 @@ export function buildExpedition(world, stage) {
       });
       enemies.forEach(({ root, body }, i) => {
         const e = f.enemies[i];
-        root.visible = e.hp > 0;
+        root.visible = e.hp > 0 || t - (e.defeatedAt ?? -Infinity) < 0.45;
         root.position.set(e.x, height(e.x, e.z), e.z);
         root.rotation.y = Math.atan2(p.x - e.x, p.z - e.z);
         body.material.color.setHex(
           e.hitUntil > t ? 0xffffff : e.phase === 'windup' ? 0xef5947 : 0xb77865,
         );
       });
-      boss.root.visible = f.bossHP > 0;
-      boss.root.rotation.y = Math.atan2(p.x - stage.boss.x, p.z - stage.boss.z);
+      boss.root.visible = f.bossHP > 0 || t - (f.bossDefeatedAt ?? -Infinity) < 0.7;
+      boss.root.rotation.y =
+        f.bossAttack?.kind === 'fan' && (f.bossPhase === 'windup' || f.bossPhase === 'slam')
+          ? f.bossAttack.sweep
+          : Math.atan2(p.x - stage.boss.x, p.z - stage.boss.z);
       const size = stage.id === 5 ? 1.6 : 1;
       boss.root.scale.set(size, size * (f.bossPhase === 'rest' ? 0.78 : 1), size);
       boss.body.material.color.setHex(
         f.bossPhase === 'rest' ? 0x72c598 : f.bossPhase === 'windup' ? 0xef7763 : 0x586b85,
       );
-      warning.visible = f.bossHP > 0 && (f.bossPhase === 'windup' || f.bossPhase === 'slam');
+      warning.visible =
+        stage.id === 5 && f.bossHP > 0 && (f.bossPhase === 'windup' || f.bossPhase === 'slam');
       warning.material.opacity = f.bossPhase === 'slam' ? 0.65 : 0.23 + Math.sin(t * 15) * 0.07;
       if (shield) {
         shield.visible = f.bossHP > 0 && !f.bossReady();
@@ -643,7 +843,7 @@ export function buildExpedition(world, stage) {
         seals[i].material.emissiveIntensity = 0.8;
       });
       veil.visible = !course.activated;
-      attackRing.visible = f.attackFlash > 0;
+      attackRing.visible = false;
       attackRing.position.set(p.x, p.y - 0.55, p.z);
       attackRing.scale.setScalar(1 + (0.2 - f.attackFlash) * 5);
     },

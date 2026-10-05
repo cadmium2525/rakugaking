@@ -377,12 +377,14 @@ export function buildField(world, stage) {
   attackRing.rotation.x = -Math.PI / 2;
   world.add(attackRing);
   return {
+    enemies,
+    boss,
     update(course) {
       const f = course.field,
         p = course.sim.position;
       enemies.forEach(({ root, body }, i) => {
         const e = f.enemies[i];
-        root.visible = e.hp > 0;
+        root.visible = e.hp > 0 || course.elapsed - (e.defeatedAt ?? -Infinity) < 0.45;
         root.position.set(e.x, 0, e.z);
         root.rotation.y = Math.atan2(p.x - e.x, p.z - e.z);
         body.material.color.setHex(
@@ -390,7 +392,7 @@ export function buildField(world, stage) {
         );
         root.scale.setScalar(e.phase === 'windup' ? 1.13 : 1);
       });
-      boss.root.visible = f.bossHP > 0;
+      boss.root.visible = f.bossHP > 0 || course.elapsed - (f.bossDefeatedAt ?? -Infinity) < 0.7;
       boss.root.rotation.y = Math.atan2(p.x - stage.boss.x, p.z - stage.boss.z);
       boss.body.material.color.setHex(
         f.bossPhase === 'rest' ? 0x8ab78f : f.bossPhase === 'windup' ? 0xda765a : 0x786c9a,
@@ -410,7 +412,7 @@ export function buildField(world, stage) {
         r.position.y = m.reward.y + Math.sin(course.elapsed * 2) * 0.2;
       });
       gate.visible = !course.activated;
-      attackRing.visible = f.attackFlash > 0;
+      attackRing.visible = false;
       attackRing.position.set(p.x, p.y - 0.55, p.z);
       attackRing.scale.setScalar(1 + (0.2 - f.attackFlash) * 5);
     },

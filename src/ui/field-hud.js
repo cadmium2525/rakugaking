@@ -5,23 +5,23 @@ export class FieldHUD {
     this.root.className = 'field-hud';
     this.root.hidden = true;
     this.root.innerHTML =
-      '<details open><summary>紋章 <span data-count>0/3</span> · 地図</summary><div class="field-hud-content"><canvas width="200" height="180" aria-label="北が上のフィールド地図"></canvas><div data-missions></div><p>ミッションを選ぶと目的地を強調</p></div></details><p class="field-bearing" aria-label="目的地の方向と距離"></p>';
+      '<details open><summary>紋章 <span data-count>0/3</span> · 地図</summary><div class="field-hud-content"><canvas width="200" height="180" aria-label="北が上のフィールド地図"></canvas><div data-missions></div><p>ミッションを選ぶと目的地を強調</p></div></details><p class="field-stars" aria-label="探索のかけらと星評価"></p><p class="field-bearing" aria-label="目的地の方向と距離"></p>';
     document.body.append(this.root);
     this.root.addEventListener('click', (event) => {
       const button = event.target.closest('[data-mission]');
       if (button && this.course) this.course.field.selected = button.dataset.mission;
     });
   }
-  update(course) {
+  update(course, cameraYaw = 0) {
     this.course = course;
     this.root.hidden = !course?.field || course.complete;
     if (this.root.hidden) return;
     const f = course.field,
       stage = course.stage;
-    const portrait = innerWidth < 600 && innerHeight > innerWidth;
-    if (portrait !== this.portrait) {
-      this.root.querySelector('details').open = !portrait;
-      this.portrait = portrait;
+    const folded = (innerWidth < 600 && innerHeight > innerWidth) || innerHeight < 500;
+    if (folded !== this.folded) {
+      this.root.querySelector('details').open = !folded;
+      this.folded = folded;
     }
     const selected = stage.missions.find((m) => m.id === f.selected);
     const target = f.target
@@ -31,7 +31,7 @@ export class FieldHUD {
         : selected?.reward || stage.missions[0].reward;
     const dx = target.x - course.sim.position.x,
       dz = target.z - course.sim.position.z;
-    const direction = (Math.round(Math.atan2(dx, -dz) / (Math.PI / 4)) + 8) % 8;
+    const direction = ((Math.round((Math.atan2(dx, -dz) + cameraYaw) / (Math.PI / 4)) % 8) + 8) % 8;
     this.root.querySelector('.field-bearing').textContent =
       `${['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'][direction]} ${f.unlocked ? '北の門' : selected?.short || stage.missions[0].short} · ${Math.round(Math.hypot(dx, dz))}m`;
     const holder = this.root.querySelector('[data-missions]');
@@ -45,6 +45,8 @@ export class FieldHUD {
       }
     }
     this.root.querySelector('[data-count]').textContent = `${f.rewards.size}/3`;
+    this.root.querySelector('.field-stars').textContent =
+      `✦ ${course.collected.size}/${stage.collectibles.length} · 半分で★★ / 全回収★★★`;
     for (const [i, button] of [...holder.children].entries()) {
       const m = stage.missions[i];
       const progress = f.progress
@@ -59,8 +61,13 @@ export class FieldHUD {
       button.title = m.name;
     }
     const ctx = this.root.querySelector('canvas').getContext('2d');
+    const bounds = stage.mapBounds || { minX: -48, maxX: 48, minZ: -88, maxZ: 24 };
+    const sx = 184 / (bounds.maxX - bounds.minX),
+      sz = 152 / (bounds.maxZ - bounds.minZ);
     const map = (x, z) =>
-      stage.expedition ? [100 + x * 1.8, 14 + (z + 88) * 1.38] : [100 + x * 2, 15 + (z + 78) * 1.5];
+      stage.expedition
+        ? [8 + (x - bounds.minX) * sx, 16 + (z - bounds.minZ) * sz]
+        : [100 + x * 2, 15 + (z + 78) * 1.5];
     ctx.fillStyle = stage.expedition ? `#${stage.color.toString(16)}` : '#d4dfb4';
     ctx.fillRect(0, 0, 200, 180);
     for (const water of stage.waters || [])
@@ -71,8 +78,8 @@ export class FieldHUD {
         ctx.ellipse(
           x,
           y,
-          (water.width || 7) * 0.9,
-          (water.maxZ - water.minZ) * 0.69,
+          ((water.width || 7) * sx) / 2,
+          ((water.maxZ - water.minZ) * sz) / 2,
           0,
           0,
           Math.PI * 2,
@@ -125,6 +132,14 @@ export class FieldHUD {
         ctx.fillRect(x - 2, y - 2, 4, 4);
       }
     const [gx, gy] = map(stage.goal.x, stage.goal.z);
+    for (const [i, star] of stage.collectibles.entries())
+      if (!course.collected.has(i)) {
+        const [x, y] = map(star.x, star.z);
+        ctx.fillStyle = '#be8730';
+        ctx.beginPath();
+        ctx.arc(x, y, 2.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
     ctx.fillStyle = f.unlocked ? '#d99b38' : '#85649d';
     ctx.fillRect(gx - 7, gy - 4, 14, 8);
     ctx.fillStyle = '#355c4a';

@@ -9,7 +9,7 @@ const home = new URL('./', self.registration.scope).href;
 self.addEventListener('install', (event) => {
   // Atomic installation: failed downloads leave the previous worker in place.
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(urls)));
-  // No skipWaiting: a new release never takes over a running game.
+  // Updates wait until all game tabs close or a safe, explicit update request.
 });
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -21,6 +21,22 @@ self.addEventListener('activate', (event) => {
           .map((key) => caches.delete(key)),
       );
       await self.clients.claim();
+    })(),
+  );
+});
+self.addEventListener('message', (event) => {
+  if (event.data?.type !== 'RAKUGA_APPLY_UPDATE') return;
+  event.waitUntil(
+    (async () => {
+      const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      const gameWindows = windows.filter((client) =>
+        client.url.startsWith(self.registration.scope),
+      );
+      if (gameWindows.length > 1) {
+        event.source?.postMessage({ type: 'RAKUGA_UPDATE_BLOCKED' });
+        return;
+      }
+      await self.skipWaiting();
     })(),
   );
 });

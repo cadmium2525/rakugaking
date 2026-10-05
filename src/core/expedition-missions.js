@@ -1,5 +1,6 @@
 import { DT } from './controller.js';
 import { FieldMissions } from './field-missions.js';
+import { bossPattern, bossAttackHits, bossAdvice } from './boss-pattern.js';
 export class ExpeditionMissions extends FieldMissions {
   constructor(stage) {
     super(stage);
@@ -57,11 +58,7 @@ export class ExpeditionMissions extends FieldMissions {
       course.notice = text;
       course.noticeUntil = course.elapsed + 3;
     };
-    const hurt = (damage) => {
-      if (course.elapsed < course.nextDamage) return;
-      course.hp -= Math.max(4, damage - (stats.defense || 8) * 0.4);
-      course.nextDamage = course.elapsed + 1.2;
-    };
+    const hurt = (damage) => this.hurt(course, damage);
     for (const place of this.stage.discoveries || [])
       if (
         !this.discovered.has(place.id) &&
@@ -70,20 +67,26 @@ export class ExpeditionMissions extends FieldMissions {
         this.discovered.add(place.id);
         say(`探索発見 · ${place.name}`);
       }
-    for (const e of this.enemies) {
+    for (const [i, e] of this.enemies.entries()) {
       if (e.hp <= 0) continue;
       const d = Math.hypot(p.x - e.x, p.z - e.z),
         y = ground(e.x, e.z),
         m = this.mission(e.mission);
-      if (attack && d < (stats.reach || 1) + 1.5 && Math.abs(p.y - y - 0.8) < 2.3) {
-        e.hp = Math.max(0, e.hp - (stats.power || 20));
-        e.hitUntil = course.elapsed + 0.18;
-      }
+      const hit = this.hitTarget(
+        course,
+        attack,
+        `enemy:${i}`,
+        { x: e.x, y: y + 0.8, z: e.z },
+        { radius: 0.8, vertical: 2.3 },
+      );
+      if (hit) this.applyEnemyHit(course, e, hit, i);
       if (e.hp <= 0) continue;
+      if (this.updateEnemyImpact(course, e)) continue;
       e.timer += DT;
       if (e.phase === 'windup') {
         if (e.timer >= 0.95) {
           if (d < 2.4 && p.y < y + 1.5) hurt(20);
+          e.strikeUntil = course.elapsed + 0.16;
           e.phase = 'rest';
           e.timer = 0;
         }
@@ -93,8 +96,7 @@ export class ExpeditionMissions extends FieldMissions {
         e.phase = 'windup';
         e.timer = 0;
       } else if (d < 9 && Math.hypot(p.x - m.x, p.z - m.z) < m.radius) {
-        e.x += ((p.x - e.x) / d) * DT * 1.6;
-        e.z += ((p.z - e.z) / d) * DT * 1.6;
+        this.moveEnemy(course, e, ((p.x - e.x) / d) * DT * 1.6, ((p.z - e.z) / d) * DT * 1.6);
       }
     }
     for (const m of this.stage.missions)
@@ -129,6 +131,17 @@ export class ExpeditionMissions extends FieldMissions {
           return;
         }
       }
+      if (
+        m.type !== 'relay' &&
+        !this.hitTarget(
+          course,
+          attack,
+          `rune:${i}`,
+          { ...r, y: r.y + 0.8 },
+          { radius: 0.7, vertical: 1.8, interaction: true },
+        )
+      )
+        return;
       this.runes.add(i);
       if (m.duration && !this.chains.has(m.id)) this.chains.set(m.id, course.elapsed);
       say(
@@ -136,48 +149,43 @@ export class ExpeditionMissions extends FieldMissions {
       );
     });
     const b = this.stage.boss,
-      distance = Math.hypot(p.x - b.x, p.z - b.z),
-      radius = b.radius || 6;
+      distance = Math.hypot(p.x - b.x, p.z - b.z);
     if (this.bossHP > 0 && distance < 13 && this.bossReady()) {
       this.bossTime += DT;
-      const t = this.bossTime % (b.pattern === 'double' ? 9.5 : b.cycle || 6.5);
-      this.bossPhase =
-        b.pattern === 'double'
-          ? t < 1.6
-            ? 'guard'
-            : t < 2.8
-              ? 'windup'
-              : t < 3.1
-                ? 'slam'
-                : t < 3.6
-                  ? 'guard'
-                  : t < 4.8
-                    ? 'windup'
-                    : t < 5.1
-                      ? 'slam'
-                      : 'rest'
-          : t < 2
-            ? 'guard'
-            : t < 3.2
-              ? 'windup'
-              : t < 3.5
-                ? 'slam'
-                : 'rest';
+      const previous = this.bossPhase;
+      this.bossAttack = bossPattern(this.stage.id, this.bossTime, this.bossAim || 0, b);
+      this.bossPhase = this.bossAttack.phase;
+      if (this.bossPhase === 'windup' && previous !== 'windup') {
+        this.bossAim = Math.atan2(p.x - b.x, p.z - b.z);
+        this.bossAttack.aim = this.bossAim;
+        this.bossAttack.sweep = this.bossAim;
+      }
       if (this.bossPhase !== 'slam') this.slamHit = false;
-      if (this.bossPhase === 'slam' && !this.slamHit) {
-        if (distance < radius && p.y < b.y + 1.6) hurt(b.damage || 32);
+      if (!this.slamHit && bossAttackHits(this.bossAttack, b, p)) {
+        hurt(b.damage || 32);
         this.slamHit = true;
       }
-      if (
-        attack &&
-        this.bossPhase === 'rest' &&
-        distance < (stats.reach || 1) + 2.6 &&
-        Math.abs(p.y - b.y - 0.8) < 3
-      )
-        this.bossHP = Math.max(0, this.bossHP - (stats.power || 20));
     } else if (this.bossHP > 0) {
       this.bossTime = 0;
+      this.bossAttack = null;
       this.bossPhase = this.bossReady() ? 'sleep' : 'shield';
+    }
+    if (this.bossHP > 0) {
+      const hit = this.hitTarget(
+        course,
+        attack,
+        'boss',
+        { ...b, y: b.y + 1.2 },
+        { radius: 1.9, vertical: 3, blocked: this.bossPhase !== 'rest' },
+      );
+      if (hit && !hit.blocked) {
+        this.bossHP = Math.max(0, this.bossHP - hit.damage);
+        this.bossHitUntil = course.elapsed + 0.2;
+        if (this.bossHP <= 0) {
+          this.bossDefeatedAt = course.elapsed;
+          course.combat?.emit('defeat', { key: 'boss', ...b, y: b.y + 1.8, combo: hit.combo || 1 });
+        }
+      }
     }
     for (const m of this.stage.missions)
       if (
@@ -219,7 +227,7 @@ export class ExpeditionMissions extends FieldMissions {
     }
     if (Math.hypot(p.x - b.x, p.z - b.z) < 13 && this.bossHP > 0)
       return this.bossReady()
-        ? `${b.name} HP ${this.bossHP}/${b.hp} · ${this.bossPhase === 'rest' ? '緑に光る今！ ACTION' : this.bossPhase === 'windup' || this.bossPhase === 'slam' ? '赤い円の外へ！ ジャンプでも回避' : b.pattern === 'double' ? '二連続の衝撃波の後、緑に光るまで待とう' : '衝撃波の後に攻撃しよう'}`
+        ? `${b.name} HP ${this.bossHP}/${b.hp} · ${this.bossPhase === 'rest' ? '緑に光る今！ 近づいて3連撃' : bossAdvice(this.bossAttack?.kind)}`
         : '巨人の盾が作動中 · 星座と守衛のミッションを先に達成しよう';
     if (course.noticeUntil > course.elapsed) return course.notice;
     const ledge = this.stage.platforms.find(

@@ -7,7 +7,7 @@ export class Input {
     this.action = false;
     this.pointer = null;
     this.pendingJump = false;
-    this.pendingAction = false;
+    this.pendingAction = 0;
     this.buttonPointers = [];
     this.abort = new AbortController();
     const options = { signal: this.abort.signal };
@@ -17,7 +17,7 @@ export class Input {
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code))
         e.preventDefault();
       if (!e.repeat && e.code === 'Space') this.pendingJump = true;
-      if (!e.repeat && e.code === 'KeyE') this.pendingAction = true;
+      if (!e.repeat && e.code === 'KeyE') this.pendingAction = Math.min(3, this.pendingAction + 1);
       this.keys.add(e.code);
     });
     this.on(window, 'keyup', (e) => this.keys.delete(e.code));
@@ -62,7 +62,8 @@ export class Input {
         button.setPointerCapture(e.pointerId);
         pointers.add(e.pointerId);
         this[key] = true;
-        this[key === 'jump' ? 'pendingJump' : 'pendingAction'] = true;
+        if (key === 'jump') this.pendingJump = true;
+        else this.pendingAction = Math.min(3, this.pendingAction + 1);
       });
       for (const type of ['pointerup', 'pointercancel', 'lostpointercapture'])
         this.on(button, type, (e) => {
@@ -82,10 +83,11 @@ export class Input {
         (this.keys.has('KeyS') || this.keys.has('ArrowDown') ? 1 : 0) -
         (this.keys.has('KeyW') || this.keys.has('ArrowUp') ? 1 : 0),
       jump: this.pendingJump || this.jump || this.keys.has('Space'),
-      action: this.pendingAction || this.action || this.keys.has('KeyE'),
+      action: this.pendingAction > 0 || this.action || this.keys.has('KeyE'),
+      actionPressed: this.pendingAction > 0,
     };
     this.pendingJump = false;
-    this.pendingAction = false;
+    this.pendingAction = Math.max(0, this.pendingAction - 1);
     return state;
   }
   clear() {
@@ -96,7 +98,7 @@ export class Input {
     this.jump = false;
     this.action = false;
     this.pendingJump = false;
-    this.pendingAction = false;
+    this.pendingAction = 0;
     this.pointer = null;
     if (this.stick) this.stick.firstElementChild.style.transform = '';
   }

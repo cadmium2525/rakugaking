@@ -15,8 +15,11 @@ try {
   startupButtons.forEach((button) => {
     button.disabled = false;
   });
-  new GameApp(store, loaded.data, loaded.notice);
-  registerPwa();
+  const app = new GameApp(store, loaded.data, loaded.notice);
+  registerPwa({
+    canApply: () => !app.course && !document.querySelector('dialog[open]'),
+    save: () => app.save(),
+  });
 } catch (error) {
   $('#status').textContent = '起動できませんでした。WebGL対応ブラウザで再読み込みしてください。';
   console.error(error);

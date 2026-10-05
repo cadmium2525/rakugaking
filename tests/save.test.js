@@ -2,6 +2,32 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { freshSave, migrateSave, SaveStore } from '../src/core/save.js';
 import { calculateStats } from '../src/core/stats.js';
+test('combat release archives 5.0 timings and preserves earned medals, characters and mute', () => {
+  const raw = freshSave();
+  raw.player.medals = { 1: 3, 2: 2, 3: 1, 4: 3, 5: 2 };
+  raw.settings.sound = false;
+  raw.records = [
+    {
+      version: '5.0.0',
+      total: 200,
+      splits: [60, 30, 30, 30, 50],
+      valid: true,
+      character: 'らくがきくん',
+      level: 1,
+      drawing: raw.characters[0].drawing,
+      stats: calculateStats(raw.characters[0].drawing),
+    },
+  ];
+  const { data } = migrateSave(raw);
+  assert.equal(data.records.length, 0);
+  assert.equal(data.legacyRecords.length, 1);
+  assert.deepEqual(data.player.medals, raw.player.medals);
+  assert.deepEqual(data.characters[0].drawing, raw.characters[0].drawing);
+  assert.equal(data.settings.sound, false);
+  assert.equal(migrateSave(data).data.legacyRecords.length, 1);
+  delete raw.settings.sound;
+  assert.equal(migrateSave(raw).data.settings.sound, true);
+});
 test('campaign replacement preserves characters and progression, resets replaced medals and archives 4.1 timings', () => {
   const raw = freshSave();
   delete raw.player.expeditionMedalVersion;

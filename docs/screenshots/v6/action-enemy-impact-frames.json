@@ -1,0 +1,377 @@
+[
+  {
+    "file": "qa/v6/action-enemy-impact-0.png",
+    "capturedAt": "2026-10-05T12:44:49.968Z",
+    "state": {
+      "position": {
+        "x": -17.970447540283203,
+        "y": 0.8202201128005981,
+        "z": -11.730023384094238
+      },
+      "grounded": true,
+      "jumps": 0,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 8.633333333333342,
+      "stage": 1,
+      "complete": false,
+      "collected": 1,
+      "checkpoint": -1,
+      "field": {
+        "rewards": [],
+        "runes": [],
+        "enemies": [
+          {
+            "x": -26,
+            "z": -15,
+            "hp": 30,
+            "phase": "patrol"
+          },
+          {
+            "x": -17.26108716590019,
+            "z": -13.14104356915867,
+            "hp": 12,
+            "phase": "rest"
+          },
+          {
+            "x": -22,
+            "z": -24,
+            "hp": 30,
+            "phase": "patrol"
+          }
+        ],
+        "bossHP": 150,
+        "bossPhase": "sleep",
+        "bossAttack": null,
+        "selected": "orchard"
+      },
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0.3425509799338782,
+          "z": -0.9394992422276559
+        },
+        "reach": 2.1479999999999997,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 7.5499999999999785,
+          "x": -17.94124984741211,
+          "y": 0.8200818300247192,
+          "z": -11.406342506408691,
+          "combo": 1,
+          "airborne": false,
+          "name": "薙ぎ払い",
+          "facing": {
+            "x": 0.3425509799338782,
+            "z": -0.9394992422276559
+          }
+        },
+        {
+          "id": 2,
+          "type": "hit",
+          "time": 7.649999999999978,
+          "key": "enemy:1",
+          "x": -17.476463743969873,
+          "y": 0.8,
+          "z": -12.681090551403964,
+          "damage": 18,
+          "combo": 1,
+          "airborne": false,
+          "facing": {
+            "x": 0.4240683735871678,
+            "z": -0.9056301753603037
+          }
+        }
+      ],
+      "practiceHits": 0,
+      "camera": {
+        "yaw": 0.0006040998916450967,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -17.95774764332634,
+          "y": 9.82312890999508,
+          "z": 4.292816691895833
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 1,
+      "name": "らくがきくん",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 164,
+      "triangles": 31636,
+      "geometries": 137,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  },
+  {
+    "file": "qa/v6/action-enemy-impact-1.png",
+    "capturedAt": "2026-10-05T12:44:50.612Z",
+    "state": {
+      "position": {
+        "x": -17.970460891723633,
+        "y": 0.8200985789299011,
+        "z": -11.730226516723633
+      },
+      "grounded": true,
+      "jumps": 0,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 9.233333333333372,
+      "stage": 1,
+      "complete": false,
+      "collected": 1,
+      "checkpoint": -1,
+      "field": {
+        "rewards": [],
+        "runes": [],
+        "enemies": [
+          {
+            "x": -26,
+            "z": -15,
+            "hp": 30,
+            "phase": "patrol"
+          },
+          {
+            "x": -17.253854360879966,
+            "z": -13.156489772853126,
+            "hp": 12,
+            "phase": "windup"
+          },
+          {
+            "x": -22,
+            "z": -24,
+            "hp": 30,
+            "phase": "patrol"
+          }
+        ],
+        "bossHP": 150,
+        "bossPhase": "sleep",
+        "bossAttack": null,
+        "selected": "orchard"
+      },
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0.3425509799338782,
+          "z": -0.9394992422276559
+        },
+        "reach": 2.1479999999999997,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 7.5499999999999785,
+          "x": -17.94124984741211,
+          "y": 0.8200818300247192,
+          "z": -11.406342506408691,
+          "combo": 1,
+          "airborne": false,
+          "name": "薙ぎ払い",
+          "facing": {
+            "x": 0.3425509799338782,
+            "z": -0.9394992422276559
+          }
+        },
+        {
+          "id": 2,
+          "type": "hit",
+          "time": 7.649999999999978,
+          "key": "enemy:1",
+          "x": -17.476463743969873,
+          "y": 0.8,
+          "z": -12.681090551403964,
+          "damage": 18,
+          "combo": 1,
+          "airborne": false,
+          "facing": {
+            "x": 0.4240683735871678,
+            "z": -0.9056301753603037
+          }
+        }
+      ],
+      "practiceHits": 0,
+      "camera": {
+        "yaw": 0.000032549131212179356,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -17.96977731944626,
+          "y": 9.820263284923918,
+          "z": 4.27101842210234
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 1,
+      "name": "らくがきくん",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 163,
+      "triangles": 31634,
+      "geometries": 137,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  },
+  {
+    "file": "qa/v6/action-enemy-impact-2.png",
+    "capturedAt": "2026-10-05T12:44:51.265Z",
+    "state": {
+      "position": {
+        "x": -17.970460891723633,
+        "y": 0.820099949836731,
+        "z": -11.730231285095215
+      },
+      "grounded": true,
+      "jumps": 0,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 9.900000000000071,
+      "stage": 1,
+      "complete": false,
+      "collected": 1,
+      "checkpoint": -1,
+      "field": {
+        "rewards": [],
+        "runes": [],
+        "enemies": [
+          {
+            "x": -26,
+            "z": -15,
+            "hp": 30,
+            "phase": "patrol"
+          },
+          {
+            "x": -17.25365490347186,
+            "z": -13.156915729276028,
+            "hp": 12,
+            "phase": "windup"
+          },
+          {
+            "x": -22,
+            "z": -24,
+            "hp": 30,
+            "phase": "patrol"
+          }
+        ],
+        "bossHP": 150,
+        "bossPhase": "sleep",
+        "bossAttack": null,
+        "selected": "orchard"
+      },
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0.3425509799338782,
+          "z": -0.9394992422276559
+        },
+        "reach": 2.1479999999999997,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 7.5499999999999785,
+          "x": -17.94124984741211,
+          "y": 0.8200818300247192,
+          "z": -11.406342506408691,
+          "combo": 1,
+          "airborne": false,
+          "name": "薙ぎ払い",
+          "facing": {
+            "x": 0.3425509799338782,
+            "z": -0.9394992422276559
+          }
+        },
+        {
+          "id": 2,
+          "type": "hit",
+          "time": 7.649999999999978,
+          "key": "enemy:1",
+          "x": -17.476463743969873,
+          "y": 0.8,
+          "z": -12.681090551403964,
+          "damage": 18,
+          "combo": 1,
+          "airborne": false,
+          "facing": {
+            "x": 0.4240683735871678,
+            "z": -0.9056301753603037
+          }
+        }
+      ],
+      "practiceHits": 0,
+      "camera": {
+        "yaw": 0.0000011448898261595734,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -17.97043684898677,
+          "y": 9.820107540417094,
+          "z": 4.269812837188908
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 1,
+      "name": "らくがきくん",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 163,
+      "triangles": 31634,
+      "geometries": 137,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  }
+]

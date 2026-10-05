@@ -109,66 +109,66 @@ test('water switches enforce sequence and drain the actual water volume', () => 
   }
   c.dispose();
 });
-test('north-rim jumping cannot pass through the reachable temple roof', () => {
+test('temple roof underside blocks jumps in a local collision fixture and allows escape', () => {
   const s = STAGES[2],
-    c = new Course(s, { speed: 6, jump: 8.5, weight: 1, hp: 100 }),
-    roof = s.platforms.find((p) => p.w === 18 && p.h === 0.8);
-  const points = [
-    [15, -76],
-    [15, -86],
-    [0, -86],
-    [0, -82],
-  ];
-  let index = 0,
-    contact = false;
-  for (let i = 0; i < 2200; i++) {
-    const p = c.sim.position,
-      [x, z] = points[index];
-    if (Math.hypot(p.x - x, p.z - z) < 0.5 && index < points.length - 1) index++;
-    c.step({ x: x - p.x, z: z - p.z, jump: i % 48 === 0 });
-    if (
-      Math.abs(p.x) < 8.5 &&
-      p.z > -85.5 &&
-      p.z < -69 &&
-      Math.abs(p.y - (roof.y - 0.4 - 0.82)) < 0.05
-    )
-      contact = true;
-    assert.ok(
-      !(Math.abs(p.x) < 8.5 && p.z > -85.5 && p.z < -69 && Math.abs(p.y - roof.y) < 0.35),
-      'character passed through roof',
+    roof = s.platforms.find((p) => p.w === 18 && p.h === 0.8),
+    bottom = roof.y - roof.h / 2,
+    floor = bottom - 2,
+    // This scaffold tests the roof itself. Its old enclosing-rim access route
+    // no longer exists; real outdoor walking is checked in field-space.test.
+    c = new Course(
+      {
+        ...s,
+        platforms: [...s.platforms, { x: 0, y: floor - 0.2, z: roof.z, w: 22, h: 0.4, d: 24 }],
+        spawn: { x: 0, y: floor + 0.82, z: roof.z },
+      },
+      { speed: 6, jump: 8.5, weight: 1, hp: 100 },
     );
+  const collider = c.sim.platforms[s.platforms.indexOf(roof)].handle;
+  let contacts = 0;
+  for (let i = 0; i < 240; i++) {
+    c.step({ jump: i % 48 === 0 });
+    for (let j = 0; j < c.sim.controller.numComputedCollisions(); j++)
+      if (c.sim.controller.computedCollision(j)?.collider.handle === collider) contacts++;
+    assert.ok(c.sim.position.y + 0.8 <= bottom + 0.04, 'character passed through roof');
   }
-  assert.ok(contact);
+  assert.ok(contacts > 0, 'fixture actually contacts the roof');
   for (let i = 0; i < 220; i++) c.step({ x: 1 });
   assert.ok(c.sim.position.x > 10, 'character can leave the underside of the roof');
   assert.equal(c.sim.deaths, 0);
   c.dispose();
 });
-test('aqueduct upper beams block a jumping character approaching from the west rim', () => {
+test('aqueduct upper beam blocks the capsule in a local elevated approach fixture', () => {
   const s = STAGES[2],
-    c = new Course(s, { speed: 7.5, jump: 10, weight: 1, hp: 100 });
-  let approach = false,
-    blocked = false;
-  for (let i = 0; i < 1600; i++) {
-    const p = c.sim.position,
-      x = approach ? -38 : -44.5,
-      z = -20;
-    if (!approach && Math.hypot(p.x + 44.5, p.z + 20) < 0.5) approach = true;
-    c.step({ x: x - p.x, z: z - p.z, jump: i % 48 === 0 });
-    for (const b of s.platforms.filter((p) => p.w === 2.5 && p.h === 0.8))
-      if (
-        Math.abs(p.z - b.z) < b.d / 2 - 0.35 &&
-        p.y + 0.8 > b.y - b.h / 2 &&
-        p.y - 0.8 < b.y + b.h / 2
-      ) {
-        assert.ok(
-          p.x <= b.x - b.w / 2 - 0.34 || p.x >= b.x + b.w / 2 + 0.34,
-          'capsule penetrated aqueduct beam',
-        );
-        if (approach) blocked = true;
-      }
+    b = s.platforms.find((p) => p.w === 2.5 && p.h === 0.8),
+    floor = b.y - b.h / 2 - 1.8,
+    c = new Course(
+      {
+        ...s,
+        platforms: [...s.platforms, { x: b.x - 3.5, y: floor - 0.2, z: b.z, w: 8, h: 0.4, d: 4 }],
+        spawn: { x: b.x - 4, y: floor + 0.82, z: b.z },
+      },
+      { speed: 7.5, jump: 10, weight: 1, hp: 100 },
+    );
+  const collider = c.sim.platforms[s.platforms.indexOf(b)].handle;
+  let contacts = 0;
+  for (let i = 0; i < 10; i++) c.step({});
+  for (let i = 0; i < 300; i++) {
+    c.step({ x: 1, jump: i % 48 === 0 });
+    const p = c.sim.position;
+    for (let j = 0; j < c.sim.controller.numComputedCollisions(); j++)
+      if (c.sim.controller.computedCollision(j)?.collider.handle === collider) contacts++;
+    // The capsule has rounded ends; an AABB check falsely reports corner
+    // contact as overlap. Distance from its vertical segment to the box must
+    // remain at least its 0.35m radius.
+    const gap = Math.hypot(
+      Math.max(0, Math.abs(p.x - b.x) - b.w / 2),
+      Math.max(0, Math.abs(p.y - b.y) - b.h / 2 - 0.45),
+      Math.max(0, Math.abs(p.z - b.z) - b.d / 2),
+    );
+    assert.ok(gap > 0.34, `capsule penetrated aqueduct beam: ${gap}`);
   }
-  assert.ok(blocked);
+  assert.ok(contacts > 0, 'fixture actually contacts the beam');
   assert.equal(c.sim.deaths, 0);
   c.dispose();
 });
@@ -294,19 +294,28 @@ test('optional discoveries and bridge fragments are reachable by a slow heavy bo
     c.dispose();
   }
 });
-test('observatory cone roof has physical contact during a jump from the west rim', () => {
+test('observatory cone roof blocks a jump from an elevated local approach fixture', () => {
   const s = STAGES[4],
+    roof = s.platforms.find((p) => p.x === -36 && p.hull),
+    floor = roof.y - roof.h / 2 - 1.8,
     c = new Course(
-      { ...s, spawn: { x: -46, y: s.height(-46, -24) + 0.82, z: -24 } },
+      {
+        ...s,
+        platforms: [
+          ...s.platforms,
+          { x: roof.x - 4, y: floor - 0.2, z: roof.z, w: 3, h: 0.4, d: 4 },
+        ],
+        spawn: { x: roof.x - 4, y: floor + 0.82, z: roof.z },
+      },
       { speed: 7.5, jump: 10, weight: 1, hp: 100 },
     );
-  const roof = s.platforms.findIndex((p) => p.x === -36 && p.hull);
+  const index = s.platforms.indexOf(roof);
   for (let i = 0; i < 10; i++) c.step({});
   let contacts = 0;
   for (let i = 0; i < 240; i++) {
     c.step({ x: 1, jump: i % 48 === 0 });
     for (let j = 0; j < c.sim.controller.numComputedCollisions(); j++)
-      if (c.sim.controller.computedCollision(j)?.collider.handle === c.sim.platforms[roof].handle)
+      if (c.sim.controller.computedCollision(j)?.collider.handle === c.sim.platforms[index].handle)
         contacts++;
   }
   assert.ok(contacts > 0);

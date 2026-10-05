@@ -17,6 +17,10 @@ import { Library } from '../ui/library.js';
 import { SAVE_VERSION } from '../core/save.js';
 import { GAME_VERSION } from '../core/ranking.js';
 import { FieldHUD } from '../ui/field-hud.js';
+import { Combat } from '../core/combat.js';
+import { cameraMovement } from '../core/camera.js';
+import { CameraInput } from '../ui/camera-input.js';
+import { CombatAudio } from '../ui/combat-audio.js';
 
 export class GameApp {
   constructor(store, data, notice) {
@@ -31,7 +35,11 @@ export class GameApp {
     const active = this.characters.find((c) => c.id === this.active);
     this.drawing = active?.drawing || defaultDrawing();
     this.name = active?.name || 'らくがきくん';
-    this.sim = new Simulation(prototypePlatforms);
+    this.sim = new Simulation(
+      prototypePlatforms,
+      undefined,
+      levelStats(calculateStats(this.drawing), levelFromExp(this.player.exp)),
+    );
     this.course = null;
     this.fieldHUD = new FieldHUD();
     this.run = null;
@@ -47,7 +55,13 @@ export class GameApp {
     });
     this.view.setQuality(this.settings.quality);
     this.view.setCharacter(this.drawing);
+    this.view.setupPractice();
+    this.homeCombat = new Combat(this.sim.stats);
+    this.homeCombat.facing = { x: 0, z: 1 };
+    this.practiceHits = 0;
     this.input = new Input($('#stick'), $('#jump'), $('#action'));
+    this.audio = new CombatAudio(this.settings.sound !== false);
+    this.cameraInput = new CameraInput($('#world'), this.view, () => !this.paused && !!this.course);
     this.paused = false;
     this.last = performance.now();
     this.accumulator = 0;
@@ -63,6 +77,15 @@ export class GameApp {
       this.view.setQuality(this.settings.quality);
       this.save();
     };
+    $('#sound').checked = this.settings.sound !== false;
+    $('#sound').onchange = () => {
+      this.settings.sound = $('#sound').checked;
+      this.audio.enabled = this.settings.sound;
+      this.audio.unlock();
+      this.save();
+    };
+    $('#camera-reset').onclick = () => this.view.resetCamera();
+    $('#game-version').textContent = `v${GAME_VERSION}`;
     $('#world').addEventListener('webglcontextlost', (e) => {
       e.preventDefault();
       this.run?.timer.invalidate('描画が中断したため記録対象外');
@@ -126,7 +149,11 @@ export class GameApp {
     };
     $('#reset').onclick = () => {
       if (this.course) this.course.retry();
-      else this.sim.reset();
+      else {
+        this.sim.reset();
+        this.homeCombat.reset();
+        this.view.combatView.reset();
+      }
       $('#resume').click();
     };
     $('#home').onclick = () => {
@@ -192,7 +219,7 @@ export class GameApp {
     $('#birth-banner').hidden = false;
     clearTimeout(this.birthBannerTimeout);
     this.birthBannerTimeout = setTimeout(() => ($('#birth-banner').hidden = true), 1400);
-    $('.intro h1').innerHTML = 'きみのヒーローが、<br>うまれた。';
+    $('.intro h1').innerHTML = 'ヒーローが、<br>うまれた。';
     $('.intro>p:not(.eyebrow)').textContent = `${name}と、一緒に冒険へ。`;
     $('.pill').textContent = statRows(this.sim.stats)
       .map(([k, v]) => `${k} ${v}`)
@@ -203,7 +230,13 @@ export class GameApp {
     this.drawing = character.drawing;
     this.name = character.name;
     this.view.setCharacter(this.drawing);
+    if (!this.course && this.homeCombat) {
+      this.homeCombat.reset();
+      this.homeCombat.facing = { x: 0, z: 1 };
+      this.view.combatView.reset();
+    }
     this.sim.stats = levelStats(calculateStats(this.drawing), levelFromExp(this.player.exp));
+    this.homeCombat.stats = this.sim.stats;
     this.save();
   }
   async save() {
@@ -219,9 +252,12 @@ export class GameApp {
     };
     $('#save-status').textContent = '保存しています…';
     try {
-      $('#save-status').textContent = await this.store.save(data);
+      const result = await this.store.save(data);
+      $('#save-status').textContent = result;
+      return result.startsWith('この端末に保存しました');
     } catch (error) {
       $('#save-status').textContent = `保存できません: ${error.message}`;
+      return false;
     }
   }
   openStages() {
@@ -265,7 +301,11 @@ export class GameApp {
     this.run = null;
     this.course = null;
     this.sim.dispose();
-    this.sim = new Simulation(prototypePlatforms);
+    this.sim = new Simulation(
+      prototypePlatforms,
+      undefined,
+      levelStats(calculateStats(this.drawing), levelFromExp(this.player.exp)),
+    );
     this.view.setStage({
       ...STAGES[0],
       field: false,
@@ -276,6 +316,9 @@ export class GameApp {
       goal: { x: 0, y: 0, z: 100 },
     });
     this.view.setCharacter(this.drawing);
+    this.view.setupPractice();
+    this.homeCombat = new Combat(this.sim.stats);
+    this.homeCombat.facing = { x: 0, z: 1 };
     document.body.classList.remove('playing');
     document.body.classList.remove('field-playing');
     $('.stage-label').textContent = 'PLAYGROUND / はじまりの広場';
@@ -285,6 +328,7 @@ export class GameApp {
   pause() {
     this.paused = true;
     this.input.clear();
+    this.cameraInput.clear();
     $('#pause-note').textContent = this.run ? 'タイムアタックの時計は一時停止中も進みます。' : '';
     if (!document.querySelector('dialog[open]')) $('#pause-dialog').showModal();
   }
@@ -348,15 +392,28 @@ export class GameApp {
     this.save();
   }
   frame(now) {
-    const delta = Math.min((now - this.last) / 1000, 0.1);
+    const delta = Math.max(0, Math.min((now - this.last) / 1000, 0.1));
     this.last = now;
     if (!this.paused) {
       this.accumulator += delta;
       while (this.accumulator >= DT) {
-        const controls = this.input.read();
-        if (controls.action && !this.actionHeld && !this.course) this.sim.reset();
+        const controls = cameraMovement(this.input.read(), this.course ? this.view.cameraHeading : 0);
         this.actionHeld = controls.action;
-        const event = this.course ? this.course.step(controls) : this.sim.step(controls);
+        if (!this.course) {
+          this.homeCombat.update(controls, DT, {
+            position: this.sim.position,
+            grounded: this.sim.grounded && !(controls.jump && !this.sim.jumpHeld),
+            targets: [{ key: 'practice', x: 0, y: 0.8, z: -2.8, radius: 0.7 }],
+          });
+        }
+        const event = this.course
+          ? this.course.step(controls)
+          : this.sim.step(controls, this.homeCombat.motion);
+        if (!this.course) {
+          this.homeCombat.position = { ...this.sim.position };
+          if (this.homeCombat.hit('practice', { x: 0, y: 0.8, z: -2.8 }, { radius: 0.7 }))
+            this.practiceHits++;
+        }
         this.accumulator -= DT;
         this.elapsed += DT;
         if (event === 'complete') {
@@ -365,15 +422,33 @@ export class GameApp {
         }
       }
     } else this.accumulator = 0;
-    if (this.course) this.view.updateCourse(this.course);
+    const combat = this.course?.combat || this.homeCombat;
+    if (this.course) {
+      this.view.updateCourse(this.course);
+      this.view.combatView.update(this.course, this.paused ? 0 : delta, this.view.fieldView);
+    } else this.view.updatePractice(this.sim, combat, this.paused ? 0 : delta);
+    this.audio.update(combat);
     this.view.render(this.sim, this.paused ? 0 : delta);
     if (now - this.lastHud > 100) {
-      this.fieldHUD.update(this.course);
+      this.fieldHUD.update(this.course, this.view.cameraHeading);
       this.lastHud = now;
       this.ui.status.textContent = `${this.course ? `HP ${Math.ceil(this.course.hp)} · ` : ''}${this.sim.grounded ? '● ON GROUND' : '↑ IN THE AIR'} · ${Math.hypot(this.sim.vx, this.sim.vz).toFixed(1)} m/s`;
       if (this.run)
         this.ui.run.textContent = `STAGE ${formatTime(this.run.timer.stageTime())} · TOTAL ${formatTime(this.run.timer.total())} · BEST ${formatTime(this.best)}${this.run.timer.valid ? '' : ' · 記録対象外'}`;
       this.ui.objective.textContent = '';
+      const action = combat.snapshot();
+      $('#combat-hud').textContent = action.attacking
+        ? `${action.airborne ? '空中' : ['● ○ ○', '● ● ○', '● ● ●'][action.combo - 1]} · ${action.name}${action.buffered ? ' · 次の一撃' : ''}`
+        : this.course
+          ? 'リズムよくACTIONで3連撃 · 空中ではスピン'
+          : 'ACTIONで練習 · リズムよく押すと3連撃';
+      $('#vitals').hidden = !this.course;
+      if (this.course) {
+        $('#health').value = this.course.hp;
+        $('#health').max = this.sim.stats.hp || 100;
+        $('#health-label').textContent =
+          `HP ${Math.ceil(this.course.hp)}/${this.sim.stats.hp || 100}`;
+      }
       if (this.course && !this.course.complete) {
         const p = this.sim.position,
           g = this.course.stage.goal;
@@ -401,6 +476,20 @@ export class GameApp {
       collected: this.course?.collected.size,
       checkpoint: this.course?.checkpoint,
       field: this.course?.field?.snapshot(),
+      combat: (this.course?.combat || this.homeCombat).snapshot(),
+      combatEvents: (this.course?.combat || this.homeCombat).events.map((e) => ({ ...e })),
+      practiceHits: this.practiceHits,
+      camera: {
+        yaw: this.view.cameraHeading,
+        intentYaw: this.view.cameraYaw,
+        pitch: this.view.cameraPitch,
+        position: {
+          x: this.view.camera.position.x,
+          y: this.view.camera.position.y,
+          z: this.view.camera.position.z,
+        },
+      },
+      version: GAME_VERSION,
       exp: this.player.exp,
       characters: this.characters.length,
       name: this.name,

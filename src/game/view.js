@@ -7,6 +7,9 @@ import { windPhase } from '../core/course.js';
 import { buildField } from './field-view.js';
 import { fieldHeight } from './field-terrain.js';
 import { buildExpedition } from './expedition-view.js';
+import { CombatView } from './combat-view.js';
+import { cameraFollow } from '../core/camera.js';
+import { ActorVisibility } from './actor-visibility.js';
 
 export class GameView {
   constructor(canvas, platforms) {
@@ -17,6 +20,11 @@ export class GameView {
     this.renderer.setClearColor(0xdcebe5);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.scene = new THREE.Scene();
+    this.combatView = new CombatView(this.scene);
+    this.cameraYaw = 0;
+    this.cameraHeading = 0;
+    this.cameraPitch = 0;
+    this.reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.scene.fog = new THREE.Fog(0xdcebe5, 30, 65);
     this.camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
     this.scene.add(new THREE.HemisphereLight(0xffffff, 0x52635b, 1.8));
@@ -64,6 +72,8 @@ export class GameView {
       this.avatar.add(eye);
     }
     this.scene.add(this.avatar);
+    this.actorVisibility = new ActorVisibility();
+    this.actorVisibility.setCharacter(this.avatar);
     this.shadow = new THREE.Mesh(
       new THREE.CircleGeometry(0.48, 24),
       new THREE.MeshBasicMaterial({
@@ -122,6 +132,7 @@ export class GameView {
     this.scene.add(avatar);
     this.world.visible = false;
     this.shadow.visible = false;
+    this.combatView.root.visible = false;
     this.renderer.setSize(320, 320, false);
     this.renderer.render(this.scene, camera);
     const image = this.renderer.domElement.toDataURL('image/png');
@@ -129,10 +140,12 @@ export class GameView {
     disposeCharacter(avatar);
     this.scene.add(this.avatar);
     this.world.visible = true;
+    this.combatView.root.visible = true;
     this.resize();
     return image;
   }
   setCharacter(drawing) {
+    this.actorVisibility.setCharacter(null);
     this.scene.remove(this.avatar);
     disposeCharacter(this.avatar);
     this.avatar = buildCharacter(drawing);
@@ -140,22 +153,28 @@ export class GameView {
       if (o.isMesh) o.castShadow = true;
     });
     this.scene.add(this.avatar);
+    this.actorVisibility.setCharacter(this.avatar);
   }
   setStage(stage) {
+    this.stage = stage;
+    this.practiceDummy = null;
+    this.combatView.reset();
+    this.resetCamera();
     this.fieldMode = !!stage.field;
     this.terrainHeight = stage.height || fieldHeight;
     this.renderer.shadowMap.enabled = this.fieldMode && this.quality !== 'low';
     this.sun.castShadow = this.renderer.shadowMap.enabled;
     this.platforms = stage.platforms;
+    this.actorVisibility.clearActors();
     this.scene.remove(this.world);
     disposeCharacter(this.world);
     this.world = new THREE.Group();
     this.scene.add(this.world);
     this.renderer.setClearColor(stage.sky);
     this.scene.fog.color.setHex(stage.sky);
-    this.scene.fog.near = stage.field ? 55 : 30;
-    this.scene.fog.far = stage.field ? 135 : 65;
-    this.camera.far = stage.field ? 180 : 100;
+    this.scene.fog.near = stage.field ? stage.cameraHint?.fogNear || 70 : 30;
+    this.scene.fog.far = stage.field ? stage.cameraHint?.fogFar || 240 : 65;
+    this.camera.far = stage.field ? 350 : 100;
     this.camera.fov = stage.field ? (innerHeight < 500 ? 50 : 60) : 48;
     this.camera.updateProjectionMatrix();
     this.platformMeshes = [];
@@ -215,6 +234,12 @@ export class GameView {
       : stage.field
         ? buildField(this.world, stage)
         : null;
+    this.actorVisibility.setActors(
+      this.fieldView
+        ? [...this.fieldView.enemies.map((enemy) => enemy.root), this.fieldView.boss.root]
+        : [],
+      this.world,
+    );
     if (stage.field)
       this.world.traverse((o) => {
         if (o.isMesh) {
@@ -330,6 +355,7 @@ export class GameView {
     });
   }
   updateCourse(course) {
+    this.currentCombat = course.combat;
     this.fieldView?.update(course);
     for (const [i, m] of this.platformMeshes.entries()) {
       const start = course.collapseTimes[i],
@@ -374,10 +400,69 @@ export class GameView {
       ),
     );
   }
+  orbit(yaw, pitch) {
+    this.cameraYaw = (this.cameraYaw + yaw) % (Math.PI * 2);
+    this.cameraPitch = Math.max(-0.2, Math.min(0.6, this.cameraPitch + pitch));
+  }
+  resetCamera() {
+    this.cameraYaw = 0;
+    this.cameraHeading = 0;
+    this.cameraPitch = 0;
+  }
+  setupPractice() {
+    const root = new THREE.Group();
+    const body = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.5, 0.65, 1.2, 10),
+      new THREE.MeshStandardMaterial({ color: 0xbe9270 }),
+    );
+    body.position.y = 0.9;
+    root.add(body);
+    for (const side of [-1, 1]) {
+      const arm = new THREE.Mesh(
+        new THREE.BoxGeometry(0.75, 0.15, 0.15),
+        new THREE.MeshStandardMaterial({ color: 0xe8c78c }),
+      );
+      arm.position.set(side * 0.65, 1.05, 0);
+      root.add(arm);
+    }
+    const head = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(0.42, 1),
+      new THREE.MeshStandardMaterial({ color: 0xf4d29d }),
+    );
+    head.position.y = 1.72;
+    root.add(head);
+    for (const side of [-1, 1]) {
+      const eye = new THREE.Mesh(
+        new THREE.SphereGeometry(0.035, 6, 4),
+        new THREE.MeshBasicMaterial({ color: 0x3b4a42 }),
+      );
+      eye.position.set(side * 0.14, 1.77, 0.36);
+      root.add(eye);
+    }
+    root.position.set(0, 0, -2.8);
+    this.world.add(root);
+    root.traverse((o) => {
+      if (o.isMesh) o.castShadow = true;
+    });
+    this.practiceDummy = { root, body };
+    this.actorVisibility.setActors([root], this.world);
+  }
+  updatePractice(sim, combat, dt) {
+    this.currentCombat = combat;
+    this.combatView.update({ sim, combat, elapsed: combat.clock }, dt);
+    const latest = combat.events.findLast((e) => e.type === 'hit' && e.key === 'practice');
+    const t = latest ? Math.max(0, 1 - (combat.clock - latest.time) / 0.4) : 0;
+    if (this.practiceDummy) {
+      this.practiceDummy.root.rotation.x = t * 0.25;
+      this.practiceDummy.root.rotation.z = Math.sin(combat.clock * 35) * t * 0.1;
+      this.practiceDummy.body.material.color.setHex(t > 0.6 ? 0xfff4ba : 0xbe9270);
+    }
+  }
   render(sim, dt) {
     const p = sim.position;
     this.avatar.position.set(p.x, p.y - HALF_HEIGHT, p.z);
-    animateCharacter(this.avatar, sim, dt);
+    const combat = this.currentCombat?.snapshot() || {};
+    animateCharacter(this.avatar, sim, dt, combat);
     this.birthElapsed = Math.min(2, this.birthElapsed + dt);
     if (this.birthElapsed < 1) {
       const t = this.birthElapsed;
@@ -400,29 +485,59 @@ export class GameView {
       this.shadow.scale.setScalar(size);
     }
     const speed = Math.hypot(sim.vx, sim.vz);
-    if (speed > 0.2) this.avatar.rotation.y = Math.atan2(sim.vx, sim.vz);
+    if (combat.attacking) this.avatar.rotation.y = Math.atan2(combat.facing.x, combat.facing.z);
+    else if (speed > 0.2) this.avatar.rotation.y = Math.atan2(sim.vx, sim.vz);
+    else if (combat.facing) this.avatar.rotation.y = Math.atan2(combat.facing.x, combat.facing.z);
     const portrait = this.camera.aspect < 0.8;
     const compact = innerHeight < 500;
-    this.cameraTarget.set(
-      p.x,
-      p.y + (this.fieldMode ? (portrait ? 15 : compact ? 6 : 8.5) : 7),
-      p.z + (this.fieldMode ? (portrait ? 22 : compact ? 10 : 15) : 12),
-    );
-    this.camera.position.lerp(this.cameraTarget, this.initial ? 1 : 1 - Math.exp(-dt * 5));
-    this.look.set(
-      p.x,
-      p.y + (this.fieldMode ? 1.5 : 0.3),
-      p.z - (this.fieldMode ? (compact ? 3 : 5) : 0),
-    );
+    const hint = this.stage?.cameraHint || {},
+      distance = this.fieldMode ? (portrait ? 22 : compact ? 11 : hint.distance || 16) : 12,
+      height = this.fieldMode ? (portrait ? 15 : compact ? 6.5 : hint.height || 9) : 7,
+      lookAhead = this.fieldMode ? (compact ? 3 : Math.min(8, hint.lookAhead || 5)) : 0,
+      yaw = this.cameraYaw,
+      desired = {
+        x: p.x + Math.sin(yaw) * distance,
+        y: p.y + height + this.cameraPitch * 14,
+        z: p.z + Math.cos(yaw) * distance,
+      },
+      blend = this.initial ? 1 : 1 - Math.exp(-dt * 5),
+      follow = this.fieldMode
+        ? cameraFollow(p, desired, this.stage, {
+            previous: this.camera.position,
+            blend,
+            yaw,
+            lookAhead,
+          })
+        : null,
+      target = follow?.target || desired;
+    this.cameraTarget.set(target.x, target.y, target.z);
+    if (follow) {
+      this.camera.position.set(follow.position.x, follow.position.y, follow.position.z);
+      this.look.set(follow.look.x, follow.look.y, follow.look.z);
+    } else {
+      this.camera.position.lerp(this.cameraTarget, blend);
+      this.look.set(p.x, p.y + 0.3, p.z);
+    }
     this.camera.lookAt(this.look);
+    if (!this.reducedMotion) {
+      const shake = this.combatView.cameraOffset();
+      this.camera.position.x += shake.x;
+      this.camera.position.y += shake.y;
+    }
+    this.cameraHeading = this.fieldMode
+      ? Math.atan2(this.camera.position.x - this.look.x, this.camera.position.z - this.look.z)
+      : 0;
     if (this.fieldMode) {
       this.sun.position.set(p.x - 25, p.y + 35, p.z + 15);
       this.sun.target.position.set(p.x, 0, p.z - 15);
     }
     this.initial = false;
+    this.actorVisibility.update(this.camera, dt);
     this.renderer.render(this.scene, this.camera);
   }
   dispose() {
+    this.actorVisibility.dispose();
+    this.combatView.dispose();
     this.scene.traverse((o) => {
       o.geometry?.dispose();
       if (o.material) o.material.dispose();

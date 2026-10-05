@@ -11,6 +11,15 @@ export const WIND_STAGE = finishExpedition(
     accent: 0xf0c16d,
     hint: '3つの風車をACTIONで起動すると風が弱まる。救出・風車・ボスの紋章を集め、灯台の門へ。',
     zones: ['麦畑の風車村', '峡谷の救出基地', '嵐の闘技場'],
+    terrainColor(x, y, z) {
+      if (Math.abs(z + 38) < 6 && Math.abs(x) < 27 && y < 0.3) return 0x9c8564;
+      if (x < -35 && z > -35) return 0xb8b267;
+      return y > 4 ? 0x87a360 : 0x78a858;
+    },
+    overlooks: [
+      { x: -49, z: -18, name: '麦丘の風見台', color: 0xeac378 },
+      { x: 53, z: -45, name: '雲海の岬', color: 0xbde5e8 },
+    ],
     missions: [
       {
         id: 'mills',
@@ -100,6 +109,22 @@ export const WIND_STAGE = finishExpedition(
         [0, -44],
         [0, -62],
       ],
+      [
+        [-20, -19],
+        [-39, -7],
+        [-49, -18],
+        [-52, -38],
+        [-35, -53],
+        [0, -62],
+      ],
+      [
+        [23, -19],
+        [47, -20],
+        [57, -31],
+        [53, -45],
+        [39, -58],
+        [13, -65],
+      ],
     ],
     mills: [
       [-23, -19],
@@ -120,11 +145,13 @@ export const WIND_STAGE = finishExpedition(
       [-17, -54],
       [13, -65],
       [0, -72],
+      [-49, -18],
+      [-52, -38],
+      [53, -45],
+      [57, -31],
     ],
   },
   (x, z) => {
-    const rim =
-      11 * Math.max(smooth(39, 48, Math.abs(x)), smooth(16, 24, z), 1 - smooth(-88, -80, z));
     const flat = Math.max(
       mound(x, z, 0, 10, 7, 15),
       mound(x, z, -20, -19, 9, 17),
@@ -133,10 +160,12 @@ export const WIND_STAGE = finishExpedition(
     );
     const ravine = 3.5 * (1 - smooth(2, 9, Math.abs(z + 38))) * (1 - smooth(20, 35, Math.abs(x)));
     return (
-      rim +
       (2.2 + 1.6 * Math.sin(x * 0.09) * Math.cos(z * 0.085)) * (1 - flat) -
       ravine * (1 - flat) +
-      4 * mound(x, z, 0, -78, 6, 16)
+      4 * mound(x, z, 0, -78, 6, 16) +
+      5.8 * mound(x, z, -49, -18, 7, 28) +
+      4.8 * mound(x, z, 53, -45, 6, 27) +
+      2.3 * mound(x, z, -47, -66, 8, 29)
     );
   },
 );

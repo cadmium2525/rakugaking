@@ -1,6 +1,7 @@
 import { Simulation, DT } from './controller.js';
 import { FieldMissions } from './field-missions.js';
 import { ExpeditionMissions } from './expedition-missions.js';
+import { Combat } from './combat.js';
 export function windPhase(zone, elapsed) {
   const t = (elapsed + (zone.offset || 0)) % 7;
   return t < 2.5
@@ -44,12 +45,19 @@ export class Course {
       : stage.field
         ? new FieldMissions(stage)
         : null;
+    this.combat = new Combat(stats);
   }
   step(input) {
     if (this.complete) return 'finished';
     this.elapsed += DT;
     this.updatePlatforms();
-    const event = this.sim.step(input, this.environment());
+    this.combat.update(input, DT, {
+      position: this.sim.position,
+      grounded: this.sim.grounded && !(input.jump && !this.sim.jumpHeld),
+      targets: this.field?.combatTargets(this) || [],
+    });
+    const event = this.sim.step(input, { ...this.environment(), ...this.combat.motion });
+    this.combat.position = { ...this.sim.position };
     if (event === 'death') this.restore();
     const p = this.sim.position,
       g = this.stage.goal,
@@ -78,13 +86,20 @@ export class Course {
         this.noticeUntil = this.elapsed + 1.5;
       }
     }
-    const attack = input.action && !this.actionHeld && this.elapsed >= this.nextAction;
+    const attack = this.combat.attack;
     this.actionHeld = !!input.action;
     if (attack) {
       this.nextAction = this.elapsed + (stats.actionCooldown || 0.6) - (stats.luck || 0) * 0.8;
       if (!this.field && distance < (stats.reach || 1) + 1) {
-        this.sealHP -= stats.power || 20;
-        if (this.sealHP <= 0) this.activated = true;
+        const hit = this.combat.hit(
+          'seal',
+          { ...g, y: g.y + 0.8 },
+          { radius: 0.35, interaction: true },
+        );
+        if (hit) {
+          this.sealHP -= hit.damage;
+          if (this.sealHP <= 0) this.activated = true;
+        }
       }
     }
     for (const [i, h] of (this.stage.hazards || []).entries()) {
@@ -92,7 +107,9 @@ export class Course {
       const d = Math.hypot(p.x - this.hazardPosition(h).x, p.z - h.z, p.y - h.y);
       if (attack && d < (stats.reach || 1) + 0.7) this.destroyed.add(i);
       else if (d < 0.8 && this.elapsed >= this.nextDamage) {
-        this.hp -= Math.max(4, 25 - (stats.defense || 8) * 0.6);
+        const damage = Math.max(4, 25 - (stats.defense || 8) * 0.6);
+        this.hp -= damage;
+        this.combat.hurt(damage);
         this.nextDamage = this.elapsed + 1;
         if (this.hp <= 0) {
           this.sim.deaths++;
@@ -136,6 +153,7 @@ export class Course {
     this.collapseTimes.fill(null);
     this.sim.platforms.forEach((p) => p.setEnabled(true));
     this.destroyed.clear();
+    this.combat.reset();
     this.field?.resetCombat();
   }
   retry() {

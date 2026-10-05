@@ -22,16 +22,24 @@ export function fieldControls(
       target =
         f.bossHP <= 0
           ? m.reward
-          : { x: boss.x + (f.bossPhase === 'rest' ? 2.8 : (boss.radius || 6) + 1.5), z: boss.z };
+          : {
+              x:
+                boss.x +
+                (f.bossPhase === 'rest'
+                  ? 2.8
+                  : Math.max(boss.radius || 6, f.bossAttack?.radius || 0) + 1.5),
+              z: boss.z,
+            };
     else
       target = stage.runes.find((r, i) => r.mission === m.id && !f.runes.includes(i)) || m.reward;
     const dx = target.x - p.x,
       dz = target.z - p.z,
       d = Math.hypot(dx, dz),
-      scale = Math.max(1, d);
+      scale = Math.max(1, d),
+      stopDistance = target.hp > 0 ? 1.8 : 0.35;
     return {
-      x: d < 0.35 ? 0 : dx / scale,
-      z: d < 0.35 ? 0 : dz / scale,
+      x: d < stopDistance ? 0 : dx / scale,
+      z: d < stopDistance ? 0 : dz / scale,
       jump:
         state.grounded &&
         stage.platforms.some(
@@ -61,10 +69,13 @@ export function fieldControls(
   const dx = target.x - p.x,
     dz = target.z - p.z;
   const distance = Math.hypot(dx, dz),
-    scale = Math.max(1, distance);
+    scale = Math.max(1, distance),
+    // Fight within reach rather than walking through the enemy's centre and
+    // stopping with the previous facing pointing away from the next strike.
+    stopDistance = target.hp > 0 ? 1.8 : 0.35;
   return {
-    x: distance < 0.35 ? 0 : dx / scale,
-    z: distance < 0.35 ? 0 : dz / scale,
+    x: distance < stopDistance ? 0 : dx / scale,
+    z: distance < stopDistance ? 0 : dz / scale,
     jump,
     action: frame % 48 === 0,
   };

@@ -1,0 +1,62 @@
+[
+  {
+    "layout": "desktop",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "intro": {
+      "x": 68,
+      "y": 158,
+      "width": 372,
+      "height": 277.125
+    },
+    "actions": {
+      "x": 68,
+      "y": 451.125,
+      "width": 372,
+      "height": 198
+    },
+    "file": "qa/v6/action-birth-layout-desktop.png"
+  },
+  {
+    "layout": "landscape",
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "intro": {
+      "x": 37.75,
+      "y": 78,
+      "width": 278.953125,
+      "height": 50.59375
+    },
+    "actions": {
+      "x": 37.75,
+      "y": 138.59375,
+      "width": 278.953125,
+      "height": 194
+    },
+    "file": "qa/v6/action-birth-layout-landscape.png"
+  },
+  {
+    "layout": "portrait",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "intro": {
+      "x": 28,
+      "y": 168,
+      "width": 334,
+      "height": 64.375
+    },
+    "actions": {
+      "x": 28,
+      "y": 240.375,
+      "width": 334,
+      "height": 186
+    },
+    "file": "qa/v6/action-birth-layout-portrait.png"
+  }
+]

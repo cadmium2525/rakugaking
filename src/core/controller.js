@@ -15,6 +15,7 @@ export class Simulation {
   constructor(platforms, spawn = { x: 0, y: 2, z: 0 }, stats = {}) {
     this.world = new RAPIER.World({ x: 0, y: -22, z: 0 });
     this.world.timestep = DT;
+    this.actorShape = new RAPIER.Ball(0.65);
     this.platforms = platforms.map((p) => {
       const desc = (
         p.terrain
@@ -27,6 +28,9 @@ export class Simulation {
         desc.setRotation({ x: 0, y: 0, z: Math.sin(p.angle / 2), w: Math.cos(p.angle / 2) });
       return this.world.createCollider(desc);
     });
+    this.terrainHandles = new Set(
+      this.platforms.filter((_, i) => platforms[i].terrain).map((c) => c.handle),
+    );
     this.body = this.world.createRigidBody(
       RAPIER.RigidBodyDesc.kinematicPositionBased().setTranslation(spawn.x, spawn.y, spawn.z),
     );
@@ -89,13 +93,17 @@ export class Simulation {
     this.vx += (x * this.stats.speed * water - this.vx) * acceleration;
     this.vz += (z * this.stats.speed * water - this.vz) * acceleration;
     this.vy = Math.max(-30, this.vy - (environment.water ? 12 : 22) * DT);
-    this.motion.x = (this.vx + (environment.wind || 0) / this.stats.weight) * DT;
+    this.motion.x =
+      (this.vx + (environment.wind || 0) / this.stats.weight + (environment.burstX || 0)) * DT;
     // Pushing into headwind retains 12% of forward velocity so every build can
     // cross the mandatory bridge; releasing the stick still lets wind push.
     const windZ = (environment.windZ || 0) / this.stats.weight;
     this.motion.y = this.vy * DT;
     this.motion.z =
-      (this.vz + (z < 0 ? Math.min(windZ, Math.max(0, -this.vz) * 0.88) : windZ)) * DT;
+      (this.vz +
+        (z < 0 ? Math.min(windZ, Math.max(0, -this.vz) * 0.88) : windZ) +
+        (environment.burstZ || 0)) *
+      DT;
     this.controller.computeColliderMovement(this.collider, this.motion);
     const move = this.controller.computedMovement();
     this.grounded = this.controller.computedGrounded();
@@ -116,5 +124,40 @@ export class Simulation {
   }
   dispose() {
     this.world.free();
+  }
+  lineClear(a, b) {
+    const dx = b.x - a.x,
+      dy = b.y - a.y,
+      dz = b.z - a.z,
+      distance = Math.hypot(dx, dy, dz);
+    if (distance < 0.05) return true;
+    const ray = new RAPIER.Ray(a, { x: dx / distance, y: dy / distance, z: dz / distance });
+    return !this.world.castRay(
+      ray,
+      Math.max(0, distance - 0.08),
+      true,
+      undefined,
+      undefined,
+      this.collider,
+      this.body,
+    );
+  }
+  moveActor(p, motion) {
+    const hit = this.world.castShape(
+      p,
+      { x: 0, y: 0, z: 0, w: 1 },
+      { x: motion.x, y: 0, z: motion.z },
+      this.actorShape,
+      0.025,
+      1,
+      true,
+      undefined,
+      undefined,
+      this.collider,
+      this.body,
+      (collider) => !this.terrainHandles.has(collider.handle),
+    );
+    const t = hit ? Math.max(0, hit.time_of_impact - 0.01) : 1;
+    return { x: p.x + motion.x * t, z: p.z + motion.z * t };
   }
 }

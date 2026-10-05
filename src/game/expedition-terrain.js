@@ -5,6 +5,18 @@ export const smooth = (a, b, v) => {
 };
 export const mound = (x, z, cx, cz, inner, outer) =>
   1 - smooth(inner, outer, Math.hypot(x - cx, z - cz));
+export function distanceToPath(x, z, points) {
+  let distance = Infinity;
+  for (let i = 1; i < points.length; i++) {
+    const [ax, az] = points[i - 1],
+      [bx, bz] = points[i],
+      dx = bx - ax,
+      dz = bz - az,
+      t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz)));
+    distance = Math.min(distance, Math.hypot(x - ax - dx * t, z - az - dz * t));
+  }
+  return distance;
+}
 export function icoHull(sx, sy, sz) {
   const t = (1 + Math.sqrt(5)) / 2,
     n = Math.sqrt(1 + t * t),
@@ -37,16 +49,16 @@ export function makeTerrain(height) {
     x: 0,
     y: 0,
     z: 0,
-    w: 96,
-    d: 112,
+    w: 156,
+    d: 148,
     h: 0,
     terrain: true,
     visible: false,
-    minX: -48,
-    minZ: -88,
+    minX: -78,
+    minZ: -106,
     step: 2,
-    columns: 48,
-    rows: 56,
+    columns: 78,
+    rows: 74,
   };
   const vertices = [],
     indices = [];
@@ -83,6 +95,8 @@ export function makeTerrain(height) {
 export function finishExpedition(stage, rawHeight) {
   const terrain = makeTerrain(rawHeight);
   stage.height = terrain.height;
+  stage.landscapeHeight = rawHeight;
+  stage.cameraHint = { distance: 16, height: 9, lookAhead: 8, fogNear: 85, fogFar: 230 };
   stage.platforms = [terrain, ...(stage.platforms || [])];
   const ground = (x, z) => stage.height(x, z);
   for (const water of stage.waters || [])
@@ -105,6 +119,20 @@ export function finishExpedition(stage, rawHeight) {
     }
   for (const s of stage.solids || [])
     stage.platforms.push({ ...s, y: ground(s.x, s.z) + s.h / 2, visible: false });
+  for (const o of stage.overlooks || []) {
+    stage.discoveries.push({ id: `lookout-${o.x}`, ...o, radius: 4 });
+    for (const side of [-1, 1])
+      stage.platforms.push({
+        x: o.x + side * 4,
+        y: ground(o.x + side * 4, o.z + 3) + 1.8,
+        z: o.z + 3,
+        w: 0.3,
+        h: 3.6,
+        d: 0.3,
+        cameraBlock: false,
+        visible: false,
+      });
+  }
   stage.spawn = { x: 0, y: ground(0, 10) + 1.8, z: 10 };
   stage.goal = { x: 0, y: ground(0, -78), z: -78 };
   stage.gate = {
@@ -128,12 +156,112 @@ export function finishExpedition(stage, rawHeight) {
       d: 2,
       visible: false,
     })),
+    {
+      x: stage.gate.x,
+      y: ground(stage.gate.x, stage.gate.z) + 6,
+      z: stage.gate.z,
+      w: 9,
+      h: 0.9,
+      d: 2,
+      visible: false,
+    },
   );
-  // Raised boundary slopes are backed by collision, including at the four corners.
-  stage.platforms.push(
-    ...[-1, 1].map((s) => ({ x: s * 48, y: 8, z: -32, w: 2, h: 24, d: 114, visible: false })),
-    ...[-88, 24].map((z) => ({ x: 0, y: 8, z, w: 96, h: 24, d: 2, visible: false })),
-  );
+  // The mesh continues beyond thin, physical rails; their open gaps preserve
+  // the distant horizon rather than surrounding every field with a solid wall.
+  // This irregular perimeter lies outside the original 144 x 136 m field,
+  // while leaving a strip of real terrain beyond every collider.
+  stage.boundaryPath = [
+    [-74, -102],
+    [-46, -104],
+    [-18, -102],
+    [14, -104],
+    [43, -101.5],
+    [74, -102],
+    [76, -79],
+    [73.2, -52],
+    [75.5, -24],
+    [73, 6],
+    [75.5, 26],
+    [74, 38],
+    [48, 40],
+    [20, 37.5],
+    [-10, 40],
+    [-39, 38],
+    [-66, 40],
+    [-74, 38],
+    [-76, 15],
+    [-73.5, -11],
+    [-76, -38],
+    [-73.5, -64],
+    [-76, -84],
+  ].map(([x, z], i) => [
+    Math.abs(x) >= 73 ? x + Math.sign(x) * 0.35 * (1 + Math.sin(i * 1.7 + stage.id)) : x,
+    z < -100
+      ? z - 0.2 * (1 + Math.sin(i * 0.9 + stage.id))
+      : z > 36
+        ? z + 0.2 * (1 + Math.sin(i * 0.9 + stage.id))
+        : z,
+  ]);
+  stage.mapBounds = {
+    minX: Math.min(...stage.boundaryPath.map(([x]) => x)),
+    maxX: Math.max(...stage.boundaryPath.map(([x]) => x)),
+    minZ: Math.min(...stage.boundaryPath.map(([, z]) => z)),
+    maxZ: Math.max(...stage.boundaryPath.map(([, z]) => z)),
+  };
+  stage.boundaries = [];
+  for (let i = 0; i < stage.boundaryPath.length; i++) {
+    const [ax, az] = stage.boundaryPath[i],
+      [bx, bz] = stage.boundaryPath[(i + 1) % stage.boundaryPath.length],
+      dx = bx - ax,
+      dz = bz - az,
+      length = Math.hypot(dx, dz),
+      count = Math.ceil(length / 0.9),
+      nx = dz / length,
+      nz = -dx / length;
+    // Real square slats have gaps smaller than the capsule, even at bends.
+    // The horizontal rails sit behind them and cannot be used as stairs.
+    for (let n = 0; n < count; n++) {
+      const x = ax + (dx * n) / count,
+        z = az + (dz * n) / count;
+      stage.boundaries.push({
+        x,
+        z,
+        y: ground(x, z) + 1.75,
+        w: 0.35,
+        h: 3.5,
+        d: 0.35,
+        boundary: true,
+        visible: false,
+        cameraBlock: false,
+      });
+    }
+    const spans = Math.ceil(length / 2);
+    for (let n = 0; n < spans; n++) {
+      const t = (n + 0.5) / spans,
+        x = ax + dx * t + nx * 0.25,
+        z = az + dz * t + nz * 0.25,
+        groundY = Math.min(
+          ground(ax + (dx * n) / spans, az + (dz * n) / spans),
+          ground(ax + (dx * (n + 1)) / spans, az + (dz * (n + 1)) / spans),
+        );
+      for (const lift of [0.6, 1.8, 3.3])
+        stage.boundaries.push({
+          x,
+          z,
+          y: groundY + lift,
+          w: length / spans + 0.12,
+          h: 0.18,
+          d: 0.16,
+          rotation: -Math.atan2(dz, dx),
+          boundary: true,
+          rail: true,
+          visible: false,
+          cameraBlock: false,
+        });
+    }
+  }
+  // Rails sit behind the solid slats, beyond the capsule's possible contact.
+  stage.platforms.push(...stage.boundaries.filter((p) => !p.rail));
   stage.checkpoints = [];
   for (const [x, z] of stage.rests || [[0, -38]]) {
     const top = ground(x, z) + 0.08;

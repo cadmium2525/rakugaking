@@ -1,11 +1,28 @@
 import { expect } from '@playwright/test';
 import { fieldControls } from './field-driver.js';
 import { STAGES } from '../../src/game/stages.js';
+import { cameraMovement } from '../../src/core/camera.js';
+import { mkdir, writeFile } from 'node:fs/promises';
+export const viewControls = (input, state) => cameraMovement(input, -(state.camera?.yaw || 0));
 export async function playField(page, screenshots = false, order) {
   const held = new Set(),
-    captured = new Set();
+    captured = new Set(),
+    trace = [];
+  let previousInput;
   for (let i = 0; i < 4500; i++) {
-    const state = await page.evaluate(() => window.__qa.state());
+    const state = await page.evaluate(() => ({
+      ...window.__qa.state(),
+      hp: document.querySelector('#health')?.value,
+    }));
+    trace.push({ state, input: previousInput, held: [...held] });
+    if (trace.length > 80) trace.shift();
+    if (state.deaths) {
+      await mkdir('qa/v6/field-failures', { recursive: true });
+      await writeFile(
+        `qa/v6/field-failures/stage-${state.stage}-${Date.now()}.json`,
+        JSON.stringify(trace, null, 2),
+      );
+    }
     if (i % 400 === 0)
       console.log(
         'Field pilot',
@@ -39,7 +56,7 @@ export async function playField(page, screenshots = false, order) {
         await page.screenshot({
           path:
             typeof screenshots === 'string'
-              ? `docs/screenshots/expedition/${screenshots}-${label}.png`
+              ? `test-results/expedition/${screenshots}-${label}.png`
               : `test-results/field-${label}.png`,
         });
         captured.add(label);
@@ -56,7 +73,7 @@ export async function playField(page, screenshots = false, order) {
         d = Math.hypot(dx, dz);
       if (!drained && d < 11 && !captured.has('water-before')) {
         await page.screenshot({
-          path: `docs/screenshots/expedition/${screenshots}-water-before.png`,
+          path: `test-results/expedition/${screenshots}-water-before.png`,
         });
         captured.add('water-before');
       }
@@ -64,12 +81,14 @@ export async function playField(page, screenshots = false, order) {
         input = { x: dx / Math.max(1, d), z: dz / Math.max(1, d), jump: false, action: false };
         if (d < 2) {
           await page.screenshot({
-            path: `docs/screenshots/expedition/${screenshots}-water-after.png`,
+            path: `test-results/expedition/${screenshots}-water-after.png`,
           });
           captured.add('water-after');
         }
       }
     }
+    input = viewControls(input, state);
+    previousInput = { ...input };
     for (const [key, on] of [
       ['KeyA', input.x < -0.1],
       ['KeyD', input.x > 0.1],

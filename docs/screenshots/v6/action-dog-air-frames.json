@@ -1,0 +1,281 @@
+[
+  {
+    "file": "qa/v6/action-dog-air-0.png",
+    "capturedAt": "2026-10-05T12:44:27.814Z",
+    "state": {
+      "position": {
+        "x": -0.0002742891083471477,
+        "y": 2.3974387645721436,
+        "z": -1.5295114517211914
+      },
+      "grounded": false,
+      "jumps": 1,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 2.8666666666666614,
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0.00019246702946032422,
+          "z": -0.9999999814782212
+        },
+        "reach": 2.136,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 2.3833333333333298,
+          "x": -0.0002742891083471477,
+          "y": 1.101925253868103,
+          "z": -1.3748774528503418,
+          "combo": 1,
+          "airborne": true,
+          "name": "空中スピン",
+          "facing": {
+            "x": 0.00019246702946032422,
+            "z": -0.9999999814782212
+          }
+        },
+        {
+          "id": 2,
+          "type": "hit",
+          "time": 2.466666666666663,
+          "key": "practice",
+          "x": 0,
+          "y": 0.8,
+          "z": -2.8,
+          "damage": 34,
+          "combo": 1,
+          "airborne": true,
+          "facing": {
+            "x": 0.00020232939871320916,
+            "z": -0.999999979531407
+          }
+        }
+      ],
+      "practiceHits": 1,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.011135447917398752,
+          "y": 9.304900024571578,
+          "z": 10.539119259817483
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 2,
+      "name": "ACTION-dog",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 31,
+      "triangles": 1202,
+      "geometries": 36,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  },
+  {
+    "file": "qa/v6/action-dog-air-1.png",
+    "capturedAt": "2026-10-05T12:44:28.081Z",
+    "state": {
+      "position": {
+        "x": -0.0002742891083471477,
+        "y": 0.8272681832313538,
+        "z": -1.5382095575332642
+      },
+      "grounded": true,
+      "jumps": 1,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 3.1666666666666603,
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0.00019246702946032422,
+          "z": -0.9999999814782212
+        },
+        "reach": 2.136,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 2.3833333333333298,
+          "x": -0.0002742891083471477,
+          "y": 1.101925253868103,
+          "z": -1.3748774528503418,
+          "combo": 1,
+          "airborne": true,
+          "name": "空中スピン",
+          "facing": {
+            "x": 0.00019246702946032422,
+            "z": -0.9999999814782212
+          }
+        },
+        {
+          "id": 2,
+          "type": "hit",
+          "time": 2.466666666666663,
+          "key": "practice",
+          "x": 0,
+          "y": 0.8,
+          "z": -2.8,
+          "damage": 34,
+          "combo": 1,
+          "airborne": true,
+          "facing": {
+            "x": 0.00020232939871320916,
+            "z": -0.999999979531407
+          }
+        }
+      ],
+      "practiceHits": 1,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.002797734302570716,
+          "y": 8.584290834903827,
+          "z": 10.481217908858635
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 2,
+      "name": "ACTION-dog",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 31,
+      "triangles": 1202,
+      "geometries": 36,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  },
+  {
+    "file": "qa/v6/action-dog-air-2.png",
+    "capturedAt": "2026-10-05T12:44:28.386Z",
+    "state": {
+      "position": {
+        "x": -0.0002696890151128173,
+        "y": 0.820015549659729,
+        "z": -1.5388492345809937
+      },
+      "grounded": true,
+      "jumps": 1,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 3.4499999999999926,
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0.00019246702946032422,
+          "z": -0.9999999814782212
+        },
+        "reach": 2.136,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 1,
+          "type": "swing",
+          "time": 2.3833333333333298,
+          "x": -0.0002742891083471477,
+          "y": 1.101925253868103,
+          "z": -1.3748774528503418,
+          "combo": 1,
+          "airborne": true,
+          "name": "空中スピン",
+          "facing": {
+            "x": 0.00019246702946032422,
+            "z": -0.9999999814782212
+          }
+        },
+        {
+          "id": 2,
+          "type": "hit",
+          "time": 2.466666666666663,
+          "key": "practice",
+          "x": 0,
+          "y": 0.8,
+          "z": -2.8,
+          "damage": 34,
+          "combo": 1,
+          "airborne": true,
+          "facing": {
+            "x": 0.00020232939871320916,
+            "z": -0.999999979531407
+          }
+        }
+      ],
+      "practiceHits": 1,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.0008571448824721438,
+          "y": 7.997836003462151,
+          "z": 10.465875725693403
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 2,
+      "name": "ACTION-dog",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 31,
+      "triangles": 1212,
+      "geometries": 36,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  }
+]

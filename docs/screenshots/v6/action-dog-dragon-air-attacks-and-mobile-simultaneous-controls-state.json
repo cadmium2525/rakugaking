@@ -1,0 +1,125 @@
+{
+  "status": "passed",
+  "state": {
+    "position": {
+      "x": 0.9966980814933777,
+      "y": 0.820099949836731,
+      "z": -1.6810680627822876
+    },
+    "grounded": true,
+    "jumps": 3,
+    "deaths": 0,
+    "paused": false,
+    "elapsed": 12.933333333333556,
+    "combat": {
+      "attacking": false,
+      "combo": 0,
+      "airborne": false,
+      "name": "",
+      "elapsed": 0,
+      "duration": 1,
+      "windup": 0,
+      "active": 0,
+      "phase": "idle",
+      "facing": {
+        "x": 1,
+        "z": 0
+      },
+      "reach": 2.132,
+      "buffered": false,
+      "hurt": 0
+    },
+    "combatEvents": [
+      {
+        "id": 3,
+        "type": "swing",
+        "time": 9.533333333333387,
+        "x": -0.000253778271144256,
+        "y": 0.9657770991325378,
+        "z": -1.4579143524169922,
+        "combo": 1,
+        "airborne": true,
+        "name": "空中スピン",
+        "facing": {
+          "x": 0.00018909245253032005,
+          "z": -0.9999999821220222
+        }
+      },
+      {
+        "id": 4,
+        "type": "hit",
+        "time": 9.616666666666724,
+        "key": "practice",
+        "x": 0,
+        "y": 0.8,
+        "z": -2.8,
+        "damage": 34,
+        "combo": 1,
+        "airborne": true,
+        "facing": {
+          "x": 0.00020340760621110547,
+          "z": -0.9999999793126725
+        }
+      },
+      {
+        "id": 5,
+        "type": "swing",
+        "time": 10.916666666666789,
+        "x": 0.0001762801839504391,
+        "y": 0.8200709819793701,
+        "z": -1.6807184219360352,
+        "combo": 1,
+        "airborne": true,
+        "name": "空中スピン",
+        "facing": {
+          "x": 1,
+          "z": 0
+        }
+      },
+      {
+        "id": 6,
+        "type": "hit",
+        "time": 11.000000000000126,
+        "key": "practice",
+        "x": 0,
+        "y": 0.8,
+        "z": -2.8,
+        "damage": 34,
+        "combo": 1,
+        "airborne": true,
+        "facing": {
+          "x": -0.06859196318211976,
+          "z": -0.997644797804721
+        }
+      }
+    ],
+    "practiceHits": 3,
+    "camera": {
+      "yaw": 0,
+      "intentYaw": 0,
+      "pitch": 0,
+      "position": {
+        "x": 0.9962067162002901,
+        "y": 7.8220607177034704,
+        "z": 10.319018021202497
+      }
+    },
+    "version": "6.0.0",
+    "exp": 0,
+    "characters": 3,
+    "name": "ACTION-dragon",
+    "run": null,
+    "best": null,
+    "records": 0,
+    "calls": 31,
+    "triangles": 1232,
+    "geometries": 37,
+    "quality": "medium",
+    "resolution": {
+      "width": 844,
+      "height": 390
+    }
+  },
+  "errors": [],
+  "browserErrors": []
+}

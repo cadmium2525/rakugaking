@@ -1,0 +1,281 @@
+[
+  {
+    "file": "qa/v6/action-dragon-air-0.png",
+    "capturedAt": "2026-10-05T12:44:35.232Z",
+    "state": {
+      "position": {
+        "x": -0.000253778271144256,
+        "y": 2.507289409637451,
+        "z": -1.634454607963562
+      },
+      "grounded": false,
+      "jumps": 2,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 9.800000000000066,
+      "combat": {
+        "attacking": true,
+        "combo": 1,
+        "airborne": true,
+        "name": "空中スピン",
+        "elapsed": 0.26666666666666666,
+        "duration": 0.4659315428792637,
+        "windup": 0.08,
+        "active": 0.23,
+        "phase": "strike",
+        "facing": {
+          "x": 0.00018909245253032005,
+          "z": -0.9999999821220222
+        },
+        "reach": 2.132,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 3,
+          "type": "swing",
+          "time": 9.533333333333387,
+          "x": -0.000253778271144256,
+          "y": 0.9657770991325378,
+          "z": -1.4579143524169922,
+          "combo": 1,
+          "airborne": true,
+          "name": "空中スピン",
+          "facing": {
+            "x": 0.00018909245253032005,
+            "z": -0.9999999821220222
+          }
+        },
+        {
+          "id": 4,
+          "type": "hit",
+          "time": 9.616666666666724,
+          "key": "practice",
+          "x": 0,
+          "y": 0.8,
+          "z": -2.8,
+          "damage": 34,
+          "combo": 1,
+          "airborne": true,
+          "facing": {
+            "x": 0.00020340760621110547,
+            "z": -0.9999999793126725
+          }
+        }
+      ],
+      "practiceHits": 2,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.0036020790985887763,
+          "y": 8.849346195746593,
+          "z": 10.57375188472174
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 3,
+      "name": "ACTION-dragon",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 40,
+      "triangles": 1778,
+      "geometries": 37,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  },
+  {
+    "file": "qa/v6/action-dragon-air-1.png",
+    "capturedAt": "2026-10-05T12:44:35.551Z",
+    "state": {
+      "position": {
+        "x": -0.000253778271144256,
+        "y": 2.0597221851348877,
+        "z": -1.6742916107177734
+      },
+      "grounded": false,
+      "jumps": 2,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 10.133333333333416,
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0.00018909245253032005,
+          "z": -0.9999999821220222
+        },
+        "reach": 2.132,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 3,
+          "type": "swing",
+          "time": 9.533333333333387,
+          "x": -0.000253778271144256,
+          "y": 0.9657770991325378,
+          "z": -1.4579143524169922,
+          "combo": 1,
+          "airborne": true,
+          "name": "空中スピン",
+          "facing": {
+            "x": 0.00018909245253032005,
+            "z": -0.9999999821220222
+          }
+        },
+        {
+          "id": 4,
+          "type": "hit",
+          "time": 9.616666666666724,
+          "key": "practice",
+          "x": 0,
+          "y": 0.8,
+          "z": -2.8,
+          "damage": 34,
+          "combo": 1,
+          "airborne": true,
+          "facing": {
+            "x": 0.00020340760621110547,
+            "z": -0.9999999793126725
+          }
+        }
+      ],
+      "practiceHits": 2,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.0006131890738191618,
+          "y": 9.280699169800481,
+          "z": 10.378676452611238
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 3,
+      "name": "ACTION-dragon",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 32,
+      "triangles": 1234,
+      "geometries": 37,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  },
+  {
+    "file": "qa/v6/action-dragon-air-2.png",
+    "capturedAt": "2026-10-05T12:44:35.839Z",
+    "state": {
+      "position": {
+        "x": -0.00020168034825474024,
+        "y": 0.8200110197067261,
+        "z": -1.6801109313964844
+      },
+      "grounded": true,
+      "jumps": 2,
+      "deaths": 0,
+      "paused": false,
+      "elapsed": 10.450000000000099,
+      "combat": {
+        "attacking": false,
+        "combo": 0,
+        "airborne": false,
+        "name": "",
+        "elapsed": 0,
+        "duration": 1,
+        "windup": 0,
+        "active": 0,
+        "phase": "idle",
+        "facing": {
+          "x": 0.00018909245253032005,
+          "z": -0.9999999821220222
+        },
+        "reach": 2.132,
+        "buffered": false,
+        "hurt": 0
+      },
+      "combatEvents": [
+        {
+          "id": 3,
+          "type": "swing",
+          "time": 9.533333333333387,
+          "x": -0.000253778271144256,
+          "y": 0.9657770991325378,
+          "z": -1.4579143524169922,
+          "combo": 1,
+          "airborne": true,
+          "name": "空中スピン",
+          "facing": {
+            "x": 0.00018909245253032005,
+            "z": -0.9999999821220222
+          }
+        },
+        {
+          "id": 4,
+          "type": "hit",
+          "time": 9.616666666666724,
+          "key": "practice",
+          "x": 0,
+          "y": 0.8,
+          "z": -2.8,
+          "damage": 34,
+          "combo": 1,
+          "airborne": true,
+          "facing": {
+            "x": 0.00020340760621110547,
+            "z": -0.9999999793126725
+          }
+        }
+      ],
+      "practiceHits": 2,
+      "camera": {
+        "yaw": 0,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.00031593499661603316,
+          "y": 8.263754232063805,
+          "z": 10.332982475076804
+        }
+      },
+      "version": "6.0.0",
+      "exp": 0,
+      "characters": 3,
+      "name": "ACTION-dragon",
+      "run": null,
+      "best": null,
+      "records": 0,
+      "calls": 31,
+      "triangles": 1232,
+      "geometries": 37,
+      "quality": "medium",
+      "resolution": {
+        "width": 1280,
+        "height": 800
+      }
+    }
+  }
+]

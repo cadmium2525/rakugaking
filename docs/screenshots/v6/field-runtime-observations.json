@@ -1,0 +1,58 @@
+[
+  {
+    "stage": 2,
+    "position": {
+      "x": 53.1947021484375,
+      "y": 8.967487335205078,
+      "z": -45.97989273071289
+    },
+    "collected": 4,
+    "deaths": 0,
+    "calls": 61,
+    "triangles": 75010,
+    "errors": []
+  },
+  {
+    "stage": 3,
+    "position": {
+      "x": 50.610172271728516,
+      "y": 4.727781295776367,
+      "z": -46.80012893676758
+    },
+    "collected": 4,
+    "deaths": 0,
+    "calls": 53,
+    "triangles": 74722,
+    "errors": []
+  },
+  {
+    "stage": 4,
+    "position": {
+      "x": 52.520687103271484,
+      "y": 6.320145606994629,
+      "z": -41.77375411987305
+    },
+    "collected": 3,
+    "deaths": 0,
+    "calls": 66,
+    "triangles": 78474,
+    "errors": []
+  },
+  {
+    "stage": 5,
+    "position": {
+      "x": 0.3255894184112549,
+      "y": 5.502645015716553,
+      "z": -78.38117218017578
+    },
+    "collected": 5,
+    "deaths": 0,
+    "calls": 58,
+    "triangles": 76478,
+    "errors": [],
+    "lockedNorth": {
+      "complete": false,
+      "rewards": []
+    }
+  }
+]

@@ -16,7 +16,7 @@ export function freshSave() {
     records: [],
     legacyRecords: [],
     best: null,
-    settings: { quality: 'medium' },
+    settings: { quality: 'medium', sound: true },
   };
 }
 export function migrateSave(raw) {
@@ -98,7 +98,7 @@ export function migrateSave(raw) {
     ...(Array.isArray(raw.legacyRecords) ? raw.legacyRecords : []),
     ...(Array.isArray(raw.records)
       ? raw.records.filter((r) =>
-          ['1.0.0', '2.0.0', '2.1.0', '3.0.0', '4.0.0', '4.1.0'].includes(r?.version),
+          ['1.0.0', '2.0.0', '2.1.0', '3.0.0', '4.0.0', '4.1.0', '5.0.0'].includes(r?.version),
         )
       : []),
   ]
@@ -114,6 +114,7 @@ export function migrateSave(raw) {
   data.settings.quality = ['low', 'medium', 'high'].includes(raw.settings?.quality)
     ? raw.settings.quality
     : 'medium';
+  data.settings.sound = raw.settings?.sound !== false;
   return { data, notice };
 }
 export class SaveStore {

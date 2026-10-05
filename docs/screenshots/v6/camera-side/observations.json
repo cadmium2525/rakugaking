@@ -1,0 +1,2485 @@
+{
+  "errors": [],
+  "observations": [
+    {
+      "name": "open-default",
+      "position": {
+        "x": -0.0002834714250639081,
+        "y": 1.480072021484375,
+        "z": 9.999737739562988
+      },
+      "camera": {
+        "yaw": 0.000003817114429880006,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -0.00019186035522439956,
+          "y": 10.518038570113038,
+          "z": 25.999822495194344
+        }
+      },
+      "intersections": [],
+      "distance": 18.376276868014102,
+      "deaths": 0,
+      "calls": 172,
+      "triangles": 97132,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 36m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 36
+    },
+    {
+      "name": "open-Q",
+      "position": {
+        "x": -0.000771043763961643,
+        "y": 1.4799706935882568,
+        "z": 9.999286651611328
+      },
+      "camera": {
+        "yaw": 0.6283201173442831,
+        "intentYaw": 0.64,
+        "pitch": 0,
+        "position": {
+          "x": 9.275708253406062,
+          "y": 10.48110023873953,
+          "z": 22.92529440713558
+        }
+      },
+      "intersections": [],
+      "distance": 18.27990912820117,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 92592,
+      "expectedBearing": "↑",
+      "bearing": "↑ 灯火の巡回 · 36m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 36
+    },
+    {
+      "name": "open-Q-W",
+      "position": {
+        "x": -1.8077201843261719,
+        "y": 1.0631917715072632,
+        "z": 7.5559306144714355
+      },
+      "camera": {
+        "yaw": 0.6399640026734313,
+        "intentYaw": 0.64,
+        "pitch": 0,
+        "position": {
+          "x": 7.816048427473952,
+          "y": 10.08492922822273,
+          "z": 20.483109154397752
+        }
+      },
+      "intersections": [],
+      "distance": 18.469450831968548,
+      "deaths": 0,
+      "calls": 136,
+      "triangles": 92660,
+      "expectedBearing": "↑",
+      "bearing": "↑ 灯火の巡回 · 33m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 33
+    },
+    {
+      "name": "open-R",
+      "position": {
+        "x": -1.8327558040618896,
+        "y": 1.05959153175354,
+        "z": 7.528632640838623
+      },
+      "camera": {
+        "yaw": -0.6325939105894249,
+        "intentYaw": -0.6400000000000001,
+        "pitch": 0,
+        "position": {
+          "x": -11.17144354931574,
+          "y": 10.060284247648195,
+          "z": 20.366774798233916
+        }
+      },
+      "intersections": [],
+      "distance": 18.249423339459355,
+      "deaths": 0,
+      "calls": 157,
+      "triangles": 95806,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 33m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 33
+    },
+    {
+      "name": "open-C",
+      "position": {
+        "x": -1.8519597053527832,
+        "y": 1.0568475723266602,
+        "z": 7.5079426765441895
+      },
+      "camera": {
+        "yaw": -0.007096391445415671,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -2.0216960120197776,
+          "y": 10.057388907912499,
+          "z": 23.453159651506823
+        }
+      },
+      "intersections": [],
+      "distance": 18.31088471718466,
+      "deaths": 0,
+      "calls": 175,
+      "triangles": 97252,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 33m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 33
+    },
+    {
+      "name": "south-default",
+      "position": {
+        "x": -19.242172241210938,
+        "y": 2.3201000690460205,
+        "z": 2.029529333114624
+      },
+      "camera": {
+        "yaw": 0.001407669141603124,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -19.20837860597899,
+          "y": 11.320166478498095,
+          "z": 18.036316092962277
+        }
+      },
+      "intersections": [],
+      "distance": 18.363538868082152,
+      "deaths": 0,
+      "calls": 152,
+      "triangles": 92026,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 17m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 17
+    },
+    {
+      "name": "south-wall-facing",
+      "position": {
+        "x": -19.242998123168945,
+        "y": 2.3200998306274414,
+        "z": 2.029879331588745
+      },
+      "camera": {
+        "yaw": -1.5690104332757409,
+        "intentYaw": -3.1430000000000002,
+        "pitch": 0,
+        "position": {
+          "x": -35.23134071345543,
+          "y": 11.320099842577914,
+          "z": 2.0584328393591202
+        }
+      },
+      "intersections": [],
+      "distance": 18.34742255201758,
+      "deaths": 0,
+      "calls": 125,
+      "triangles": 92814,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "name": "south-Q",
+      "position": {
+        "x": -19.242998123168945,
+        "y": 2.3200998306274414,
+        "z": 2.029879331588745
+      },
+      "camera": {
+        "yaw": -1.4150625268109371,
+        "intentYaw": -2.983,
+        "pitch": 0,
+        "position": {
+          "x": -35.04567058243141,
+          "y": 11.32009983084632,
+          "z": 4.510980129387355
+        }
+      },
+      "intersections": [],
+      "distance": 18.354299714985295,
+      "deaths": 0,
+      "calls": 132,
+      "triangles": 93276,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "name": "south-R",
+      "position": {
+        "x": -19.242998123168945,
+        "y": 2.3200998306274414,
+        "z": 2.029879331588745
+      },
+      "camera": {
+        "yaw": -1.5676376119130804,
+        "intentYaw": -3.1430000000000002,
+        "pitch": 0,
+        "position": {
+          "x": -35.23722603699152,
+          "y": 11.320099830633826,
+          "z": 2.080400705348735
+        }
+      },
+      "intersections": [],
+      "distance": 18.352598697967075,
+      "deaths": 0,
+      "calls": 125,
+      "triangles": 92814,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "name": "west-wall-facing",
+      "position": {
+        "x": -22.370071411132812,
+        "y": 2.30500864982605,
+        "z": -1.172851800918579
+      },
+      "camera": {
+        "yaw": -0.009065874338550203,
+        "intentYaw": 1.5679999999999998,
+        "pitch": 0,
+        "position": {
+          "x": -22.514979217778674,
+          "y": 11.304993774871406,
+          "z": 14.81058578251699
+        }
+      },
+      "intersections": [],
+      "distance": 18.343691218155772,
+      "deaths": 0,
+      "calls": 139,
+      "triangles": 91642,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "name": "north-5-5",
+      "position": {
+        "x": -18.490232467651367,
+        "y": 1.8917077779769897,
+        "z": -5.386406898498535
+      },
+      "camera": {
+        "yaw": -1.563866091412458,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -34.49180388577061,
+          "y": 10.881859229239069,
+          "z": -5.2755104666924355
+        }
+      },
+      "intersections": [],
+      "distance": 18.35443840013602,
+      "deaths": 0,
+      "calls": 138,
+      "triangles": 94794,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 12m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 12
+    },
+    {
+      "name": "north-5",
+      "position": {
+        "x": -19.34757423400879,
+        "y": 1.9953579902648926,
+        "z": -4.6108527183532715
+      },
+      "camera": {
+        "yaw": -1.5736171099293301,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -35.28955945550281,
+          "y": 10.988861967660046,
+          "z": -4.65582172066556
+        }
+      },
+      "intersections": [],
+      "distance": 18.30388015708487,
+      "deaths": 0,
+      "calls": 136,
+      "triangles": 94506,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 12m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 12
+    },
+    {
+      "name": "north-4-5",
+      "position": {
+        "x": -18.949283599853516,
+        "y": 2.0959153175354004,
+        "z": -4.248743534088135
+      },
+      "camera": {
+        "yaw": -1.5724974474751776,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -34.97722454154165,
+          "y": 11.08845611364751,
+          "z": -4.276009022186765
+        }
+      },
+      "intersections": [],
+      "distance": 18.37828675929355,
+      "deaths": 0,
+      "calls": 136,
+      "triangles": 94506,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "name": "north-4-2",
+      "position": {
+        "x": -18.949012756347656,
+        "y": 2.0958592891693115,
+        "z": -4.249346733093262
+      },
+      "camera": {
+        "yaw": -1.5710076668138337,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -34.952688913058246,
+          "y": 11.09489660647727,
+          "z": -4.252728950365638
+        }
+      },
+      "intersections": [],
+      "distance": 18.360292334452684,
+      "deaths": 0,
+      "calls": 136,
+      "triangles": 94506,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "name": "north-3-9",
+      "position": {
+        "x": -18.962549209594727,
+        "y": 2.1575562953948975,
+        "z": -3.8700902462005615
+      },
+      "camera": {
+        "yaw": -1.5721858678394058,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -34.96058409804283,
+          "y": 11.154234852372856,
+          "z": -3.8923201866169226
+        }
+      },
+      "intersections": [],
+      "distance": 18.35423219641292,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "name": "north-low-pitch",
+      "position": {
+        "x": -18.96367645263672,
+        "y": 2.1572928428649902,
+        "z": -3.871358871459961
+      },
+      "camera": {
+        "yaw": -1.5707892126227863,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.9636231910221,
+          "y": 8.357905783796452,
+          "z": -3.8712450450851046
+        }
+      },
+      "intersections": [],
+      "distance": 17.159425878722523,
+      "deaths": 0,
+      "calls": 134,
+      "triangles": 94166,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "name": "north-side-orbit",
+      "position": {
+        "x": -18.964397430419922,
+        "y": 2.1571388244628906,
+        "z": -3.872917652130127
+      },
+      "camera": {
+        "yaw": -1.5715045281773423,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.94030442067024,
+          "y": 8.35708654951642,
+          "z": -3.9122258559949383
+        }
+      },
+      "intersections": [],
+      "distance": 17.136817122482704,
+      "deaths": 0,
+      "calls": 134,
+      "triangles": 94134,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "name": "east-wall-facing",
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.005365280601505402,
+        "intentYaw": -1.5680000000000003,
+        "pitch": 0,
+        "position": {
+          "x": -15.331663233474963,
+          "y": 11.320099534478466,
+          "z": 15.573494862158146
+        }
+      },
+      "intersections": [],
+      "distance": 18.350875639326997,
+      "deaths": 0,
+      "calls": 145,
+      "triangles": 92214,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "name": "east-low-pitch",
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.002796439415960735,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.372723192242619,
+          "y": 8.520681497999774,
+          "z": 15.581331415529345
+        }
+      },
+      "intersections": [],
+      "distance": 17.159463924482854,
+      "deaths": 0,
+      "calls": 153,
+      "triangles": 92510,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "name": "east-C-reset",
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.00005438758602542998,
+        "intentYaw": 0,
+        "pitch": 0,
+        "position": {
+          "x": -15.416160861717609,
+          "y": 11.238431447770104,
+          "z": 15.581392479785114
+        }
+      },
+      "intersections": [],
+      "distance": 18.317657650959543,
+      "deaths": 0,
+      "calls": 154,
+      "triangles": 92550,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    }
+  ],
+  "transient": [
+    {
+      "position": {
+        "x": -19.242889404296875,
+        "y": 2.320098876953125,
+        "z": 2.029844284057617
+      },
+      "camera": {
+        "yaw": -0.1553146245513104,
+        "intentYaw": -0.26191680908203124,
+        "pitch": 0,
+        "position": {
+          "x": -20.860263028230648,
+          "y": 11.320122209901829,
+          "z": 17.817501100852628
+        }
+      },
+      "intersections": [],
+      "distance": 18.24462729676635,
+      "deaths": 0,
+      "calls": 173,
+      "triangles": 96280,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 17m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242948532104492,
+        "y": 2.320098876953125,
+        "z": 2.0298690795898438
+      },
+      "camera": {
+        "yaw": -0.3532136563333336,
+        "intentYaw": -0.5238331909179688,
+        "pitch": 0,
+        "position": {
+          "x": -23.37293204519634,
+          "y": 11.320113029101893,
+          "z": 17.056885021813425
+        }
+      },
+      "intersections": [],
+      "distance": 17.996339257891595,
+      "deaths": 0,
+      "calls": 173,
+      "triangles": 96214,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 17m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.24297332763672,
+        "y": 2.3201234340667725,
+        "z": 2.029876947402954
+      },
+      "camera": {
+        "yaw": -0.577519009500607,
+        "intentYaw": -0.78575,
+        "pitch": 0,
+        "position": {
+          "x": -26.20108329183344,
+          "y": 11.320117123136558,
+          "z": 15.59424897717231
+        }
+      },
+      "intersections": [],
+      "distance": 17.703315204761477,
+      "deaths": 0,
+      "calls": 173,
+      "triangles": 96214,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 17m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242984771728516,
+        "y": 2.320098876953125,
+        "z": 2.029879570007324
+      },
+      "camera": {
+        "yaw": -0.8186313113420757,
+        "intentYaw": -1.0476668090820311,
+        "pitch": 0,
+        "position": {
+          "x": -28.91683247464941,
+          "y": 11.3201099438228,
+          "z": 13.4022814435816
+        }
+      },
+      "intersections": [],
+      "distance": 17.4331595804421,
+      "deaths": 0,
+      "calls": 168,
+      "triangles": 95760,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242990493774414,
+        "y": 2.320098876953125,
+        "z": 2.0298805236816406
+      },
+      "camera": {
+        "yaw": -1.0700860562502545,
+        "intentYaw": -1.3095831909179687,
+        "pitch": 0,
+        "position": {
+          "x": -31.19242160708565,
+          "y": 11.320105589348888,
+          "z": 10.553422824126283
+        }
+      },
+      "intersections": [],
+      "distance": 17.217427162686313,
+      "deaths": 0,
+      "calls": 145,
+      "triangles": 94138,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242990493774414,
+        "y": 2.3201260566711426,
+        "z": 2.0298807621002197
+      },
+      "camera": {
+        "yaw": -1.3275110529005971,
+        "intentYaw": -1.5715,
+        "pitch": 0,
+        "position": {
+          "x": -32.7861947160901,
+          "y": 11.320113642612672,
+          "z": 7.195240371126218
+        }
+      },
+      "intersections": [],
+      "distance": 17.061626447821684,
+      "deaths": 0,
+      "calls": 134,
+      "triangles": 93300,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242990493774414,
+        "y": 2.320101022720337,
+        "z": 2.0298798084259033
+      },
+      "camera": {
+        "yaw": -1.1403536313992477,
+        "intentYaw": -1.833416809082031,
+        "pitch": 0,
+        "position": {
+          "x": -32.91201296002407,
+          "y": 11.32010867707196,
+          "z": 8.306106354338564
+        }
+      },
+      "intersections": [],
+      "distance": 17.52807270115127,
+      "deaths": 0,
+      "calls": 137,
+      "triangles": 93630,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242998123168945,
+        "y": 2.320098876953125,
+        "z": 2.029879570007324
+      },
+      "camera": {
+        "yaw": -1.2095595818746125,
+        "intentYaw": -2.0953331909179687,
+        "pitch": 0,
+        "position": {
+          "x": -33.61619571540467,
+          "y": 11.320104821025666,
+          "z": 7.46029605701123
+        }
+      },
+      "intersections": [],
+      "distance": 17.806693663931995,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 93588,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242998123168945,
+        "y": 2.3200998306274414,
+        "z": 2.029879331588745
+      },
+      "camera": {
+        "yaw": -1.355253538788595,
+        "intentYaw": -2.35725,
+        "pitch": 0,
+        "position": {
+          "x": -34.25628907864937,
+          "y": 11.320102857456966,
+          "z": 5.316948599844666
+        }
+      },
+      "intersections": [],
+      "distance": 17.810215725003538,
+      "deaths": 0,
+      "calls": 134,
+      "triangles": 93300,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242998123168945,
+        "y": 2.3200998306274414,
+        "z": 2.029879331588745
+      },
+      "camera": {
+        "yaw": -1.2317715779660234,
+        "intentYaw": -2.6191668090820315,
+        "pitch": 0,
+        "position": {
+          "x": -33.80477884778314,
+          "y": 11.320101666492349,
+          "z": 7.164945278150239
+        }
+      },
+      "intersections": [],
+      "distance": 17.872168116735384,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 93588,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242998123168945,
+        "y": 2.3200998306274414,
+        "z": 2.029879331588745
+      },
+      "camera": {
+        "yaw": -1.2633305282858036,
+        "intentYaw": -2.881083618164063,
+        "pitch": 0,
+        "position": {
+          "x": -34.15825718904917,
+          "y": 11.320100944135795,
+          "z": 6.766004029865496
+        }
+      },
+      "intersections": [],
+      "distance": 18.0525856929998,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 93588,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -19.242998123168945,
+        "y": 2.3200998306274414,
+        "z": 2.029879331588745
+      },
+      "camera": {
+        "yaw": -1.3862602866908904,
+        "intentYaw": -3.1430000000000002,
+        "pitch": 0,
+        "position": {
+          "x": -34.58506325426272,
+          "y": 11.320100506004398,
+          "z": 4.893624209623269
+        }
+      },
+      "intersections": [],
+      "distance": 18.01610416738253,
+      "deaths": 0,
+      "calls": 134,
+      "triangles": 93300,
+      "expectedBearing": "←",
+      "bearing": "← 灯火の巡回 · 17m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 17
+    },
+    {
+      "position": {
+        "x": -22.370098114013672,
+        "y": 2.305062770843506,
+        "z": -1.159506916999817
+      },
+      "camera": {
+        "yaw": 0.07551432255437279,
+        "intentYaw": 0.13066680908203127,
+        "pitch": 0,
+        "position": {
+          "x": -21.592163915009117,
+          "y": 11.306722226647427,
+          "z": 14.968169796036936
+        }
+      },
+      "intersections": [],
+      "distance": 18.486130226103917,
+      "deaths": 0,
+      "calls": 142,
+      "triangles": 91812,
+      "expectedBearing": "↑",
+      "bearing": "↑ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.370031356811523,
+        "y": 2.305199384689331,
+        "z": -1.1650941371917725
+      },
+      "camera": {
+        "yaw": -0.14290357281278213,
+        "intentYaw": 0.2613331909179688,
+        "pitch": 0,
+        "position": {
+          "x": -24.547438949715485,
+          "y": 11.305511195599198,
+          "z": 13.967945615560375
+        }
+      },
+      "intersections": [],
+      "distance": 17.741353067836066,
+      "deaths": 0,
+      "calls": 150,
+      "triangles": 92926,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.37006378173828,
+        "y": 2.3050761222839355,
+        "z": -1.1656970977783203
+      },
+      "camera": {
+        "yaw": -0.24406771212609993,
+        "intentYaw": 0.39200000000000007,
+        "pitch": 0,
+        "position": {
+          "x": -26.10396121604172,
+          "y": 11.305340007588864,
+          "z": 13.82792788382142
+        }
+      },
+      "intersections": [],
+      "distance": 17.881709374214587,
+      "deaths": 0,
+      "calls": 166,
+      "triangles": 96054,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.37004852294922,
+        "y": 2.3050785064697266,
+        "z": -1.1662001609802246
+      },
+      "camera": {
+        "yaw": -0.2515628725303573,
+        "intentYaw": 0.5226668090820313,
+        "pitch": 0,
+        "position": {
+          "x": -26.26984537032496,
+          "y": 11.305237114916032,
+          "z": 14.007672191255402
+        }
+      },
+      "intersections": [],
+      "distance": 18.068139710272686,
+      "deaths": 0,
+      "calls": 166,
+      "triangles": 96054,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.37002944946289,
+        "y": 2.3050637245178223,
+        "z": -1.1666932106018066
+      },
+      "camera": {
+        "yaw": -0.20395371750639676,
+        "intentYaw": 0.6533331909179688,
+        "pitch": 0,
+        "position": {
+          "x": -25.56438895065934,
+          "y": 11.305168891110437,
+          "z": 14.277713355355687
+        }
+      },
+      "intersections": [],
+      "distance": 18.158621087714838,
+      "deaths": 0,
+      "calls": 163,
+      "triangles": 94612,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.370038986206055,
+        "y": 2.3050522804260254,
+        "z": -1.1671624183654785
+      },
+      "camera": {
+        "yaw": -0.12362332199984938,
+        "intentYaw": 0.784,
+        "pitch": 0,
+        "position": {
+          "x": -24.31631232550483,
+          "y": 11.305123008381369,
+          "z": 14.496131565025571
+        }
+      },
+      "intersections": [],
+      "distance": 18.169425731970673,
+      "deaths": 0,
+      "calls": 147,
+      "triangles": 92594,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.370046615600586,
+        "y": 2.3049826622009277,
+        "z": -1.1676288843154907
+      },
+      "camera": {
+        "yaw": -0.023429066673827045,
+        "intentYaw": 0.9146665954589844,
+        "pitch": 0,
+        "position": {
+          "x": -22.73897041976517,
+          "y": 11.305067786462338,
+          "z": 14.575904712981279
+        }
+      },
+      "intersections": [],
+      "distance": 18.138260312015674,
+      "deaths": 0,
+      "calls": 143,
+      "triangles": 91698,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.370067596435547,
+        "y": 2.305189609527588,
+        "z": -1.168092966079712
+      },
+      "camera": {
+        "yaw": -0.2218028880970156,
+        "intentYaw": 1.0453334045410156,
+        "pitch": 0,
+        "position": {
+          "x": -25.751731176485944,
+          "y": 11.305115720103451,
+          "z": 13.827318095374931
+        }
+      },
+      "intersections": [],
+      "distance": 17.81282323121354,
+      "deaths": 0,
+      "calls": 163,
+      "triangles": 94612,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.370065689086914,
+        "y": 2.305114507675171,
+        "z": -1.168563961982727
+      },
+      "camera": {
+        "yaw": -0.2914849270541394,
+        "intentYaw": 1.176,
+        "pitch": 0,
+        "position": {
+          "x": -26.842529534114323,
+          "y": 11.305115243050096,
+          "z": 13.738125154282887
+        }
+      },
+      "intersections": [],
+      "distance": 17.978106866153016,
+      "deaths": 0,
+      "calls": 166,
+      "triangles": 95982,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.37006950378418,
+        "y": 2.3050100803375244,
+        "z": -1.1690399646759033
+      },
+      "camera": {
+        "yaw": -0.28053520134690524,
+        "intentYaw": 1.3066665954589842,
+        "pitch": 0,
+        "position": {
+          "x": -26.726317750129915,
+          "y": 11.305073864746959,
+          "z": 13.94979432707518
+        }
+      },
+      "intersections": [],
+      "distance": 18.126146784373592,
+      "deaths": 0,
+      "calls": 166,
+      "triangles": 95982,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.37006378173828,
+        "y": 2.3050453662872314,
+        "z": -1.169511318206787
+      },
+      "camera": {
+        "yaw": -0.22209942835847693,
+        "intentYaw": 1.4373334045410155,
+        "pitch": 0,
+        "position": {
+          "x": -25.849990309507096,
+          "y": 11.30506265147681,
+          "z": 14.240334817105781
+        }
+      },
+      "intersections": [],
+      "distance": 18.181681926774214,
+      "deaths": 0,
+      "calls": 164,
+      "triangles": 94612,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -22.37006378173828,
+        "y": 2.305021286010742,
+        "z": -1.1699897050857544
+      },
+      "camera": {
+        "yaw": -0.13522913597425798,
+        "intentYaw": 1.5679999999999998,
+        "pitch": 0,
+        "position": {
+          "x": -24.498350193182215,
+          "y": 11.305046375434166,
+          "z": 14.472329424668413
+        }
+      },
+      "intersections": [],
+      "distance": 18.17174186522748,
+      "deaths": 0,
+      "calls": 150,
+      "triangles": 92926,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.962976455688477,
+        "y": 2.157461166381836,
+        "z": -3.870039463043213
+      },
+      "camera": {
+        "yaw": -1.5713084349704527,
+        "intentYaw": 0,
+        "pitch": -0.045833282470703125,
+        "position": {
+          "x": -34.96206176197298,
+          "y": 10.903786500082994,
+          "z": -3.878232726146223
+        }
+      },
+      "intersections": [],
+      "distance": 18.23373260224773,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963050842285156,
+        "y": 2.1574909687042236,
+        "z": -3.870093822479248
+      },
+      "camera": {
+        "yaw": -1.57110486926682,
+        "intentYaw": 0,
+        "pitch": -0.09166671752929688,
+        "position": {
+          "x": -34.962450934750905,
+          "y": 10.498658829763494,
+          "z": -3.8750303170897156
+        }
+      },
+      "intersections": [],
+      "distance": 18.043167930663955,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.96310043334961,
+        "y": 2.1574792861938477,
+        "z": -3.870161294937134
+      },
+      "camera": {
+        "yaw": -1.5709809070385536,
+        "intentYaw": 0,
+        "pitch": -0.1375,
+        "position": {
+          "x": -34.96270649253606,
+          "y": 10.000456000069786,
+          "z": -3.873114506155494
+        }
+      },
+      "intersections": [],
+      "distance": 17.81852088432181,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963146209716797,
+        "y": 2.157536506652832,
+        "z": -3.8702332973480225
+      },
+      "camera": {
+        "yaw": -1.570905549957512,
+        "intentYaw": 0,
+        "pitch": -0.18333328247070313,
+        "position": {
+          "x": -34.962879507765074,
+          "y": 9.44582734376388,
+          "z": -3.871980838826788
+        }
+      },
+      "intersections": [],
+      "distance": 17.581542935388036,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963186264038086,
+        "y": 2.157413959503174,
+        "z": -3.870307207107544
+      },
+      "camera": {
+        "yaw": -1.5708597718420108,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.963000206953446,
+          "y": 9.017570047498879,
+          "z": -3.8713223160583325
+        }
+      },
+      "intersections": [],
+      "distance": 17.408497602895533,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963224411010742,
+        "y": 2.1575045585632324,
+        "z": -3.8703808784484863
+      },
+      "camera": {
+        "yaw": -1.5708320152716149,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.96308842437596,
+          "y": 8.757854515020911,
+          "z": -3.8709518892230643
+        }
+      },
+      "intersections": [],
+      "distance": 17.30780946047025,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963258743286133,
+        "y": 2.157489061355591,
+        "z": -3.870455265045166
+      },
+      "camera": {
+        "yaw": -1.570815153028336,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.963155439645185,
+          "y": 8.600322984093365,
+          "z": -3.8707564828354157
+        }
+      },
+      "intersections": [],
+      "distance": 17.248385528532054,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963293075561523,
+        "y": 2.157545328140259,
+        "z": -3.8705296516418457
+      },
+      "camera": {
+        "yaw": -1.5708049255943533,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.96320959515839,
+          "y": 8.504797419968982,
+          "z": -3.870667231715325
+        }
+      },
+      "intersections": [],
+      "distance": 17.212929377947876,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963327407836914,
+        "y": 2.1575143337249756,
+        "z": -3.8706040382385254
+      },
+      "camera": {
+        "yaw": -1.5707987223544186,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.96325595083528,
+          "y": 8.446846041189065,
+          "z": -3.870642367019698
+        }
+      },
+      "intersections": [],
+      "distance": 17.19166678100283,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963361740112305,
+        "y": 2.157444715499878,
+        "z": -3.870678424835205
+      },
+      "camera": {
+        "yaw": -1.5707949599037507,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.96329757567232,
+          "y": 8.411669360549325,
+          "z": -3.8706565546645773
+        }
+      },
+      "intersections": [],
+      "distance": 17.178861215262778,
+      "deaths": 0,
+      "calls": 134,
+      "triangles": 94166,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963396072387695,
+        "y": 2.157575845718384,
+        "z": -3.8707528114318848
+      },
+      "camera": {
+        "yaw": -1.570792677863736,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.96333633110994,
+          "y": 8.39038522095497,
+          "z": -3.8706944287513076
+        }
+      },
+      "intersections": [],
+      "distance": 17.171080367703325,
+      "deaths": 0,
+      "calls": 134,
+      "triangles": 94166,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963430404663086,
+        "y": 2.1573333740234375,
+        "z": -3.8708271980285645
+      },
+      "camera": {
+        "yaw": -1.5707912937371151,
+        "intentYaw": 0,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.96337334616884,
+          "y": 8.37738033254754,
+          "z": -3.87074666939124
+        }
+      },
+      "intersections": [],
+      "distance": 17.166454447677,
+      "deaths": 0,
+      "calls": 134,
+      "triangles": 94166,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "←",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.9637451171875,
+        "y": 2.1573474407196045,
+        "z": -3.8715076446533203
+      },
+      "camera": {
+        "yaw": -1.6221837878729966,
+        "intentYaw": -0.13066680908203127,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.91002431251612,
+          "y": 8.357512673046292,
+          "z": -4.691668498303384
+        }
+      },
+      "intersections": [],
+      "distance": 17.128880083338288,
+      "deaths": 0,
+      "calls": 135,
+      "triangles": 94186,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.96377944946289,
+        "y": 2.1571977138519287,
+        "z": -3.871581792831421
+      },
+      "camera": {
+        "yaw": -1.7048122958852767,
+        "intentYaw": -0.2613331909179688,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.7174199876717,
+          "y": 8.357388746259868,
+          "z": -5.995552148264949
+        }
+      },
+      "intersections": [],
+      "distance": 17.062555761556006,
+      "deaths": 0,
+      "calls": 131,
+      "triangles": 94142,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.96381378173828,
+        "y": 2.157381534576416,
+        "z": -3.8716559410095215
+      },
+      "camera": {
+        "yaw": -1.8065752525383176,
+        "intentYaw": -0.39200000000000007,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.336834066533434,
+          "y": 8.357385908683538,
+          "z": -7.564984619613707
+        }
+      },
+      "intersections": [],
+      "distance": 16.982652432522748,
+      "deaths": 0,
+      "calls": 125,
+      "triangles": 93648,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963848114013672,
+        "y": 2.157280206680298,
+        "z": -3.871730327606201
+      },
+      "camera": {
+        "yaw": -1.9200748056868924,
+        "intentYaw": -0.5226668090820313,
+        "pitch": -0.2,
+        "position": {
+          "x": -33.743037768183484,
+          "y": 8.357344318186056,
+          "z": -9.25447449813149
+        }
+      },
+      "intersections": [],
+      "distance": 16.906779013934784,
+      "deaths": 0,
+      "calls": 108,
+      "triangles": 93042,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963882446289062,
+        "y": 2.1573445796966553,
+        "z": -3.871804714202881
+      },
+      "camera": {
+        "yaw": -2.0407193806020363,
+        "intentYaw": -0.6533331909179688,
+        "pitch": -0.2,
+        "position": {
+          "x": -32.92691921579711,
+          "y": 8.357344421082459,
+          "z": -10.963199636611199
+        }
+      },
+      "intersections": [],
+      "distance": 16.843226407234937,
+      "deaths": 0,
+      "calls": 105,
+      "triangles": 91592,
+      "expectedBearing": "↓",
+      "bearing": "↓ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963916778564453,
+        "y": 2.1572189331054688,
+        "z": -3.8718791007995605
+      },
+      "camera": {
+        "yaw": -1.8537157647512803,
+        "intentYaw": -0.784,
+        "pitch": -0.2,
+        "position": {
+          "x": -33.72840914956457,
+          "y": 8.357295045410938,
+          "z": -8.16418027561324
+        }
+      },
+      "intersections": [],
+      "distance": 16.57875230971886,
+      "deaths": 0,
+      "calls": 116,
+      "triangles": 93152,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963951110839844,
+        "y": 2.1573054790496826,
+        "z": -3.8719534873962402
+      },
+      "camera": {
+        "yaw": -1.7918193289199145,
+        "intentYaw": -0.9146668090820314,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.16203005037925,
+          "y": 8.357299150727892,
+          "z": -7.2868679873744036
+        }
+      },
+      "intersections": [],
+      "distance": 16.76553506523076,
+      "deaths": 0,
+      "calls": 125,
+      "triangles": 93648,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.963985443115234,
+        "y": 2.1571476459503174,
+        "z": -3.87202787399292
+      },
+      "camera": {
+        "yaw": -1.8073765736521783,
+        "intentYaw": -1.0453331909179688,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.26608784167728,
+          "y": 8.35723953824301,
+          "z": -7.561290852631365
+        }
+      },
+      "intersections": [],
+      "distance": 16.91762804339025,
+      "deaths": 0,
+      "calls": 125,
+      "triangles": 93648,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.964019775390625,
+        "y": 2.1572234630584717,
+        "z": -3.8721022605895996
+      },
+      "camera": {
+        "yaw": -1.8685489652156426,
+        "intentYaw": -1.1760000000000002,
+        "pitch": -0.2,
+        "position": {
+          "x": -34.06652539816445,
+          "y": 8.357233213150755,
+          "z": -8.506691933934228
+        }
+      },
+      "intersections": [],
+      "distance": 16.970716497173214,
+      "deaths": 0,
+      "calls": 115,
+      "triangles": 93484,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.964054107666016,
+        "y": 2.1571943759918213,
+        "z": -3.8721766471862793
+      },
+      "camera": {
+        "yaw": -1.9570807986538885,
+        "intentYaw": -1.3066668090820315,
+        "pitch": -0.2,
+        "position": {
+          "x": -33.583556961353835,
+          "y": 8.35721793191945,
+          "z": -9.818194415946753
+        }
+      },
+      "intersections": [],
+      "distance": 16.956570499056085,
+      "deaths": 0,
+      "calls": 105,
+      "triangles": 91592,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.964088439941406,
+        "y": 2.1571898460388184,
+        "z": -3.87225079536438
+      },
+      "camera": {
+        "yaw": -2.0623180642777466,
+        "intentYaw": -1.437333190917969,
+        "pitch": -0.2,
+        "position": {
+          "x": -32.83561564997947,
+          "y": 8.357206880986526,
+          "z": -11.298295376424763
+        }
+      },
+      "intersections": [],
+      "distance": 16.91170057955037,
+      "deaths": 0,
+      "calls": 104,
+      "triangles": 91580,
+      "expectedBearing": "↓",
+      "bearing": "↓ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -18.964122772216797,
+        "y": 2.157179594039917,
+        "z": -3.8723251819610596
+      },
+      "camera": {
+        "yaw": -1.7675644891331597,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -33.67309332948885,
+          "y": 8.357196144409645,
+          "z": -8.358799504210662
+        }
+      },
+      "intersections": [],
+      "distance": 16.580786227551446,
+      "deaths": 0,
+      "calls": 127,
+      "triangles": 93658,
+      "expectedBearing": "↙",
+      "bearing": "↙ 灯火の巡回 · 13m",
+      "rewardCenterBearing": "↙",
+      "expectedDistance": 13
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3201467990875244,
+        "z": -0.4240082800388336
+      },
+      "camera": {
+        "yaw": -0.07811170069871305,
+        "intentYaw": -0.13066680908203127,
+        "pitch": 0,
+        "position": {
+          "x": -16.234303388955322,
+          "y": 11.319798591302533,
+          "z": 15.317785460204265
+        }
+      },
+      "intersections": [],
+      "distance": 18.151171466165597,
+      "deaths": 0,
+      "calls": 167,
+      "triangles": 95226,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417460441589355,
+        "y": 2.3200998306274414,
+        "z": -0.4203971326351166
+      },
+      "camera": {
+        "yaw": -0.1770604524644871,
+        "intentYaw": -0.2613331909179688,
+        "pitch": 0,
+        "position": {
+          "x": -17.539463358278905,
+          "y": 11.319917119740971,
+          "z": 15.207047259559573
+        }
+      },
+      "intersections": [],
+      "distance": 18.158100832603694,
+      "deaths": 0,
+      "calls": 172,
+      "triangles": 96678,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417435646057129,
+        "y": 2.320080280303955,
+        "z": -0.41925278306007385
+      },
+      "camera": {
+        "yaw": 0.07351009743534134,
+        "intentYaw": -0.39200000000000007,
+        "pitch": 0,
+        "position": {
+          "x": -14.291257877051173,
+          "y": 11.319981318420048,
+          "z": 14.873183973480707
+        }
+      },
+      "intersections": [],
+      "distance": 17.77990767737802,
+      "deaths": 0,
+      "calls": 144,
+      "triangles": 92178,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417435646057129,
+        "y": 2.3200979232788086,
+        "z": -0.41886094212532043
+      },
+      "camera": {
+        "yaw": 0.14984142995214442,
+        "intentYaw": -0.5226668090820313,
+        "pitch": 0,
+        "position": {
+          "x": -13.099309982543275,
+          "y": 11.320027198856899,
+          "z": 14.93570712629881
+        }
+      },
+      "intersections": [],
+      "distance": 17.948125086624483,
+      "deaths": 0,
+      "calls": 137,
+      "triangles": 92068,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417436599731445,
+        "y": 2.320094108581543,
+        "z": -0.41873589158058167
+      },
+      "camera": {
+        "yaw": 0.1427204330802963,
+        "intentYaw": -0.6533331909179688,
+        "pitch": 0,
+        "position": {
+          "x": -13.182420155352741,
+          "y": 11.32005352578211,
+          "z": 15.134893269622324
+        }
+      },
+      "intersections": [],
+      "distance": 18.10828396348262,
+      "deaths": 0,
+      "calls": 138,
+      "triangles": 92070,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417448043823242,
+        "y": 2.3200998306274414,
+        "z": -0.41867801547050476
+      },
+      "camera": {
+        "yaw": 0.08652737824747533,
+        "intentYaw": -0.784,
+        "pitch": 0,
+        "position": {
+          "x": -14.053032956147199,
+          "y": 11.320071745319055,
+          "z": 15.310543128140603
+        }
+      },
+      "intersections": [],
+      "distance": 18.17331892586873,
+      "deaths": 0,
+      "calls": 143,
+      "triangles": 92166,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417448043823242,
+        "y": 2.3200995922088623,
+        "z": -0.41866371035575867
+      },
+      "camera": {
+        "yaw": 0.0010145087302017002,
+        "intentYaw": -0.9146668090820314,
+        "pitch": 0,
+        "position": {
+          "x": -15.401435815057889,
+          "y": 11.320082702216414,
+          "z": 15.364564955166108
+        }
+      },
+      "intersections": [],
+      "distance": 18.168936663438576,
+      "deaths": 0,
+      "calls": 146,
+      "triangles": 92226,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417447090148926,
+        "y": 2.320094347000122,
+        "z": -0.41865795850753784
+      },
+      "camera": {
+        "yaw": -0.10236454219177728,
+        "intentYaw": -1.0453331909179688,
+        "pitch": 0,
+        "position": {
+          "x": -17.02579351276113,
+          "y": 11.320087284081776,
+          "z": 15.238373024290665
+        }
+      },
+      "intersections": [],
+      "distance": 18.13089270496497,
+      "deaths": 0,
+      "calls": 160,
+      "triangles": 93568,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417449951171875,
+        "y": 2.320094347000122,
+        "z": -0.4186509847640991
+      },
+      "camera": {
+        "yaw": 0.09417444810148268,
+        "intentYaw": -1.1760000000000002,
+        "pitch": 0,
+        "position": {
+          "x": -13.971579586599342,
+          "y": 11.320090063123597,
+          "z": 14.88904099562806
+        }
+      },
+      "intersections": [],
+      "distance": 17.81616955936243,
+      "deaths": 0,
+      "calls": 140,
+      "triangles": 92122,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417452812194824,
+        "y": 2.320094347000122,
+        "z": -0.41864532232284546
+      },
+      "camera": {
+        "yaw": 0.1626290428800492,
+        "intentYaw": -1.3066668090820315,
+        "pitch": 0,
+        "position": {
+          "x": -12.896923555428444,
+          "y": 11.320091748697667,
+          "z": 14.943117707584854
+        }
+      },
+      "intersections": [],
+      "distance": 17.981567905825585,
+      "deaths": 0,
+      "calls": 137,
+      "triangles": 92068,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417454719543457,
+        "y": 2.3200995922088623,
+        "z": -0.41863423585891724
+      },
+      "camera": {
+        "yaw": 0.1509620537460624,
+        "intentYaw": -1.437333190917969,
+        "pitch": 0,
+        "position": {
+          "x": -13.05094902239602,
+          "y": 11.32009483487884,
+          "z": 15.138262833665122
+        }
+      },
+      "intersections": [],
+      "distance": 18.12780488681625,
+      "deaths": 0,
+      "calls": 138,
+      "triangles": 92070,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417459487915039,
+        "y": 2.3200998306274414,
+        "z": -0.41863155364990234
+      },
+      "camera": {
+        "yaw": 0.09210061255376044,
+        "intentYaw": -1.5680000000000003,
+        "pitch": 0,
+        "position": {
+          "x": -13.964494055242117,
+          "y": 11.320096800552747,
+          "z": 15.312586693091605
+        }
+      },
+      "intersections": [],
+      "distance": 18.181921832793694,
+      "deaths": 0,
+      "calls": 141,
+      "triangles": 92142,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↑",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.003741105512206034,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.045833282470703125,
+        "position": {
+          "x": -15.357619215994943,
+          "y": 11.067623841842991,
+          "z": 15.578448725932601
+        }
+      },
+      "intersections": [],
+      "distance": 18.23262207741282,
+      "deaths": 0,
+      "calls": 146,
+      "triangles": 92226,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.0033693241246573694,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.09166671752929688,
+        "position": {
+          "x": -15.363562876196369,
+          "y": 10.662012802372558,
+          "z": 15.579583111153305
+        }
+      },
+      "intersections": [],
+      "distance": 18.042518182266598,
+      "deaths": 0,
+      "calls": 147,
+      "triangles": 92286,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.0031438525403415414,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.1375,
+        "position": {
+          "x": -15.367167888339447,
+          "y": 10.1635213911785,
+          "z": 15.580271150569587
+        }
+      },
+      "intersections": [],
+      "distance": 17.818132665917318,
+      "deaths": 0,
+      "calls": 147,
+      "triangles": 92286,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.0030071064025086447,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.18333328247070313,
+        "position": {
+          "x": -15.369354438732861,
+          "y": 9.608695186848557,
+          "z": 15.580688467570653
+        }
+      },
+      "intersections": [],
+      "distance": 17.581335284692468,
+      "deaths": 0,
+      "calls": 150,
+      "triangles": 92474,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.002924169097682927,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.370680648585473,
+          "y": 9.180366290196343,
+          "z": 15.580941583126618
+        }
+      },
+      "intersections": [],
+      "distance": 17.40835884203943,
+      "deaths": 0,
+      "calls": 152,
+      "triangles": 92494,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.0028738663382943674,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.371485035522296,
+          "y": 8.920571681935892,
+          "z": 15.581095105471762
+        }
+      },
+      "intersections": [],
+      "distance": 17.30776612726699,
+      "deaths": 0,
+      "calls": 153,
+      "triangles": 92510,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.002843356635672227,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.37197292086175,
+          "y": 8.762998286797895,
+          "z": 15.581188221481042
+        }
+      },
+      "intersections": [],
+      "distance": 17.248374277276675,
+      "deaths": 0,
+      "calls": 153,
+      "triangles": 92510,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.002824851736047375,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.372268838278554,
+          "y": 8.667425191491686,
+          "z": 15.581244699195581
+        }
+      },
+      "intersections": [],
+      "distance": 17.212954260063075,
+      "deaths": 0,
+      "calls": 153,
+      "triangles": 92510,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.0028136280097752014,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.372448321264589,
+          "y": 8.609457178944833,
+          "z": 15.58127895466104
+        }
+      },
+      "intersections": [],
+      "distance": 17.191694243177928,
+      "deaths": 0,
+      "calls": 153,
+      "triangles": 92510,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.002806820498744244,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.372557183198515,
+          "y": 8.57429780205256,
+          "z": 15.581299731651102
+        }
+      },
+      "intersections": [],
+      "distance": 17.178881873730123,
+      "deaths": 0,
+      "calls": 153,
+      "triangles": 92510,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.002802691543074571,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.372623211299118,
+          "y": 8.552972561991005,
+          "z": 15.581312333532592
+        }
+      },
+      "intersections": [],
+      "distance": 17.171141196292222,
+      "deaths": 0,
+      "calls": 153,
+      "triangles": 92510,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    },
+    {
+      "position": {
+        "x": -15.417466163635254,
+        "y": 2.3200998306274414,
+        "z": -0.4186056852340698
+      },
+      "camera": {
+        "yaw": 0.002800187207990672,
+        "intentYaw": -1.5680000000000003,
+        "pitch": -0.2,
+        "position": {
+          "x": -15.372663259366535,
+          "y": 8.54003815006794,
+          "z": 15.581319976960087
+        }
+      },
+      "intersections": [],
+      "distance": 17.166457444493734,
+      "deaths": 0,
+      "calls": 153,
+      "triangles": 92510,
+      "expectedBearing": "↖",
+      "bearing": "↖ 灯火の巡回 · 18m",
+      "rewardCenterBearing": "↖",
+      "expectedDistance": 18
+    }
+  ],
+  "movement": [
+    {
+      "before": {
+        "position": {
+          "x": -0.0008390706498175859,
+          "y": 1.479957103729248,
+          "z": 9.999223709106445
+        },
+        "camera": {
+          "yaw": 0.6329319397239578,
+          "intentYaw": 0.64,
+          "pitch": 0,
+          "position": {
+            "x": 9.385320839032989,
+            "y": 10.480650450161175,
+            "z": 22.888883316306643
+          }
+        },
+        "intersections": [],
+        "distance": 18.309991899400966,
+        "deaths": 0,
+        "calls": 133,
+        "triangles": 92540,
+        "expectedBearing": "↑",
+        "bearing": "↑ 灯火の巡回 · 36m"
+      },
+      "after": {
+        "position": {
+          "x": -1.6892675161361694,
+          "y": 1.1303772926330566,
+          "z": 7.714105129241943
+        },
+        "camera": {
+          "yaw": 0.6395836537950541,
+          "intentYaw": 0.64,
+          "pitch": 0,
+          "position": {
+            "x": 8.271969916528825,
+            "y": 10.222992996090056,
+            "z": 21.110301617417115
+          }
+        },
+        "intersections": [],
+        "distance": 19.009471109698865,
+        "deaths": 0,
+        "calls": 136,
+        "triangles": 92660,
+        "expectedBearing": "↑",
+        "bearing": "↑ 灯火の巡回 · 33m"
+      },
+      "dot": 2.8412080941124866,
+      "alignment": 0.9999941712528584
+    }
+  ],
+  "bearingComparison": {
+    "target": {
+      "x": -28,
+      "z": -13,
+      "y": 0,
+      "mission": "lamps",
+      "index": 0
+    },
+    "source": "First pending lamps node; original comparison incorrectly used mission reward",
+    "settledMismatches": [],
+    "distanceMismatches": []
+  }
+}
