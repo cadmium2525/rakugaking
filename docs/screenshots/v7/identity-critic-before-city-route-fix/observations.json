@@ -1,0 +1,689 @@
+{
+  "method": "Initial save EXP1500 and stage unlock fixture, real keyboard thereafter, read-only QA state.",
+  "observations": [
+    {
+      "label": "stage-4-start",
+      "file": "qa/v7/identity-critic/subset-4-5/stage-4-start.png",
+      "capturedAt": "2026-10-05T23:26:18.796Z",
+      "state": {
+        "position": {
+          "x": -52,
+          "y": 0.820099949836731,
+          "z": 10
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 1.0333333333333345,
+        "stage": 4,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [],
+          "runes": [],
+          "enemies": [],
+          "bossHP": 0,
+          "bossPhase": "sleep",
+          "bossAttack": null,
+          "selected": "lamps",
+          "escorts": {},
+          "defenses": {}
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": 0,
+            "z": -1
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 0,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": -52,
+            "y": 9.858946911390241,
+            "z": 26
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 164,
+        "triangles": 89734,
+        "geometries": 86,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "0/3 紋章 · 30秒以内に4つの灯火を巡る · 光の輪を順に通ろう",
+      "bearing": "↗ 灯火の巡回 · 33m",
+      "missionText": "1 灯火の巡回 · 0/42 街じゅうの歯車 · 0/43 時計塔の修理 · 灯火の巡回・街じゅうの歯車を先に"
+    },
+    {
+      "label": "stage-4-repair-locked",
+      "file": "qa/v7/identity-critic/subset-4-5/stage-4-repair-locked.png",
+      "capturedAt": "2026-10-05T23:26:45.372Z",
+      "state": {
+        "position": {
+          "x": -14.95931625366211,
+          "y": 0.8482477068901062,
+          "z": -69.4659194946289
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 25.033333333333193,
+        "stage": 4,
+        "complete": false,
+        "collected": 1,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [],
+          "runes": [
+            5
+          ],
+          "enemies": [],
+          "bossHP": 0,
+          "bossPhase": "sleep",
+          "bossAttack": null,
+          "selected": "lamps",
+          "escorts": {},
+          "defenses": {}
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": -0.7113218732047926,
+            "z": 0.7028664117031236
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 22.16666666666669,
+            "x": -15.41175651550293,
+            "y": 0.8319981694221497,
+            "z": -68.43041229248047,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.999421131660185,
+              "z": 0.03402060538960566
+            }
+          },
+          {
+            "id": 2,
+            "type": "swing",
+            "time": 22.616666666666664,
+            "x": -14.685718536376953,
+            "y": 0.8358743190765381,
+            "z": -68.58271789550781,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.6957685936467471,
+              "z": -0.7182660120699208
+            }
+          },
+          {
+            "id": 3,
+            "type": "swing",
+            "time": 23.116666666666635,
+            "x": -15.05252456665039,
+            "y": 0.8457881808280945,
+            "z": -69.34746551513672,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": 0.7039629806823922,
+              "z": -0.7102366660689673
+            }
+          },
+          {
+            "id": 4,
+            "type": "swing",
+            "time": 23.7166666666666,
+            "x": -14.40490436553955,
+            "y": 0.8646685481071472,
+            "z": -70.00357818603516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.7113218732047926,
+              "z": 0.7028664117031236
+            }
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 0.00022334304101904358,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": -14.953957274850142,
+            "y": 9.848447408429386,
+            "z": -53.469663695577445
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 111,
+        "triangles": 82782,
+        "geometries": 93,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "0/3 紋章 · 30秒以内に4つの灯火を巡る · 光の輪を順に通ろう",
+      "bearing": "↓ 灯火の巡回 · 58m",
+      "missionText": "1 灯火の巡回 · 0/42 街じゅうの歯車 · 1/43 時計塔の修理 · 灯火の巡回・街じゅうの歯車を先に"
+    },
+    {
+      "label": "stage-4-lamps-complete",
+      "file": "qa/v7/identity-critic/subset-4-5/stage-4-lamps-complete.png",
+      "capturedAt": "2026-10-05T23:27:12.034Z",
+      "state": {
+        "position": {
+          "x": -26.52638816833496,
+          "y": 0.8201694488525391,
+          "z": -23.090126037597656
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 48.49999999999853,
+        "stage": 4,
+        "complete": false,
+        "collected": 1,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [
+            "lamps"
+          ],
+          "runes": [
+            5,
+            0,
+            1,
+            2,
+            3
+          ],
+          "enemies": [],
+          "bossHP": 0,
+          "bossPhase": "sleep",
+          "bossAttack": null,
+          "selected": "gears",
+          "escorts": {},
+          "defenses": {}
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": -0.9992691664931985,
+            "z": 0.03822476809594174
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 22.16666666666669,
+            "x": -15.41175651550293,
+            "y": 0.8319981694221497,
+            "z": -68.43041229248047,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.999421131660185,
+              "z": 0.03402060538960566
+            }
+          },
+          {
+            "id": 2,
+            "type": "swing",
+            "time": 22.616666666666664,
+            "x": -14.685718536376953,
+            "y": 0.8358743190765381,
+            "z": -68.58271789550781,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.6957685936467471,
+              "z": -0.7182660120699208
+            }
+          },
+          {
+            "id": 3,
+            "type": "swing",
+            "time": 23.116666666666635,
+            "x": -15.05252456665039,
+            "y": 0.8457881808280945,
+            "z": -69.34746551513672,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": 0.7039629806823922,
+              "z": -0.7102366660689673
+            }
+          },
+          {
+            "id": 4,
+            "type": "swing",
+            "time": 23.7166666666666,
+            "x": -14.40490436553955,
+            "y": 0.8646685481071472,
+            "z": -70.00357818603516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.7113218732047926,
+              "z": 0.7028664117031236
+            }
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 0.008513985106982452,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": -26.32214092848246,
+            "y": 9.820191193678614,
+            "z": -7.09786937586135
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 131,
+        "triangles": 87356,
+        "geometries": 96,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "紋章を獲得！ 1/3 · HP回復",
+      "bearing": "↘ 街じゅうの歯車 · 41m",
+      "missionText": "1 灯火の巡回 · 紋章獲得 ✓2 街じゅうの歯車 · 1/43 時計塔の修理 · 灯火の巡回・街じゅうの歯車を先に"
+    },
+    {
+      "label": "stage-4-park-gear",
+      "file": "qa/v7/identity-critic/subset-4-5/stage-4-park-gear.png",
+      "capturedAt": "2026-10-05T23:27:40.022Z",
+      "state": {
+        "position": {
+          "x": 52.955345153808594,
+          "y": 6.320099353790283,
+          "z": -41.97846984863281
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 72.39999999999718,
+        "stage": 4,
+        "complete": false,
+        "collected": 3,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [
+            "lamps"
+          ],
+          "runes": [
+            5,
+            0,
+            1,
+            2,
+            3,
+            6,
+            7
+          ],
+          "enemies": [],
+          "bossHP": 0,
+          "bossPhase": "sleep",
+          "bossAttack": null,
+          "selected": "gears",
+          "escorts": {},
+          "defenses": {}
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": 0.7275998468219227,
+            "z": -0.6860017951177055
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 22.16666666666669,
+            "x": -15.41175651550293,
+            "y": 0.8319981694221497,
+            "z": -68.43041229248047,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.999421131660185,
+              "z": 0.03402060538960566
+            }
+          },
+          {
+            "id": 2,
+            "type": "swing",
+            "time": 22.616666666666664,
+            "x": -14.685718536376953,
+            "y": 0.8358743190765381,
+            "z": -68.58271789550781,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.6957685936467471,
+              "z": -0.7182660120699208
+            }
+          },
+          {
+            "id": 3,
+            "type": "swing",
+            "time": 23.116666666666635,
+            "x": -15.05252456665039,
+            "y": 0.8457881808280945,
+            "z": -69.34746551513672,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": 0.7039629806823922,
+              "z": -0.7102366660689673
+            }
+          },
+          {
+            "id": 4,
+            "type": "swing",
+            "time": 23.7166666666666,
+            "x": -14.40490436553955,
+            "y": 0.8646685481071472,
+            "z": -70.00357818603516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.7113218732047926,
+              "z": 0.7028664117031236
+            }
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": -0.002501399795454035,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 52.89531328603358,
+            "y": 15.320114468179447,
+            "z": -25.979001119122156
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 78,
+        "triangles": 89166,
+        "geometries": 127,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "✦ 3/13 · HP +8",
+      "bearing": "↙ 街じゅうの歯車 · 68m",
+      "missionText": "1 灯火の巡回 · 紋章獲得 ✓2 街じゅうの歯車 · 3/43 時計塔の修理 · 灯火の巡回・街じゅうの歯車を先に"
+    },
+    {
+      "label": "failure",
+      "file": "qa/v7/identity-critic/subset-4-5/failure.png",
+      "capturedAt": "2026-10-05T23:28:58.425Z",
+      "state": {
+        "position": {
+          "x": 22.0789852142334,
+          "y": 2.320105791091919,
+          "z": -7.869953155517578
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 123.41666666666094,
+        "stage": 4,
+        "complete": false,
+        "collected": 4,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [
+            "lamps"
+          ],
+          "runes": [
+            5,
+            0,
+            1,
+            2,
+            3,
+            6,
+            7
+          ],
+          "enemies": [],
+          "bossHP": 0,
+          "bossPhase": "sleep",
+          "bossAttack": null,
+          "selected": "gears",
+          "escorts": {},
+          "defenses": {}
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": -0.000004460027024191055,
+            "z": 0.9999999999900542
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 22.16666666666669,
+            "x": -15.41175651550293,
+            "y": 0.8319981694221497,
+            "z": -68.43041229248047,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.999421131660185,
+              "z": 0.03402060538960566
+            }
+          },
+          {
+            "id": 2,
+            "type": "swing",
+            "time": 22.616666666666664,
+            "x": -14.685718536376953,
+            "y": 0.8358743190765381,
+            "z": -68.58271789550781,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.6957685936467471,
+              "z": -0.7182660120699208
+            }
+          },
+          {
+            "id": 3,
+            "type": "swing",
+            "time": 23.116666666666635,
+            "x": -15.05252456665039,
+            "y": 0.8457881808280945,
+            "z": -69.34746551513672,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": 0.7039629806823922,
+              "z": -0.7102366660689673
+            }
+          },
+          {
+            "id": 4,
+            "type": "swing",
+            "time": 23.7166666666666,
+            "x": -14.40490436553955,
+            "y": 0.8646685481071472,
+            "z": -70.00357818603516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.7113218732047926,
+              "z": 0.7028664117031236
+            }
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 1.5707939506418969,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 38.079018944477184,
+            "y": 11.320104737277795,
+            "z": -7.869915136989433
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 97,
+        "triangles": 87496,
+        "geometries": 139,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {
+        "message": "Could not walk to {\"x\":22,\"z\":-7}: {\"position\":{\"x\":22.07895851135254,\"y\":2.320098638534546,\"z\":-7.869506359100342},\"grounded\":true,\"jumps\":0,\"deaths\":0,\"paused\":false,\"elapsed\":122.91666666666097,\"stage\":4,\"complete\":false,\"collected\":4,\"checkpoint\":-1,\"field\":{\"rewards\":[\"lamps\"],\"runes\":[5,0,1,2,3,6,7],\"enemies\":[],\"bossHP\":0,\"bossPhase\":\"sleep\",\"bossAttack\":null,\"selected\":\"gears\",\"escorts\":{},\"defenses\":{}},\"combat\":{\"attacking\":false,\"combo\":0,\"airborne\":false,\"name\":\"\",\"elapsed\":0,\"duration\":1,\"windup\":0,\"active\":0,\"phase\":\"idle\",\"facing\":{\"x\":-0.000004460027024191055,\"z\":0.9999999999900542},\"reach\":2.1479999999999997,\"buffered\":false,\"hurt\":0},\"combatEvents\":[{\"id\":1,\"type\":\"swing\",\"time\":22.16666666666669,\"x\":-15.41175651550293,\"y\":0.8319981694221497,\"z\":-68.43041229248047,\"combo\":1,\"airborne\":false,\"name\":\"薙ぎ払い\",\"facing\":{\"x\":0.999421131660185,\"z\":0.03402060538960566}},{\"id\":2,\"type\":\"swing\",\"time\":22.616666666666664,\"x\":-14.685718536376953,\"y\":0.8358743190765381,\"z\":-68.58271789550781,\"combo\":2,\"airborne\":false,\"name\":\"返しの一撃\",\"facing\":{\"x\":-0.6957685936467471,\"z\":-0.7182660120699208}},{\"id\":3,\"type\":\"swing\",\"time\":23.116666666666635,\"x\":-15.05252456665039,\"y\":0.8457881808280945,\"z\":-69.34746551513672,\"combo\":3,\"airborne\":false,\"name\":\"フィニッシュ\",\"facing\":{\"x\":0.7039629806823922,\"z\":-0.7102366660689673}},{\"id\":4,\"type\":\"swing\",\"time\":23.7166666666666,\"x\":-14.40490436553955,\"y\":0.8646685481071472,\"z\":-70.00357818603516,\"combo\":1,\"airborne\":false,\"name\":\"薙ぎ払い\",\"facing\":{\"x\":-0.7113218732047926,\"z\":0.7028664117031236}}],\"practiceHits\":0,\"camera\":{\"yaw\":1.57080804642388,\"intentYaw\":0,\"pitch\":0,\"position\":{\"x\":38.07884377051932,\"y\":11.32009905165786,\"z\":-7.869693871819366}},\"version\":\"7.0.0\",\"exp\":1500,\"characters\":1,\"name\":\"らくがきくん\",\"run\":null,\"best\":null,\"records\":0,\"calls\":97,\"triangles\":87496,\"geometries\":139,\"quality\":\"medium\",\"resolution\":{\"width\":1280,\"height\":800}}"
+      },
+      "objective": "1/3 紋章 · 街じゅうに散った歯車を4つ集める · 順不同で拾える",
+      "bearing": "↖ 街じゅうの歯車 · 22m",
+      "missionText": "1 灯火の巡回 · 紋章獲得 ✓2 街じゅうの歯車 · 3/43 時計塔の修理 · 灯火の巡回・街じゅうの歯車を先に"
+    }
+  ],
+  "errors": [],
+  "movementSamples": [],
+  "defenseSamples": []
+}

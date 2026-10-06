@@ -1,0 +1,5161 @@
+{
+  "method": "Initial save EXP1500 and stage unlock fixture, real keyboard thereafter, read-only QA state.",
+  "observations": [
+    {
+      "label": "stage-5-start",
+      "file": "qa/v7/identity-critic-defense-after-navigation-fix/stage-5-start.png",
+      "capturedAt": "2026-10-06T07:39:02.926Z",
+      "state": {
+        "position": {
+          "x": -57,
+          "y": 0.820099949836731,
+          "z": 10
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 1.0833333333333344,
+        "stage": 5,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [],
+          "runes": [],
+          "enemies": [
+            {
+              "x": 43,
+              "z": -28,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 51,
+              "z": -27,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 51,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 42,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            }
+          ],
+          "bossHP": 250,
+          "bossPhase": "shield",
+          "bossAttack": null,
+          "selected": "stars",
+          "escorts": {},
+          "defenses": {
+            "sentinels": {
+              "started": false,
+              "elapsed": 0,
+              "complete": false
+            }
+          }
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": 0,
+            "z": -1
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 0,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": -57,
+            "y": 9.844332264292845,
+            "z": 26
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 120,
+        "triangles": 90696,
+        "geometries": 89,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "0/3 紋章 · 星座を番号順に4つ結ぶ · 光る番号順にACTION",
+      "bearing": "↗ 星座の観測庭 · 42m",
+      "missionText": "1 星座の観測庭 · 0/42 月の灯台の防衛 · 中央でACTION3 天空の巨人 · HP 250/250"
+    },
+    {
+      "label": "stage-5-beacon-before",
+      "file": "qa/v7/identity-critic-defense-after-navigation-fix/stage-5-beacon-before.png",
+      "capturedAt": "2026-10-06T07:39:29.662Z",
+      "state": {
+        "position": {
+          "x": 48.72037124633789,
+          "y": 1.247480034828186,
+          "z": -31.734285354614258
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 26.283333333333122,
+        "stage": 5,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [],
+          "runes": [],
+          "enemies": [
+            {
+              "x": 43,
+              "z": -28,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 51,
+              "z": -27,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 51,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 42,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            }
+          ],
+          "bossHP": 250,
+          "bossPhase": "shield",
+          "bossAttack": null,
+          "selected": "stars",
+          "escorts": {},
+          "defenses": {
+            "sentinels": {
+              "started": false,
+              "elapsed": 0,
+              "complete": false
+            }
+          }
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": 0.00595726695369918,
+            "z": -0.9999822553277846
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": -0.000566167494586243,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 48.70674603983518,
+            "y": 10.236445512737843,
+            "z": -15.6686065984836
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 72,
+        "triangles": 84748,
+        "geometries": 101,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "0/3 紋章 · 星座を番号順に4つ結ぶ · 光る番号順にACTION",
+      "bearing": "← 星座の観測庭 · 74m",
+      "missionText": "1 星座の観測庭 · 0/42 月の灯台の防衛 · 中央でACTION3 天空の巨人 · HP 250/250"
+    },
+    {
+      "label": "stage-5-defense-started",
+      "file": "qa/v7/identity-critic-defense-after-navigation-fix/stage-5-defense-started.png",
+      "capturedAt": "2026-10-06T07:39:30.927Z",
+      "state": {
+        "position": {
+          "x": 48.7156982421875,
+          "y": 1.3431779146194458,
+          "z": -32.1319694519043
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 27.233333333333068,
+        "stage": 5,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [],
+          "runes": [],
+          "enemies": [
+            {
+              "x": 43.821239114258745,
+              "z": -28.593641645014586,
+              "hp": 35,
+              "phase": "patrol",
+              "active": true
+            },
+            {
+              "x": 51,
+              "z": -27,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 51,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 42,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            }
+          ],
+          "bossHP": 250,
+          "bossPhase": "shield",
+          "bossAttack": null,
+          "selected": "sentinels",
+          "escorts": {},
+          "defenses": {
+            "sentinels": {
+              "started": true,
+              "elapsed": 0.6333333333333336,
+              "complete": false
+            }
+          }
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": 0.00595726695369918,
+            "z": -0.9999822553277846
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 26.21666666666646,
+            "x": 48.720314025878906,
+            "y": 1.2474309206008911,
+            "z": -31.734195709228516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.00595726695369918,
+              "z": -0.9999822553277846
+            }
+          },
+          {
+            "id": 2,
+            "type": "switch",
+            "time": 26.433333333333113,
+            "key": "defense:sentinels",
+            "x": 47.54905220512174,
+            "y": 1.281475418806076,
+            "z": -32.0322750065988,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9982767365849848,
+              "z": 0.058681830179645386
+            }
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 0.000001472850177374681,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 48.71573360589935,
+            "y": 10.34054300011292,
+            "z": -16.121576273143816
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 81,
+        "triangles": 84928,
+        "geometries": 113,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "月の灯台の防衛 残り19.4秒 · 敵4 · 光の範囲で迎撃 / 11m以上離れると再挑戦",
+      "bearing": "← 月の灯台の防衛 · 2m",
+      "missionText": "1 星座の観測庭 · 0/42 月の灯台の防衛 · 残り19.4秒 · 敵43 天空の巨人 · HP 250/250"
+    },
+    {
+      "label": "stage-5-defense-paused",
+      "file": "qa/v7/identity-critic-defense-after-navigation-fix/stage-5-defense-paused.png",
+      "capturedAt": "2026-10-06T07:39:33.414Z",
+      "state": {
+        "position": {
+          "x": 57.4778938293457,
+          "y": 1.3787291049957275,
+          "z": -32.09149169921875
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 29.499999999999606,
+        "stage": 5,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [],
+          "runes": [],
+          "enemies": [
+            {
+              "x": 46.381877768307035,
+              "z": -29.67027214168288,
+              "hp": 35,
+              "phase": "patrol",
+              "active": true
+            },
+            {
+              "x": 51,
+              "z": -27,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 51,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 42,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            }
+          ],
+          "bossHP": 250,
+          "bossPhase": "shield",
+          "bossAttack": null,
+          "selected": "sentinels",
+          "escorts": {},
+          "defenses": {
+            "sentinels": {
+              "started": true,
+              "elapsed": 2.2166666666666637,
+              "complete": false
+            }
+          }
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": 0.9994269849331545,
+            "z": 0.033848216901695594
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 26.21666666666646,
+            "x": 48.720314025878906,
+            "y": 1.2474309206008911,
+            "z": -31.734195709228516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.00595726695369918,
+              "z": -0.9999822553277846
+            }
+          },
+          {
+            "id": 2,
+            "type": "switch",
+            "time": 26.433333333333113,
+            "key": "defense:sentinels",
+            "x": 47.54905220512174,
+            "y": 1.281475418806076,
+            "z": -32.0322750065988,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9982767365849848,
+              "z": 0.058681830179645386
+            }
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": -0.005213551698413886,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 57.35283134786173,
+            "y": 10.382691923365982,
+            "z": -16.09982474529994
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 81,
+        "triangles": 83490,
+        "geometries": 113,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "月の灯台の防衛 残り17.8秒 · 敵4 · 範囲外で計時停止 · 光の輪へ戻ろう / 11m以上離れると再挑戦",
+      "bearing": "← 月の灯台の防衛 · 10m",
+      "missionText": "1 星座の観測庭 · 0/42 月の灯台の防衛 · 残り17.8秒 · 敵43 天空の巨人 · HP 250/250"
+    },
+    {
+      "label": "stage-5-defense-reset",
+      "file": "qa/v7/identity-critic-defense-after-navigation-fix/stage-5-defense-reset.png",
+      "capturedAt": "2026-10-06T07:39:35.143Z",
+      "state": {
+        "position": {
+          "x": 60.208492279052734,
+          "y": 1.769233226776123,
+          "z": -31.850317001342773
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 31.033333333332852,
+        "stage": 5,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [],
+          "runes": [],
+          "enemies": [
+            {
+              "x": 43,
+              "z": -28,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 51,
+              "z": -27,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 51,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            },
+            {
+              "x": 42,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            }
+          ],
+          "bossHP": 250,
+          "bossPhase": "shield",
+          "bossAttack": null,
+          "selected": "sentinels",
+          "escorts": {},
+          "defenses": {
+            "sentinels": {
+              "started": false,
+              "elapsed": 0,
+              "complete": false
+            }
+          }
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": 0.9996175362635453,
+            "z": 0.0276546776224124
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 26.21666666666646,
+            "x": 48.720314025878906,
+            "y": 1.2474309206008911,
+            "z": -31.734195709228516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.00595726695369918,
+              "z": -0.9999822553277846
+            }
+          },
+          {
+            "id": 2,
+            "type": "switch",
+            "time": 26.433333333333113,
+            "key": "defense:sentinels",
+            "x": 47.54905220512174,
+            "y": 1.281475418806076,
+            "z": -32.0322750065988,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9982767365849848,
+              "z": 0.058681830179645386
+            }
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": -0.005200387886245479,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 60.083782124590655,
+            "y": 10.745328094476857,
+            "z": -15.863334464471908
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 72,
+        "triangles": 83310,
+        "geometries": 113,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "防衛範囲を離れた · 中央でACTIONして再挑戦",
+      "bearing": "← 月の灯台の防衛 · 13m",
+      "missionText": "1 星座の観測庭 · 0/42 月の灯台の防衛 · 中央でACTION3 天空の巨人 · HP 250/250"
+    },
+    {
+      "label": "stage-5-defense-three-waves",
+      "file": "qa/v7/identity-critic-defense-after-navigation-fix/stage-5-defense-three-waves.png",
+      "capturedAt": "2026-10-06T07:39:48.589Z",
+      "state": {
+        "position": {
+          "x": 48.69540786743164,
+          "y": 1.3740785121917725,
+          "z": -32.239013671875
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 44.09999999999878,
+        "stage": 5,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [],
+          "runes": [],
+          "enemies": [
+            {
+              "x": 43.400731416721314,
+              "z": -29.272894108774146,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            },
+            {
+              "x": 50.74719134806725,
+              "z": -27.072080687317808,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            },
+            {
+              "x": 50.540195139890415,
+              "z": -35.24968040802151,
+              "hp": 35,
+              "phase": "patrol",
+              "active": true
+            },
+            {
+              "x": 42,
+              "z": -36,
+              "hp": 35,
+              "phase": "waiting",
+              "active": false
+            }
+          ],
+          "bossHP": 250,
+          "bossPhase": "shield",
+          "bossAttack": null,
+          "selected": "sentinels",
+          "escorts": {},
+          "defenses": {
+            "sentinels": {
+              "started": true,
+              "elapsed": 10.533333333333436,
+              "complete": false
+            }
+          }
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": -0.0038941036525314784,
+            "z": -0.9999924179496279
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 26.21666666666646,
+            "x": 48.720314025878906,
+            "y": 1.2474309206008911,
+            "z": -31.734195709228516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.00595726695369918,
+              "z": -0.9999822553277846
+            }
+          },
+          {
+            "id": 2,
+            "type": "switch",
+            "time": 26.433333333333113,
+            "key": "defense:sentinels",
+            "x": 47.54905220512174,
+            "y": 1.281475418806076,
+            "z": -32.0322750065988,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9982767365849848,
+              "z": 0.058681830179645386
+            }
+          },
+          {
+            "id": 3,
+            "type": "swing",
+            "time": 33.29999999999939,
+            "x": 47.821651458740234,
+            "y": 1.2726073265075684,
+            "z": -32.03340530395508,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.9991745560079794,
+              "z": 0.04062273533696382
+            }
+          },
+          {
+            "id": 4,
+            "type": "switch",
+            "time": 33.39999999999939,
+            "key": "defense:sentinels",
+            "x": 47.549846003573954,
+            "y": 1.281475418806076,
+            "z": -32.01301431341828,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9997200064981022,
+              "z": 0.023662388033215114
+            }
+          },
+          {
+            "id": 5,
+            "type": "swing",
+            "time": 34.08333333333268,
+            "x": 48.267799377441406,
+            "y": 1.1532952785491943,
+            "z": -31.045917510986328,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.7145106022236994,
+              "z": 0.699624613139022
+            }
+          },
+          {
+            "id": 6,
+            "type": "swing",
+            "time": 34.66666666666598,
+            "x": 46.225460052490234,
+            "y": 0.8406808972358704,
+            "z": -28.701522827148438,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": -0.9941715656598198,
+              "z": -0.1078095451873464
+            }
+          },
+          {
+            "id": 7,
+            "type": "hit",
+            "time": 34.816666666665974,
+            "key": "enemy:0",
+            "x": 44.430398064764056,
+            "y": 0.8109875628427955,
+            "z": -28.896182203019254,
+            "damage": 34,
+            "combo": 3,
+            "airborne": false,
+            "facing": {
+              "x": -0.9391214996989568,
+              "z": -0.3435852278593808
+            }
+          },
+          {
+            "id": 8,
+            "type": "swing",
+            "time": 35.26666666666595,
+            "x": 44.69068908691406,
+            "y": 0.8373008966445923,
+            "z": -29.30068016052246,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.9995033989019618,
+              "z": 0.031511197746609244
+            }
+          },
+          {
+            "id": 9,
+            "type": "hit",
+            "time": 35.36666666666594,
+            "key": "enemy:0",
+            "x": 43.400731416721314,
+            "y": 0.8047701022287094,
+            "z": -29.272894108774146,
+            "damage": 21,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9695884262074875,
+              "z": 0.24474125881119338
+            }
+          },
+          {
+            "id": 10,
+            "type": "defeat",
+            "time": 35.36666666666594,
+            "key": "enemy:0",
+            "x": 43.400731416721314,
+            "y": 0.8047701022287094,
+            "z": -29.272894108774146,
+            "combo": 1
+          },
+          {
+            "id": 11,
+            "type": "swing",
+            "time": 38.549999999999095,
+            "x": 49.113258361816406,
+            "y": 1.278379201889038,
+            "z": -31.8049373626709,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.7036112134634911,
+              "z": 0.7105851534393564
+            }
+          },
+          {
+            "id": 12,
+            "type": "swing",
+            "time": 39.133333333332395,
+            "x": 51.020023345947266,
+            "y": 0.9361570477485657,
+            "z": -29.01209831237793,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.17008515891151565,
+              "z": 0.9854293676961553
+            }
+          },
+          {
+            "id": 13,
+            "type": "hit",
+            "time": 39.249999999999055,
+            "key": "enemy:1",
+            "x": 50.79103981774162,
+            "y": 0.8,
+            "z": -27.685427044546067,
+            "damage": 23,
+            "combo": 2,
+            "airborne": false,
+            "facing": {
+              "x": -0.0713085588657823,
+              "z": 0.9974543044332835
+            }
+          },
+          {
+            "id": 14,
+            "type": "swing",
+            "time": 39.716666666665695,
+            "x": 50.82147216796875,
+            "y": 0.853947103023529,
+            "z": -28.434383392333984,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": -0.054158922220856685,
+              "z": 0.9985323285421837
+            }
+          },
+          {
+            "id": 15,
+            "type": "hit",
+            "time": 39.86666666666569,
+            "key": "enemy:1",
+            "x": 50.74719134806725,
+            "y": 0.8,
+            "z": -27.072080687317808,
+            "damage": 34,
+            "combo": 3,
+            "airborne": false,
+            "facing": {
+              "x": -0.06647286291932261,
+              "z": 0.9977882332916683
+            }
+          },
+          {
+            "id": 16,
+            "type": "defeat",
+            "time": 39.86666666666569,
+            "key": "enemy:1",
+            "x": 50.74719134806725,
+            "y": 0.8,
+            "z": -27.072080687317808,
+            "combo": 3
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 0.0000015001621936945044,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 48.69544387075725,
+            "y": 10.374136143547457,
+            "z": -16.239265661177217
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 81,
+        "triangles": 84928,
+        "geometries": 128,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "月の灯台の防衛 残り9.5秒 · 敵2 · 光の範囲で迎撃 / 11m以上離れると再挑戦",
+      "bearing": "← 月の灯台の防衛 · 2m",
+      "missionText": "1 星座の観測庭 · 0/42 月の灯台の防衛 · 残り9.5秒 · 敵23 天空の巨人 · HP 250/250"
+    },
+    {
+      "label": "stage-5-defense-complete",
+      "file": "qa/v7/identity-critic-defense-after-navigation-fix/stage-5-defense-complete.png",
+      "capturedAt": "2026-10-06T07:39:58.945Z",
+      "state": {
+        "position": {
+          "x": 48.699222564697266,
+          "y": 1.261059045791626,
+          "z": -31.817413330078125
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 54.316666666664865,
+        "stage": 5,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [
+            "sentinels"
+          ],
+          "runes": [],
+          "enemies": [
+            {
+              "x": 43.400731416721314,
+              "z": -29.272894108774146,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            },
+            {
+              "x": 50.74719134806725,
+              "z": -27.072080687317808,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            },
+            {
+              "x": 50.62077093009979,
+              "z": -35.39130263416885,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            },
+            {
+              "x": 42.515323650651695,
+              "z": -35.42995048762241,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            }
+          ],
+          "bossHP": 250,
+          "bossPhase": "shield",
+          "bossAttack": null,
+          "selected": "stars",
+          "escorts": {},
+          "defenses": {
+            "sentinels": {
+              "started": true,
+              "elapsed": 20.000000000000146,
+              "complete": true
+            }
+          }
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": 0.6870677512307664,
+            "z": 0.7265933561619577
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 26.21666666666646,
+            "x": 48.720314025878906,
+            "y": 1.2474309206008911,
+            "z": -31.734195709228516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.00595726695369918,
+              "z": -0.9999822553277846
+            }
+          },
+          {
+            "id": 2,
+            "type": "switch",
+            "time": 26.433333333333113,
+            "key": "defense:sentinels",
+            "x": 47.54905220512174,
+            "y": 1.281475418806076,
+            "z": -32.0322750065988,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9982767365849848,
+              "z": 0.058681830179645386
+            }
+          },
+          {
+            "id": 3,
+            "type": "swing",
+            "time": 33.29999999999939,
+            "x": 47.821651458740234,
+            "y": 1.2726073265075684,
+            "z": -32.03340530395508,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.9991745560079794,
+              "z": 0.04062273533696382
+            }
+          },
+          {
+            "id": 4,
+            "type": "switch",
+            "time": 33.39999999999939,
+            "key": "defense:sentinels",
+            "x": 47.549846003573954,
+            "y": 1.281475418806076,
+            "z": -32.01301431341828,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9997200064981022,
+              "z": 0.023662388033215114
+            }
+          },
+          {
+            "id": 5,
+            "type": "swing",
+            "time": 34.08333333333268,
+            "x": 48.267799377441406,
+            "y": 1.1532952785491943,
+            "z": -31.045917510986328,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.7145106022236994,
+              "z": 0.699624613139022
+            }
+          },
+          {
+            "id": 6,
+            "type": "swing",
+            "time": 34.66666666666598,
+            "x": 46.225460052490234,
+            "y": 0.8406808972358704,
+            "z": -28.701522827148438,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": -0.9941715656598198,
+              "z": -0.1078095451873464
+            }
+          },
+          {
+            "id": 7,
+            "type": "hit",
+            "time": 34.816666666665974,
+            "key": "enemy:0",
+            "x": 44.430398064764056,
+            "y": 0.8109875628427955,
+            "z": -28.896182203019254,
+            "damage": 34,
+            "combo": 3,
+            "airborne": false,
+            "facing": {
+              "x": -0.9391214996989568,
+              "z": -0.3435852278593808
+            }
+          },
+          {
+            "id": 8,
+            "type": "swing",
+            "time": 35.26666666666595,
+            "x": 44.69068908691406,
+            "y": 0.8373008966445923,
+            "z": -29.30068016052246,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.9995033989019618,
+              "z": 0.031511197746609244
+            }
+          },
+          {
+            "id": 9,
+            "type": "hit",
+            "time": 35.36666666666594,
+            "key": "enemy:0",
+            "x": 43.400731416721314,
+            "y": 0.8047701022287094,
+            "z": -29.272894108774146,
+            "damage": 21,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9695884262074875,
+              "z": 0.24474125881119338
+            }
+          },
+          {
+            "id": 10,
+            "type": "defeat",
+            "time": 35.36666666666594,
+            "key": "enemy:0",
+            "x": 43.400731416721314,
+            "y": 0.8047701022287094,
+            "z": -29.272894108774146,
+            "combo": 1
+          },
+          {
+            "id": 11,
+            "type": "swing",
+            "time": 38.549999999999095,
+            "x": 49.113258361816406,
+            "y": 1.278379201889038,
+            "z": -31.8049373626709,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.7036112134634911,
+              "z": 0.7105851534393564
+            }
+          },
+          {
+            "id": 12,
+            "type": "swing",
+            "time": 39.133333333332395,
+            "x": 51.020023345947266,
+            "y": 0.9361570477485657,
+            "z": -29.01209831237793,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.17008515891151565,
+              "z": 0.9854293676961553
+            }
+          },
+          {
+            "id": 13,
+            "type": "hit",
+            "time": 39.249999999999055,
+            "key": "enemy:1",
+            "x": 50.79103981774162,
+            "y": 0.8,
+            "z": -27.685427044546067,
+            "damage": 23,
+            "combo": 2,
+            "airborne": false,
+            "facing": {
+              "x": -0.0713085588657823,
+              "z": 0.9974543044332835
+            }
+          },
+          {
+            "id": 14,
+            "type": "swing",
+            "time": 39.716666666665695,
+            "x": 50.82147216796875,
+            "y": 0.853947103023529,
+            "z": -28.434383392333984,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": -0.054158922220856685,
+              "z": 0.9985323285421837
+            }
+          },
+          {
+            "id": 15,
+            "type": "hit",
+            "time": 39.86666666666569,
+            "key": "enemy:1",
+            "x": 50.74719134806725,
+            "y": 0.8,
+            "z": -27.072080687317808,
+            "damage": 34,
+            "combo": 3,
+            "airborne": false,
+            "facing": {
+              "x": -0.06647286291932261,
+              "z": 0.9977882332916683
+            }
+          },
+          {
+            "id": 16,
+            "type": "defeat",
+            "time": 39.86666666666569,
+            "key": "enemy:1",
+            "x": 50.74719134806725,
+            "y": 0.8,
+            "z": -27.072080687317808,
+            "combo": 3
+          },
+          {
+            "id": 17,
+            "type": "swing",
+            "time": 44.033333333332116,
+            "x": 48.69538497924805,
+            "y": 1.3740040063858032,
+            "z": -32.238853454589844,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.5224515331693295,
+              "z": -0.852668983538757
+            }
+          },
+          {
+            "id": 18,
+            "type": "hit",
+            "time": 44.149999999998776,
+            "key": "enemy:2",
+            "x": 50.3593328810533,
+            "y": 2.2770905246917206,
+            "z": -34.95393351400764,
+            "damage": 21,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": 0.513075946499319,
+              "z": -0.8583432140605692
+            }
+          },
+          {
+            "id": 19,
+            "type": "swing",
+            "time": 44.61666666666542,
+            "x": 50.4855842590332,
+            "y": 1.9532911777496338,
+            "z": -33.93956756591797,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": 0.0879337124361678,
+              "z": -0.9961263284429305
+            }
+          },
+          {
+            "id": 20,
+            "type": "hit",
+            "time": 44.73333333333208,
+            "key": "enemy:2",
+            "x": 50.62077093009979,
+            "y": 2.4471367592931346,
+            "z": -35.39130263416885,
+            "damage": 23,
+            "combo": 2,
+            "airborne": false,
+            "facing": {
+              "x": 0.03539418443100122,
+              "z": -0.9993734295589732
+            }
+          },
+          {
+            "id": 21,
+            "type": "defeat",
+            "time": 44.73333333333208,
+            "key": "enemy:2",
+            "x": 50.62077093009979,
+            "y": 2.4471367592931346,
+            "z": -35.39130263416885,
+            "combo": 2
+          },
+          {
+            "id": 22,
+            "type": "swing",
+            "time": 48.69999999999852,
+            "x": 47.99473571777344,
+            "y": 1.4960811138153076,
+            "z": -32.81067657470703,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.7140634940699375,
+              "z": -0.7000809427749283
+            }
+          },
+          {
+            "id": 23,
+            "type": "swing",
+            "time": 49.28333333333182,
+            "x": 45.20509719848633,
+            "y": 1.9947749376296997,
+            "z": -35.32771301269531,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.997547311271113,
+              "z": -0.06999544110706997
+            }
+          },
+          {
+            "id": 24,
+            "type": "hit",
+            "time": 49.39999999999848,
+            "key": "enemy:3",
+            "x": 43.13019229621812,
+            "y": 1.7214283538197837,
+            "z": -35.47330398592386,
+            "damage": 23,
+            "combo": 2,
+            "airborne": false,
+            "facing": {
+              "x": -0.9975235020323758,
+              "z": 0.07033393841570848
+            }
+          },
+          {
+            "id": 25,
+            "type": "swing",
+            "time": 49.883333333331784,
+            "x": 43.805816650390625,
+            "y": 1.8785051107406616,
+            "z": -35.44086456298828,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": -0.999972221107861,
+              "z": 0.007453657666607993
+            }
+          },
+          {
+            "id": 26,
+            "type": "hit",
+            "time": 50.033333333331775,
+            "key": "enemy:3",
+            "x": 42.515323650651695,
+            "y": 1.616970249608402,
+            "z": -35.42995048762241,
+            "damage": 34,
+            "combo": 3,
+            "airborne": false,
+            "facing": {
+              "x": -0.9792845716292936,
+              "z": -0.20248883368924572
+            }
+          },
+          {
+            "id": 27,
+            "type": "defeat",
+            "time": 50.033333333331775,
+            "key": "enemy:3",
+            "x": 42.515323650651695,
+            "y": 1.616970249608402,
+            "z": -35.42995048762241,
+            "combo": 3
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 0.00009750872225878529,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 48.70156134949991,
+            "y": 10.26286952144998,
+            "z": -15.827152953250014
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 74,
+        "triangles": 84780,
+        "geometries": 134,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {
+        "finalEnemyGoneAt": 16.683333333333668,
+        "idleGameSeconds": 13.550000000000065,
+        "finalWaitingSeconds": 3.3166666666663325
+      },
+      "objective": "紋章を獲得！ 1/3 · HP回復",
+      "bearing": "← 星座の観測庭 · 74m",
+      "missionText": "1 星座の観測庭 · 0/42 月の灯台の防衛 · 紋章獲得 ✓3 天空の巨人 · HP 250/250"
+    },
+    {
+      "label": "stage-5-defense-emblem",
+      "file": "qa/v7/identity-critic-defense-after-navigation-fix/stage-5-defense-emblem.png",
+      "capturedAt": "2026-10-06T07:39:59.991Z",
+      "state": {
+        "position": {
+          "x": 47.46048355102539,
+          "y": 0.9969884157180786,
+          "z": -30.54380226135254
+        },
+        "grounded": true,
+        "jumps": 0,
+        "deaths": 0,
+        "paused": false,
+        "elapsed": 55.29999999999814,
+        "stage": 5,
+        "complete": false,
+        "collected": 0,
+        "checkpoint": -1,
+        "field": {
+          "rewards": [
+            "sentinels"
+          ],
+          "runes": [],
+          "enemies": [
+            {
+              "x": 43.400731416721314,
+              "z": -29.272894108774146,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            },
+            {
+              "x": 50.74719134806725,
+              "z": -27.072080687317808,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            },
+            {
+              "x": 50.62077093009979,
+              "z": -35.39130263416885,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            },
+            {
+              "x": 42.515323650651695,
+              "z": -35.42995048762241,
+              "hp": 0,
+              "phase": "stagger",
+              "active": true
+            }
+          ],
+          "bossHP": 250,
+          "bossPhase": "shield",
+          "bossAttack": null,
+          "selected": "stars",
+          "escorts": {},
+          "defenses": {
+            "sentinels": {
+              "started": true,
+              "elapsed": 20.000000000000146,
+              "complete": true
+            }
+          }
+        },
+        "combat": {
+          "attacking": false,
+          "combo": 0,
+          "airborne": false,
+          "name": "",
+          "elapsed": 0,
+          "duration": 1,
+          "windup": 0,
+          "active": 0,
+          "phase": "idle",
+          "facing": {
+            "x": -0.6994349636673969,
+            "z": 0.7146962512841293
+          },
+          "reach": 2.1479999999999997,
+          "buffered": false,
+          "hurt": 0
+        },
+        "combatEvents": [
+          {
+            "id": 1,
+            "type": "swing",
+            "time": 26.21666666666646,
+            "x": 48.720314025878906,
+            "y": 1.2474309206008911,
+            "z": -31.734195709228516,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.00595726695369918,
+              "z": -0.9999822553277846
+            }
+          },
+          {
+            "id": 2,
+            "type": "switch",
+            "time": 26.433333333333113,
+            "key": "defense:sentinels",
+            "x": 47.54905220512174,
+            "y": 1.281475418806076,
+            "z": -32.0322750065988,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9982767365849848,
+              "z": 0.058681830179645386
+            }
+          },
+          {
+            "id": 3,
+            "type": "swing",
+            "time": 33.29999999999939,
+            "x": 47.821651458740234,
+            "y": 1.2726073265075684,
+            "z": -32.03340530395508,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.9991745560079794,
+              "z": 0.04062273533696382
+            }
+          },
+          {
+            "id": 4,
+            "type": "switch",
+            "time": 33.39999999999939,
+            "key": "defense:sentinels",
+            "x": 47.549846003573954,
+            "y": 1.281475418806076,
+            "z": -32.01301431341828,
+            "damage": 0,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9997200064981022,
+              "z": 0.023662388033215114
+            }
+          },
+          {
+            "id": 5,
+            "type": "swing",
+            "time": 34.08333333333268,
+            "x": 48.267799377441406,
+            "y": 1.1532952785491943,
+            "z": -31.045917510986328,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.7145106022236994,
+              "z": 0.699624613139022
+            }
+          },
+          {
+            "id": 6,
+            "type": "swing",
+            "time": 34.66666666666598,
+            "x": 46.225460052490234,
+            "y": 0.8406808972358704,
+            "z": -28.701522827148438,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": -0.9941715656598198,
+              "z": -0.1078095451873464
+            }
+          },
+          {
+            "id": 7,
+            "type": "hit",
+            "time": 34.816666666665974,
+            "key": "enemy:0",
+            "x": 44.430398064764056,
+            "y": 0.8109875628427955,
+            "z": -28.896182203019254,
+            "damage": 34,
+            "combo": 3,
+            "airborne": false,
+            "facing": {
+              "x": -0.9391214996989568,
+              "z": -0.3435852278593808
+            }
+          },
+          {
+            "id": 8,
+            "type": "swing",
+            "time": 35.26666666666595,
+            "x": 44.69068908691406,
+            "y": 0.8373008966445923,
+            "z": -29.30068016052246,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.9995033989019618,
+              "z": 0.031511197746609244
+            }
+          },
+          {
+            "id": 9,
+            "type": "hit",
+            "time": 35.36666666666594,
+            "key": "enemy:0",
+            "x": 43.400731416721314,
+            "y": 0.8047701022287094,
+            "z": -29.272894108774146,
+            "damage": 21,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": -0.9695884262074875,
+              "z": 0.24474125881119338
+            }
+          },
+          {
+            "id": 10,
+            "type": "defeat",
+            "time": 35.36666666666594,
+            "key": "enemy:0",
+            "x": 43.400731416721314,
+            "y": 0.8047701022287094,
+            "z": -29.272894108774146,
+            "combo": 1
+          },
+          {
+            "id": 11,
+            "type": "swing",
+            "time": 38.549999999999095,
+            "x": 49.113258361816406,
+            "y": 1.278379201889038,
+            "z": -31.8049373626709,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.7036112134634911,
+              "z": 0.7105851534393564
+            }
+          },
+          {
+            "id": 12,
+            "type": "swing",
+            "time": 39.133333333332395,
+            "x": 51.020023345947266,
+            "y": 0.9361570477485657,
+            "z": -29.01209831237793,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.17008515891151565,
+              "z": 0.9854293676961553
+            }
+          },
+          {
+            "id": 13,
+            "type": "hit",
+            "time": 39.249999999999055,
+            "key": "enemy:1",
+            "x": 50.79103981774162,
+            "y": 0.8,
+            "z": -27.685427044546067,
+            "damage": 23,
+            "combo": 2,
+            "airborne": false,
+            "facing": {
+              "x": -0.0713085588657823,
+              "z": 0.9974543044332835
+            }
+          },
+          {
+            "id": 14,
+            "type": "swing",
+            "time": 39.716666666665695,
+            "x": 50.82147216796875,
+            "y": 0.853947103023529,
+            "z": -28.434383392333984,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": -0.054158922220856685,
+              "z": 0.9985323285421837
+            }
+          },
+          {
+            "id": 15,
+            "type": "hit",
+            "time": 39.86666666666569,
+            "key": "enemy:1",
+            "x": 50.74719134806725,
+            "y": 0.8,
+            "z": -27.072080687317808,
+            "damage": 34,
+            "combo": 3,
+            "airborne": false,
+            "facing": {
+              "x": -0.06647286291932261,
+              "z": 0.9977882332916683
+            }
+          },
+          {
+            "id": 16,
+            "type": "defeat",
+            "time": 39.86666666666569,
+            "key": "enemy:1",
+            "x": 50.74719134806725,
+            "y": 0.8,
+            "z": -27.072080687317808,
+            "combo": 3
+          },
+          {
+            "id": 17,
+            "type": "swing",
+            "time": 44.033333333332116,
+            "x": 48.69538497924805,
+            "y": 1.3740040063858032,
+            "z": -32.238853454589844,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": 0.5224515331693295,
+              "z": -0.852668983538757
+            }
+          },
+          {
+            "id": 18,
+            "type": "hit",
+            "time": 44.149999999998776,
+            "key": "enemy:2",
+            "x": 50.3593328810533,
+            "y": 2.2770905246917206,
+            "z": -34.95393351400764,
+            "damage": 21,
+            "combo": 1,
+            "airborne": false,
+            "facing": {
+              "x": 0.513075946499319,
+              "z": -0.8583432140605692
+            }
+          },
+          {
+            "id": 19,
+            "type": "swing",
+            "time": 44.61666666666542,
+            "x": 50.4855842590332,
+            "y": 1.9532911777496338,
+            "z": -33.93956756591797,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": 0.0879337124361678,
+              "z": -0.9961263284429305
+            }
+          },
+          {
+            "id": 20,
+            "type": "hit",
+            "time": 44.73333333333208,
+            "key": "enemy:2",
+            "x": 50.62077093009979,
+            "y": 2.4471367592931346,
+            "z": -35.39130263416885,
+            "damage": 23,
+            "combo": 2,
+            "airborne": false,
+            "facing": {
+              "x": 0.03539418443100122,
+              "z": -0.9993734295589732
+            }
+          },
+          {
+            "id": 21,
+            "type": "defeat",
+            "time": 44.73333333333208,
+            "key": "enemy:2",
+            "x": 50.62077093009979,
+            "y": 2.4471367592931346,
+            "z": -35.39130263416885,
+            "combo": 2
+          },
+          {
+            "id": 22,
+            "type": "swing",
+            "time": 48.69999999999852,
+            "x": 47.99473571777344,
+            "y": 1.4960811138153076,
+            "z": -32.81067657470703,
+            "combo": 1,
+            "airborne": false,
+            "name": "薙ぎ払い",
+            "facing": {
+              "x": -0.7140634940699375,
+              "z": -0.7000809427749283
+            }
+          },
+          {
+            "id": 23,
+            "type": "swing",
+            "time": 49.28333333333182,
+            "x": 45.20509719848633,
+            "y": 1.9947749376296997,
+            "z": -35.32771301269531,
+            "combo": 2,
+            "airborne": false,
+            "name": "返しの一撃",
+            "facing": {
+              "x": -0.997547311271113,
+              "z": -0.06999544110706997
+            }
+          },
+          {
+            "id": 24,
+            "type": "hit",
+            "time": 49.39999999999848,
+            "key": "enemy:3",
+            "x": 43.13019229621812,
+            "y": 1.7214283538197837,
+            "z": -35.47330398592386,
+            "damage": 23,
+            "combo": 2,
+            "airborne": false,
+            "facing": {
+              "x": -0.9975235020323758,
+              "z": 0.07033393841570848
+            }
+          },
+          {
+            "id": 25,
+            "type": "swing",
+            "time": 49.883333333331784,
+            "x": 43.805816650390625,
+            "y": 1.8785051107406616,
+            "z": -35.44086456298828,
+            "combo": 3,
+            "airborne": false,
+            "name": "フィニッシュ",
+            "facing": {
+              "x": -0.999972221107861,
+              "z": 0.007453657666607993
+            }
+          },
+          {
+            "id": 26,
+            "type": "hit",
+            "time": 50.033333333331775,
+            "key": "enemy:3",
+            "x": 42.515323650651695,
+            "y": 1.616970249608402,
+            "z": -35.42995048762241,
+            "damage": 34,
+            "combo": 3,
+            "airborne": false,
+            "facing": {
+              "x": -0.9792845716292936,
+              "z": -0.20248883368924572
+            }
+          },
+          {
+            "id": 27,
+            "type": "defeat",
+            "time": 50.033333333331775,
+            "key": "enemy:3",
+            "x": 42.515323650651695,
+            "y": 1.616970249608402,
+            "z": -35.42995048762241,
+            "combo": 3
+          }
+        ],
+        "practiceHits": 0,
+        "camera": {
+          "yaw": 0.0012520814482629569,
+          "intentYaw": 0,
+          "pitch": 0,
+          "position": {
+            "x": 47.49046293047205,
+            "y": 10.006940206177722,
+            "z": -14.581397580545351
+          }
+        },
+        "version": "7.0.0",
+        "exp": 1500,
+        "characters": 1,
+        "name": "らくがきくん",
+        "run": null,
+        "best": null,
+        "records": 0,
+        "calls": 77,
+        "triangles": 84842,
+        "geometries": 134,
+        "quality": "medium",
+        "resolution": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "details": {},
+      "objective": "紋章を獲得！ 1/3 · HP回復",
+      "bearing": "← 星座の観測庭 · 72m",
+      "missionText": "1 星座の観測庭 · 0/42 月の灯台の防衛 · 紋章獲得 ✓3 天空の巨人 · HP 250/250"
+    }
+  ],
+  "errors": [],
+  "movementSamples": [],
+  "defenseSamples": [
+    {
+      "elapsed": 0.3833333333333333,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 47.72007751464844,
+        "y": 1.2508796453475952,
+        "z": -31.97992515563965
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 0.4833333333333333,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 47.909793853759766,
+        "y": 1.2266290187835693,
+        "z": -31.787113189697266
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 0.4833333333333333,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 47.909793853759766,
+        "y": 1.2266290187835693,
+        "z": -31.787113189697266
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 0.5833333333333335,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 48.25568771362305,
+        "y": 1.1899621486663818,
+        "z": -31.44085693359375
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 0.7833333333333341,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 48.08988952636719,
+        "y": 1.0921841859817505,
+        "z": -30.72602081298828
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 0.7833333333333341,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 48.08988952636719,
+        "y": 1.0921841859817505,
+        "z": -30.72602081298828
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 0.8833333333333344,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 47.73879623413086,
+        "y": 1.0188509225845337,
+        "z": -30.308120727539062
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 0.966666666666668,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 47.38934326171875,
+        "y": 0.9332953691482544,
+        "z": -29.926494598388672
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 0.966666666666668,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 47.38934326171875,
+        "y": 0.9332953691482544,
+        "z": -29.926494598388672
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 1.0666666666666678,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 47.02900695800781,
+        "y": 0.8966288566589355,
+        "z": -29.5410213470459
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 1.0666666666666678,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 47.02900695800781,
+        "y": 0.8966288566589355,
+        "z": -29.5410213470459
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 1.1666666666666674,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 46.63274383544922,
+        "y": 0.8599623441696167,
+        "z": -29.126623153686523
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 1.3666666666666667,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 45.847679138183594,
+        "y": 0.8305766582489014,
+        "z": -28.48452377319336
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 1.3666666666666667,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 45.847679138183594,
+        "y": 0.8305766582489014,
+        "z": -28.48452377319336
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 1.4666666666666663,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 45.672401428222656,
+        "y": 0.8292188048362732,
+        "z": -28.419139862060547
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 1.566666666666666,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 45.64883041381836,
+        "y": 0.8286392688751221,
+        "z": -28.393749237060547
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 1.566666666666666,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 45.64883041381836,
+        "y": 0.8286392688751221,
+        "z": -28.393749237060547
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 1.6666666666666656,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 45.447540283203125,
+        "y": 0.8324772119522095,
+        "z": -28.573455810546875
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 1.6666666666666656,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 45.447540283203125,
+        "y": 0.8324772119522095,
+        "z": -28.573455810546875
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 1.7666666666666653,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 45.094154357910156,
+        "y": 0.8397196531295776,
+        "z": -28.911579132080078
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 1.866666666666665,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 44.69068908691406,
+        "y": 0.8373008966445923,
+        "z": -29.30068016052246
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 1.949999999999998,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 44.486854553222656,
+        "y": 0.8343188762664795,
+        "z": -29.497127532958984
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 1.949999999999998,
+      "activeAlive": 1,
+      "allAlive": 4,
+      "position": {
+        "x": 44.486854553222656,
+        "y": 0.8343188762664795,
+        "z": -29.497127532958984
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 2.0499999999999976,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 44.39775848388672,
+        "y": 0.8331369161605835,
+        "z": -29.582500457763672
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 2.1499999999999972,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 44.55711364746094,
+        "y": 0.8367769718170166,
+        "z": -29.80352783203125
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 2.1499999999999972,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 44.55711364746094,
+        "y": 0.8367769718170166,
+        "z": -29.80352783203125
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 2.249999999999997,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 44.890323638916016,
+        "y": 0.869042694568634,
+        "z": -30.15460968017578
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 2.3499999999999965,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 45.28232955932617,
+        "y": 0.9305025339126587,
+        "z": -30.54033851623535
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.3499999999999965,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 45.28232955932617,
+        "y": 0.9305025339126587,
+        "z": -30.54033851623535
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.4333333333333296,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 45.684104919433594,
+        "y": 0.964118480682373,
+        "z": -30.7287654876709
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.533333333333329,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 46.23663330078125,
+        "y": 0.9934151768684387,
+        "z": -30.798858642578125
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.533333333333329,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 46.23663330078125,
+        "y": 0.9934151768684387,
+        "z": -30.798858642578125
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.633333333333329,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 46.73212432861328,
+        "y": 0.9985203146934509,
+        "z": -30.620304107666016
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.7333333333333285,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 47.254329681396484,
+        "y": 0.9773311018943787,
+        "z": -30.458133697509766
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.7333333333333285,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 47.254329681396484,
+        "y": 0.9773311018943787,
+        "z": -30.458133697509766
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.8166666666666615,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 47.67277526855469,
+        "y": 1.0007765293121338,
+        "z": -30.537765502929688
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.916666666666661,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.12908935546875,
+        "y": 1.0630991458892822,
+        "z": -30.81927490234375
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 2.916666666666661,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.12908935546875,
+        "y": 1.0630991458892822,
+        "z": -30.81927490234375
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.016666666666661,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.56589889526367,
+        "y": 1.1429250240325928,
+        "z": -31.171642303466797
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.1166666666666605,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.807830810546875,
+        "y": 1.2331680059432983,
+        "z": -31.63104248046875
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.1166666666666605,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.807830810546875,
+        "y": 1.2331680059432983,
+        "z": -31.63104248046875
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.1166666666666605,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.807830810546875,
+        "y": 1.2331680059432983,
+        "z": -31.63104248046875
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.21666666666666,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.888343811035156,
+        "y": 1.2841882705688477,
+        "z": -31.903783798217773
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.21666666666666,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.888343811035156,
+        "y": 1.2841882705688477,
+        "z": -31.903783798217773
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.3166666666666598,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.91324234008789,
+        "y": 1.3066277503967285,
+        "z": -31.981090545654297
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.4166666666666594,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.920352935791016,
+        "y": 1.3122313022613525,
+        "z": -31.998966217041016
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.4166666666666594,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.920352935791016,
+        "y": 1.3122313022613525,
+        "z": -31.998966217041016
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.4999999999999925,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92177963256836,
+        "y": 1.3124405145645142,
+        "z": -31.999738693237305
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.599999999999992,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.922332763671875,
+        "y": 1.3125951290130615,
+        "z": -31.999530792236328
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.599999999999992,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.922332763671875,
+        "y": 1.3125951290130615,
+        "z": -31.999530792236328
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.6999999999999917,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92250061035156,
+        "y": 1.3125489950180054,
+        "z": -31.99935531616211
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.7999999999999914,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92253875732422,
+        "y": 1.3124277591705322,
+        "z": -31.999183654785156
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.7999999999999914,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92253875732422,
+        "y": 1.3124277591705322,
+        "z": -31.999183654785156
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.8833333333333244,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92253875732422,
+        "y": 1.312345266342163,
+        "z": -31.999040603637695
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.983333333333324,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.922515869140625,
+        "y": 1.3123488426208496,
+        "z": -31.998868942260742
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 3.983333333333324,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.922515869140625,
+        "y": 1.3123488426208496,
+        "z": -31.998868942260742
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.083333333333324,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92249298095703,
+        "y": 1.3122680187225342,
+        "z": -31.99869728088379
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.183333333333324,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92247009277344,
+        "y": 1.3122944831848145,
+        "z": -31.998525619506836
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.183333333333324,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92247009277344,
+        "y": 1.3122944831848145,
+        "z": -31.998525619506836
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.2833333333333234,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.922447204589844,
+        "y": 1.3122830390930176,
+        "z": -31.998353958129883
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.383333333333323,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92242431640625,
+        "y": 1.3120851516723633,
+        "z": -31.99818229675293
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.383333333333323,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92242431640625,
+        "y": 1.3120851516723633,
+        "z": -31.99818229675293
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.483333333333323,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.922401428222656,
+        "y": 1.3121466636657715,
+        "z": -31.998010635375977
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.583333333333322,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92237854003906,
+        "y": 1.3119810819625854,
+        "z": -31.997838973999023
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.583333333333322,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92237854003906,
+        "y": 1.3119810819625854,
+        "z": -31.997838973999023
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.666666666666655,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.922359466552734,
+        "y": 1.3119382858276367,
+        "z": -31.997695922851562
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.766666666666655,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92233657836914,
+        "y": 1.3119254112243652,
+        "z": -31.99752426147461
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.766666666666655,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92233657836914,
+        "y": 1.3119254112243652,
+        "z": -31.99752426147461
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.866666666666655,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92231369018555,
+        "y": 1.3117823600769043,
+        "z": -31.997352600097656
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.966666666666654,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92229080200195,
+        "y": 1.3119194507598877,
+        "z": -31.997180938720703
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 4.966666666666654,
+      "activeAlive": 0,
+      "allAlive": 3,
+      "position": {
+        "x": 48.92229080200195,
+        "y": 1.3119194507598877,
+        "z": -31.997180938720703
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 5.049999999999987,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 48.922271728515625,
+        "y": 1.3117398023605347,
+        "z": -31.997037887573242
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 5.149999999999987,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 49.113258361816406,
+        "y": 1.278379201889038,
+        "z": -31.8049373626709
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 5.249999999999987,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 49.5360107421875,
+        "y": 1.2417123317718506,
+        "z": -31.37952995300293
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 5.349999999999986,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.08229446411133,
+        "y": 1.1683789491653442,
+        "z": -30.825260162353516
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 5.349999999999986,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.08229446411133,
+        "y": 1.1683789491653442,
+        "z": -30.825260162353516
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 5.449999999999986,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.561431884765625,
+        "y": 1.0889345407485962,
+        "z": -30.333436965942383
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 5.533333333333319,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.899349212646484,
+        "y": 1.021712303161621,
+        "z": -29.98177719116211
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 5.533333333333319,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.899349212646484,
+        "y": 1.021712303161621,
+        "z": -29.98177719116211
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 5.633333333333319,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 51.1403694152832,
+        "y": 0.9728235602378845,
+        "z": -29.490270614624023
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 5.733333333333318,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 51.020023345947266,
+        "y": 0.9361570477485657,
+        "z": -29.01209831237793
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 5.833333333333318,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.885807037353516,
+        "y": 0.8994905352592468,
+        "z": -28.765705108642578
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 5.933333333333318,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.842193603515625,
+        "y": 0.872873067855835,
+        "z": -28.684879302978516
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 5.933333333333318,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.842193603515625,
+        "y": 0.872873067855835,
+        "z": -28.684879302978516
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 6.033333333333317,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.82802963256836,
+        "y": 0.8707529306411743,
+        "z": -28.65626335144043
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 6.133333333333317,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.82343292236328,
+        "y": 0.8699474930763245,
+        "z": -28.64510726928711
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 6.133333333333317,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.82343292236328,
+        "y": 0.8699474930763245,
+        "z": -28.64510726928711
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 6.2333333333333165,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.82192611694336,
+        "y": 0.8694589734077454,
+        "z": -28.639617919921875
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 6.416666666666649,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.82125473022461,
+        "y": 0.8389156460762024,
+        "z": -28.234708786010742
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 6.416666666666649,
+      "activeAlive": 1,
+      "allAlive": 3,
+      "position": {
+        "x": 50.82125473022461,
+        "y": 0.8389156460762024,
+        "z": -28.234708786010742
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 6.516666666666649,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 50.8211784362793,
+        "y": 0.8339247703552246,
+        "z": -28.1679630279541
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 6.6166666666666485,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 50.63041305541992,
+        "y": 0.8465483784675598,
+        "z": -28.33481216430664
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 6.6166666666666485,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 50.63041305541992,
+        "y": 0.8465483784675598,
+        "z": -28.33481216430664
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 6.716666666666648,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 50.28330993652344,
+        "y": 0.8671725392341614,
+        "z": -28.669654846191406
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 6.816666666666648,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 49.88331604003906,
+        "y": 0.8890095949172974,
+        "z": -29.057655334472656
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 6.816666666666648,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 49.88331604003906,
+        "y": 0.8890095949172974,
+        "z": -29.057655334472656
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 6.916666666666647,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 49.465065002441406,
+        "y": 0.9155519008636475,
+        "z": -29.46074104309082
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 6.9999999999999805,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 49.10993576049805,
+        "y": 0.9226885437965393,
+        "z": -29.801427841186523
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 6.9999999999999805,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 49.10993576049805,
+        "y": 0.9226885437965393,
+        "z": -29.801427841186523
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.09999999999998,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.68008804321289,
+        "y": 0.9689050912857056,
+        "z": -30.200180053710938
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.19999999999998,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.248016357421875,
+        "y": 1.0286858081817627,
+        "z": -30.592758178710938
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.19999999999998,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.248016357421875,
+        "y": 1.0286858081817627,
+        "z": -30.592758178710938
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.299999999999979,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.19489669799805,
+        "y": 1.096513032913208,
+        "z": -30.994829177856445
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.399999999999979,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.45269012451172,
+        "y": 1.1779232025146484,
+        "z": -31.40055274963379
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.499999999999979,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.62319564819336,
+        "y": 1.269221305847168,
+        "z": -31.88167953491211
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.499999999999979,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.62319564819336,
+        "y": 1.269221305847168,
+        "z": -31.88167953491211
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.599999999999978,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.67506408691406,
+        "y": 1.3455743789672852,
+        "z": -32.14567947387695
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.699999999999978,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69093322753906,
+        "y": 1.3692747354507446,
+        "z": -32.22370910644531
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.699999999999978,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69093322753906,
+        "y": 1.3692747354507446,
+        "z": -32.22370910644531
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.783333333333311,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69480514526367,
+        "y": 1.3746086359024048,
+        "z": -32.24114227294922
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.883333333333311,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69572067260742,
+        "y": 1.3752706050872803,
+        "z": -32.24323654174805
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.883333333333311,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69572067260742,
+        "y": 1.3752706050872803,
+        "z": -32.24323654174805
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 7.98333333333331,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69590377807617,
+        "y": 1.375221610069275,
+        "z": -32.24311065673828
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.066666666666647,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695945739746094,
+        "y": 1.3751857280731201,
+        "z": -32.242977142333984
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.066666666666647,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695945739746094,
+        "y": 1.3751857280731201,
+        "z": -32.242977142333984
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.166666666666652,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69594955444336,
+        "y": 1.37515389919281,
+        "z": -32.24281311035156
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.166666666666652,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69594955444336,
+        "y": 1.37515389919281,
+        "z": -32.24281311035156
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.266666666666657,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695926666259766,
+        "y": 1.3751052618026733,
+        "z": -32.242652893066406
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.366666666666662,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69590377807617,
+        "y": 1.3750123977661133,
+        "z": -32.24249267578125
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.366666666666662,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69590377807617,
+        "y": 1.3750123977661133,
+        "z": -32.24249267578125
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.466666666666667,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69588088989258,
+        "y": 1.3750309944152832,
+        "z": -32.24232864379883
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.566666666666672,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695858001708984,
+        "y": 1.3749568462371826,
+        "z": -32.24216842651367
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.566666666666672,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695858001708984,
+        "y": 1.3749568462371826,
+        "z": -32.24216842651367
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.666666666666677,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69583511352539,
+        "y": 1.3749617338180542,
+        "z": -32.242008209228516
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.766666666666682,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.6958122253418,
+        "y": 1.3748985528945923,
+        "z": -32.24184799194336
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.85000000000002,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69579315185547,
+        "y": 1.3748210668563843,
+        "z": -32.24171447753906
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.85000000000002,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69579315185547,
+        "y": 1.3748210668563843,
+        "z": -32.24171447753906
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 8.950000000000024,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695770263671875,
+        "y": 1.3747729063034058,
+        "z": -32.241554260253906
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.05000000000003,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69574737548828,
+        "y": 1.3747217655181885,
+        "z": -32.241390228271484
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.05000000000003,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69574737548828,
+        "y": 1.3747217655181885,
+        "z": -32.241390228271484
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.150000000000034,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69572448730469,
+        "y": 1.374720573425293,
+        "z": -32.24123001098633
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.250000000000039,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695701599121094,
+        "y": 1.3747806549072266,
+        "z": -32.24106979370117
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.250000000000039,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695701599121094,
+        "y": 1.3747806549072266,
+        "z": -32.24106979370117
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.350000000000044,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.6956787109375,
+        "y": 1.3746000528335571,
+        "z": -32.240909576416016
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.450000000000049,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695655822753906,
+        "y": 1.3745131492614746,
+        "z": -32.24074935913086
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.450000000000049,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695655822753906,
+        "y": 1.3745131492614746,
+        "z": -32.24074935913086
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.550000000000054,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69563293457031,
+        "y": 1.3744806051254272,
+        "z": -32.2405891418457
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.633333333333391,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695613861083984,
+        "y": 1.3745509386062622,
+        "z": -32.240455627441406
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.633333333333391,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.695613861083984,
+        "y": 1.3745509386062622,
+        "z": -32.240455627441406
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.733333333333396,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69559097290039,
+        "y": 1.374496579170227,
+        "z": -32.24029541015625
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.833333333333401,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.6955680847168,
+        "y": 1.374379277229309,
+        "z": -32.240135192871094
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.833333333333401,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.6955680847168,
+        "y": 1.374379277229309,
+        "z": -32.240135192871094
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 9.933333333333406,
+      "activeAlive": 0,
+      "allAlive": 2,
+      "position": {
+        "x": 48.6955451965332,
+        "y": 1.374456763267517,
+        "z": -32.23997497558594
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 10.033333333333411,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 48.69552230834961,
+        "y": 1.3743547201156616,
+        "z": -32.23981475830078
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 10.716666666666779,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 48.732421875,
+        "y": 1.3915222883224487,
+        "z": -32.292449951171875
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 10.816666666666784,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 49.03240966796875,
+        "y": 1.503312349319458,
+        "z": -32.62691879272461
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 10.816666666666784,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 49.03240966796875,
+        "y": 1.503312349319458,
+        "z": -32.62691879272461
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 10.916666666666789,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 49.449607849121094,
+        "y": 1.6443649530410767,
+        "z": -33.04376220703125
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 11.016666666666794,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 49.84410858154297,
+        "y": 1.7637078762054443,
+        "z": -33.38996887207031
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 11.016666666666794,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 49.84410858154297,
+        "y": 1.7637078762054443,
+        "z": -33.38996887207031
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 11.116666666666799,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 50.25778579711914,
+        "y": 1.8851944208145142,
+        "z": -33.74953842163086
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 11.216666666666804,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 50.4855842590332,
+        "y": 1.9532911777496338,
+        "z": -33.93956756591797
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 11.316666666666809,
+      "activeAlive": 1,
+      "allAlive": 2,
+      "position": {
+        "x": 50.5616569519043,
+        "y": 1.9868487119674683,
+        "z": -34.0224723815918
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 11.416666666666814,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 50.58475875854492,
+        "y": 1.990634560585022,
+        "z": -34.03097152709961
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 11.416666666666814,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 50.58475875854492,
+        "y": 1.990634560585022,
+        "z": -34.03097152709961
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 11.500000000000151,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 50.45021438598633,
+        "y": 1.9619735479354858,
+        "z": -33.931053161621094
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 11.600000000000156,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 50.12447738647461,
+        "y": 1.9069734811782837,
+        "z": -33.60801696777344
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 11.600000000000156,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 50.12447738647461,
+        "y": 1.9069734811782837,
+        "z": -33.60801696777344
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 11.700000000000161,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 49.752227783203125,
+        "y": 1.7908623218536377,
+        "z": -33.23556900024414
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 11.800000000000166,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 49.35929489135742,
+        "y": 1.631973385810852,
+        "z": -32.83800506591797
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 11.800000000000166,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 49.35929489135742,
+        "y": 1.631973385810852,
+        "z": -32.83800506591797
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 11.90000000000017,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.957149505615234,
+        "y": 1.503640055656433,
+        "z": -32.42678451538086
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.000000000000176,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.55067825317383,
+        "y": 1.3386400938034058,
+        "z": -32.007442474365234
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.083333333333513,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.31802749633789,
+        "y": 1.2836401462554932,
+        "z": -31.766773223876953
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.083333333333513,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.31802749633789,
+        "y": 1.2836401462554932,
+        "z": -31.766773223876953
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.183333333333518,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.19782638549805,
+        "y": 1.2469732761383057,
+        "z": -31.64242935180664
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.283333333333523,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.15876388549805,
+        "y": 1.2103064060211182,
+        "z": -31.602022171020508
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.283333333333523,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.15876388549805,
+        "y": 1.2103064060211182,
+        "z": -31.602022171020508
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.383333333333528,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.14508056640625,
+        "y": 1.1972136497497559,
+        "z": -31.58478355407715
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.483333333333533,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.139495849609375,
+        "y": 1.1952781677246094,
+        "z": -31.574462890625
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.483333333333533,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.139495849609375,
+        "y": 1.1952781677246094,
+        "z": -31.574462890625
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.583333333333538,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.13667678833008,
+        "y": 1.1938865184783936,
+        "z": -31.56692886352539
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.683333333333543,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.1347541809082,
+        "y": 1.1926255226135254,
+        "z": -31.5603084564209
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.683333333333543,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.1347541809082,
+        "y": 1.1926255226135254,
+        "z": -31.5603084564209
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.783333333333548,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.13312530517578,
+        "y": 1.1913920640945435,
+        "z": -31.553983688354492
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.883333333333553,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.131591796875,
+        "y": 1.1901941299438477,
+        "z": -31.547752380371094
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.883333333333553,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.131591796875,
+        "y": 1.1901941299438477,
+        "z": -31.547752380371094
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 12.96666666666689,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.13032150268555,
+        "y": 1.1893426179885864,
+        "z": -31.542558670043945
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.066666666666896,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.128822326660156,
+        "y": 1.1880881786346436,
+        "z": -31.536380767822266
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.066666666666896,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.128822326660156,
+        "y": 1.1880881786346436,
+        "z": -31.536380767822266
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.1666666666669,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.12733459472656,
+        "y": 1.1869515180587769,
+        "z": -31.530183792114258
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.266666666666906,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.12582778930664,
+        "y": 1.1858065128326416,
+        "z": -31.52397918701172
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.266666666666906,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.12582778930664,
+        "y": 1.1858065128326416,
+        "z": -31.52397918701172
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.36666666666691,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.31372833251953,
+        "y": 1.2248332500457764,
+        "z": -31.701932907104492
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.450000000000248,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.45100021362305,
+        "y": 1.253504991531372,
+        "z": -31.831417083740234
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.450000000000248,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.45100021362305,
+        "y": 1.253504991531372,
+        "z": -31.831417083740234
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.550000000000253,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.50979995727539,
+        "y": 1.2646868228912354,
+        "z": -31.883899688720703
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.650000000000258,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.52790451049805,
+        "y": 1.2676998376846313,
+        "z": -31.89675521850586
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.650000000000258,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.52790451049805,
+        "y": 1.2676998376846313,
+        "z": -31.89675521850586
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.750000000000263,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53289031982422,
+        "y": 1.2679914236068726,
+        "z": -31.8972110748291
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.850000000000268,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53437042236328,
+        "y": 1.2680503129959106,
+        "z": -31.89678382873535
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.850000000000268,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53437042236328,
+        "y": 1.2680503129959106,
+        "z": -31.89678382873535
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 13.950000000000273,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53483200073242,
+        "y": 1.2679612636566162,
+        "z": -31.896577835083008
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.050000000000278,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53496551513672,
+        "y": 1.2680089473724365,
+        "z": -31.896440505981445
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.050000000000278,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53496551513672,
+        "y": 1.2680089473724365,
+        "z": -31.896440505981445
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.133333333333615,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53499221801758,
+        "y": 1.2680432796478271,
+        "z": -31.896343231201172
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.23333333333362,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53498840332031,
+        "y": 1.2679084539413452,
+        "z": -31.896238327026367
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.23333333333362,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53498840332031,
+        "y": 1.2679084539413452,
+        "z": -31.896238327026367
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.333333333333625,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53496551513672,
+        "y": 1.2678894996643066,
+        "z": -31.896135330200195
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.43333333333363,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.534942626953125,
+        "y": 1.267959475517273,
+        "z": -31.896032333374023
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.43333333333363,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.534942626953125,
+        "y": 1.267959475517273,
+        "z": -31.896032333374023
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.516666666666968,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.5349235534668,
+        "y": 1.267883539199829,
+        "z": -31.895946502685547
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.616666666666973,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.5349006652832,
+        "y": 1.267836570739746,
+        "z": -31.895843505859375
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.616666666666973,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.5349006652832,
+        "y": 1.267836570739746,
+        "z": -31.895843505859375
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.716666666666978,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53487777709961,
+        "y": 1.2678210735321045,
+        "z": -31.895740509033203
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.816666666666983,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.534854888916016,
+        "y": 1.2677979469299316,
+        "z": -31.89563751220703
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.816666666666983,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.534854888916016,
+        "y": 1.2677979469299316,
+        "z": -31.89563751220703
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 14.916666666666988,
+      "activeAlive": 0,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53483200073242,
+        "y": 1.2677799463272095,
+        "z": -31.89553451538086
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 15.016666666666993,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53480911254883,
+        "y": 1.267760157585144,
+        "z": -31.895431518554688
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 15.016666666666993,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 48.53480911254883,
+        "y": 1.267760157585144,
+        "z": -31.895431518554688
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 15.10000000000033,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 48.38853454589844,
+        "y": 1.2971980571746826,
+        "z": -32.02337646484375
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 15.200000000000335,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 48.24177551269531,
+        "y": 1.3961011171340942,
+        "z": -32.39364242553711
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 15.30000000000034,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 47.99473571777344,
+        "y": 1.4960811138153076,
+        "z": -32.81067657470703
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 15.400000000000345,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 47.54407501220703,
+        "y": 1.6000677347183228,
+        "z": -33.27823257446289
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 15.50000000000035,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 46.97107696533203,
+        "y": 1.6895254850387573,
+        "z": -33.819007873535156
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 15.50000000000035,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 46.97107696533203,
+        "y": 1.6895254850387573,
+        "z": -33.819007873535156
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 15.600000000000355,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 46.45792770385742,
+        "y": 1.7918144464492798,
+        "z": -34.263946533203125
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 15.70000000000036,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 46.017051696777344,
+        "y": 1.865268349647522,
+        "z": -34.639198303222656
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 15.70000000000036,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 46.017051696777344,
+        "y": 1.865268349647522,
+        "z": -34.639198303222656
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 15.783333333333697,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 45.6480712890625,
+        "y": 1.9261903762817383,
+        "z": -34.951446533203125
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 15.983333333333707,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 44.85343933105469,
+        "y": 2.0077621936798096,
+        "z": -35.546627044677734
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 15.983333333333707,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 44.85343933105469,
+        "y": 2.0077621936798096,
+        "z": -35.546627044677734
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 16.0833333333337,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 44.360069274902344,
+        "y": 1.9726934432983398,
+        "z": -35.62232971191406
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 16.183333333333696,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 44.11576843261719,
+        "y": 1.9360265731811523,
+        "z": -35.640438079833984
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 16.183333333333696,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 44.11576843261719,
+        "y": 1.9360265731811523,
+        "z": -35.640438079833984
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 16.28333333333369,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 44.03343963623047,
+        "y": 1.9205409288406372,
+        "z": -35.640316009521484
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 16.383333333333685,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 44.00338363647461,
+        "y": 1.9145452976226807,
+        "z": -35.633541107177734
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 16.383333333333685,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 44.00338363647461,
+        "y": 1.9145452976226807,
+        "z": -35.633541107177734
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 16.583333333333673,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 43.63076400756836,
+        "y": 1.8173940181732178,
+        "z": -35.26543045043945
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 16.583333333333673,
+      "activeAlive": 1,
+      "allAlive": 1,
+      "position": {
+        "x": 43.63076400756836,
+        "y": 1.8173940181732178,
+        "z": -35.26543045043945
+      },
+      "combatPhase": "windup"
+    },
+    {
+      "elapsed": 16.683333333333668,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 43.56075668334961,
+        "y": 1.7807271480560303,
+        "z": -35.19526672363281
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 16.783333333333662,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 43.73063659667969,
+        "y": 1.7440602779388428,
+        "z": -34.982872009277344
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 16.783333333333662,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 43.73063659667969,
+        "y": 1.7440602779388428,
+        "z": -34.982872009277344
+      },
+      "combatPhase": "strike"
+    },
+    {
+      "elapsed": 16.883333333333656,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 44.0638427734375,
+        "y": 1.6951713562011719,
+        "z": -34.63664245605469
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 16.98333333333365,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 44.44384765625,
+        "y": 1.634060263633728,
+        "z": -34.24869155883789
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 16.98333333333365,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 44.44384765625,
+        "y": 1.634060263633728,
+        "z": -34.24869155883789
+      },
+      "combatPhase": "recover"
+    },
+    {
+      "elapsed": 17.083333333333645,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 44.84243392944336,
+        "y": 1.542393684387207,
+        "z": -33.84122848510742
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.18333333333364,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 45.249412536621094,
+        "y": 1.4996157884597778,
+        "z": -33.42161178588867
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.283333333333633,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 45.742977142333984,
+        "y": 1.4629489183425903,
+        "z": -33.1845817565918
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.283333333333633,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 45.742977142333984,
+        "y": 1.4629489183425903,
+        "z": -33.1845817565918
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.383333333333628,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 46.225616455078125,
+        "y": 1.4911893606185913,
+        "z": -33.27464294433594
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.483333333333622,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 46.6638069152832,
+        "y": 1.5970172882080078,
+        "z": -33.550228118896484
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.483333333333622,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 46.6638069152832,
+        "y": 1.5970172882080078,
+        "z": -33.550228118896484
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.583333333333616,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 47.08567428588867,
+        "y": 1.6279699802398682,
+        "z": -33.528526306152344
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.68333333333361,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 47.50041198730469,
+        "y": 1.5958584547042847,
+        "z": -33.23373794555664
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.68333333333361,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 47.50041198730469,
+        "y": 1.5958584547042847,
+        "z": -33.23373794555664
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.783333333333605,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 47.91153335571289,
+        "y": 1.5591915845870972,
+        "z": -32.84634780883789
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.8833333333336,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.321533203125,
+        "y": 1.4675250053405762,
+        "z": -32.43336868286133
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.8833333333336,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.321533203125,
+        "y": 1.4675250053405762,
+        "z": -32.43336868286133
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.983333333333594,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.587642669677734,
+        "y": 1.3941916227340698,
+        "z": -32.16215133666992
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 17.983333333333594,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.587642669677734,
+        "y": 1.3941916227340698,
+        "z": -32.16215133666992
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.083333333333588,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.687896728515625,
+        "y": 1.3575247526168823,
+        "z": -32.059974670410156
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.183333333333582,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72047424316406,
+        "y": 1.3208578824996948,
+        "z": -32.02677536010742
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.183333333333582,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72047424316406,
+        "y": 1.3208578824996948,
+        "z": -32.02677536010742
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.283333333333577,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.73008728027344,
+        "y": 1.307252049446106,
+        "z": -32.00913619995117
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.38333333333357,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.73214340209961,
+        "y": 1.3035541772842407,
+        "z": -31.995849609375
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.483333333333565,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.73186492919922,
+        "y": 1.3001586198806763,
+        "z": -31.984840393066406
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.483333333333565,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.73186492919922,
+        "y": 1.3001586198806763,
+        "z": -31.984840393066406
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.566666666666894,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.73101043701172,
+        "y": 1.2975988388061523,
+        "z": -31.9761905670166
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.666666666666888,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72974395751953,
+        "y": 1.2944680452346802,
+        "z": -31.966102600097656
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.666666666666888,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72974395751953,
+        "y": 1.2944680452346802,
+        "z": -31.966102600097656
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.766666666666882,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72837448120117,
+        "y": 1.2915188074111938,
+        "z": -31.956050872802734
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.866666666666877,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72697448730469,
+        "y": 1.288451075553894,
+        "z": -31.946067810058594
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.866666666666877,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72697448730469,
+        "y": 1.288451075553894,
+        "z": -31.946067810058594
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 18.96666666666687,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72557067871094,
+        "y": 1.2853888273239136,
+        "z": -31.93610382080078
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.066666666666865,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.724159240722656,
+        "y": 1.2823840379714966,
+        "z": -31.926115036010742
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.066666666666865,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.724159240722656,
+        "y": 1.2823840379714966,
+        "z": -31.926115036010742
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.16666666666686,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.72275161743164,
+        "y": 1.2794002294540405,
+        "z": -31.916126251220703
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.266666666666854,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.721282958984375,
+        "y": 1.2780091762542725,
+        "z": -31.9092960357666
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.266666666666854,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.721282958984375,
+        "y": 1.2780091762542725,
+        "z": -31.9092960357666
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.36666666666685,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.71978759765625,
+        "y": 1.2768654823303223,
+        "z": -31.903100967407227
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.466666666666843,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.71830749511719,
+        "y": 1.2757221460342407,
+        "z": -31.89690399169922
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.466666666666843,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.71830749511719,
+        "y": 1.2757221460342407,
+        "z": -31.89690399169922
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.566666666666837,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.71681594848633,
+        "y": 1.274621605873108,
+        "z": -31.890705108642578
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.66666666666683,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.71533966064453,
+        "y": 1.2734384536743164,
+        "z": -31.884519577026367
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.66666666666683,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.71533966064453,
+        "y": 1.2734384536743164,
+        "z": -31.884519577026367
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.75000000000016,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.714107513427734,
+        "y": 1.2724870443344116,
+        "z": -31.87936019897461
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.850000000000154,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.712623596191406,
+        "y": 1.2713947296142578,
+        "z": -31.873159408569336
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.850000000000154,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.712623596191406,
+        "y": 1.2713947296142578,
+        "z": -31.873159408569336
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 19.95000000000015,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.71112823486328,
+        "y": 1.270237922668457,
+        "z": -31.866968154907227
+      },
+      "combatPhase": "idle"
+    },
+    {
+      "elapsed": 20.000000000000146,
+      "activeAlive": 0,
+      "allAlive": 0,
+      "position": {
+        "x": 48.70964813232422,
+        "y": 1.2690577507019043,
+        "z": -31.860776901245117
+      },
+      "combatPhase": "idle"
+    }
+  ]
+}

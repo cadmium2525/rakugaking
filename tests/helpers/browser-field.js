@@ -17,9 +17,9 @@ export async function playField(page, screenshots = false, order) {
     trace.push({ state, input: previousInput, held: [...held] });
     if (trace.length > 80) trace.shift();
     if (state.deaths) {
-      await mkdir('qa/v6/field-failures', { recursive: true });
+      await mkdir('qa/v7/field-failures', { recursive: true });
       await writeFile(
-        `qa/v6/field-failures/stage-${state.stage}-${Date.now()}.json`,
+        `qa/v7/field-failures/stage-${state.stage}-${Date.now()}.json`,
         JSON.stringify(trace, null, 2),
       );
     }
@@ -37,6 +37,27 @@ export async function playField(page, screenshots = false, order) {
     expect(state.deaths, JSON.stringify(state)).toBe(0);
     if (state.complete) break;
     if (screenshots) {
+      const story = [
+        [
+          'courier-follow',
+          state.field.escorts?.rescue?.started && !state.field.escorts.rescue.arrived,
+        ],
+        ['courier-arrival', state.field.escorts?.rescue?.arrived],
+        ['defense-start', state.field.defenses?.sentinels?.started],
+        [
+          'defense-last-wave',
+          state.field.enemies?.every((e) => e.active) && state.field.defenses?.sentinels?.started,
+        ],
+        ['defense-success', state.field.defenses?.sentinels?.complete],
+        ['clock-repaired', state.stage === 4 && state.field.runes.includes(8)],
+      ];
+      for (const [label, visible] of story)
+        if (visible && !captured.has(label)) {
+          const path = `test-results/expedition/${typeof screenshots === 'string' ? screenshots : `stage-${state.stage}`}-${label}`;
+          await page.screenshot({ path: `${path}.png` });
+          await writeFile(`${path}.json`, JSON.stringify({ state, input: previousInput }, null, 2));
+          captured.add(label);
+        }
       const label =
         state.stage === 4 &&
         state.field.runes.length > 0 &&
@@ -71,7 +92,9 @@ export async function playField(page, screenshots = false, order) {
         dx = 25 - state.position.x,
         dz = -27 - state.position.z,
         d = Math.hypot(dx, dz);
-      if (!drained && d < 11 && !captured.has('water-before')) {
+      if (!drained && !captured.has('water-before'))
+        input = { x: dx / Math.max(1, d), z: dz / Math.max(1, d), jump: false, action: false };
+      if (!drained && d < 2 && !captured.has('water-before')) {
         await page.screenshot({
           path: `test-results/expedition/${screenshots}-water-before.png`,
         });

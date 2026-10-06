@@ -32,8 +32,11 @@ export class FieldHUD {
     const dx = target.x - course.sim.position.x,
       dz = target.z - course.sim.position.z;
     const direction = ((Math.round((Math.atan2(dx, -dz) + cameraYaw) / (Math.PI / 4)) % 8) + 8) % 8;
-    this.root.querySelector('.field-bearing').textContent =
-      `${['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'][direction]} ${f.unlocked ? '北の門' : selected?.short || stage.missions[0].short} · ${Math.round(Math.hypot(dx, dz))}m`;
+    const defenseState = selected?.type === 'defense' ? f.defenses.get(selected.id) : null,
+      bearing = this.root.querySelector('.field-bearing');
+    bearing.textContent = `${['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'][direction]} ${f.unlocked ? '出口の門' : selected?.short || stage.missions[0].short} · ${Math.round(Math.hypot(dx, dz))}m${defenseState?.started && !defenseState.complete ? ` · 灯台${defenseState.hp}` : ''}`;
+    bearing.style.color =
+      defenseState?.started && !defenseState.complete && defenseState.hp <= 30 ? '#98372c' : '';
     const holder = this.root.querySelector('[data-missions]');
     if (this.stageId !== stage.id) {
       this.stageId = stage.id;
@@ -59,6 +62,9 @@ export class FieldHUD {
       button.textContent = `${i + 1} ${m.short} · ${f.rewards.has(m.id) ? '紋章獲得 ✓' : f.done(m.id) ? '紋章を拾う' : progress}`;
       button.setAttribute('aria-pressed', String(f.selected === m.id));
       button.title = m.name;
+      const health = m.type === 'defense' ? f.defenses.get(m.id) : null;
+      button.style.borderColor =
+        health?.started && !health.complete && health.hp <= 30 ? '#c85a47' : '';
     }
     const ctx = this.root.querySelector('canvas').getContext('2d');
     const bounds = stage.mapBounds || { minX: -48, maxX: 48, minZ: -88, maxZ: 24 };
@@ -109,6 +115,7 @@ export class FieldHUD {
     }
     ctx.fillStyle = '#355c4a';
     ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'left';
     ctx.fillText('N ↑', 6, 13);
     stage.missions.forEach((m, i) => {
       const [x, y] = map(m.x, m.z);
@@ -126,11 +133,31 @@ export class FieldHUD {
       ctx.fillText(f.rewards.has(m.id) ? '✓' : String(i + 1), x, y + 4);
     });
     for (const [i, r] of (stage.runes || []).entries())
-      if (stage.expedition && !f.runes.has(i)) {
+      if (stage.expedition && !f.runes.has(i) && f.ready(r.mission)) {
         const [x, y] = map(r.x, r.z);
         ctx.fillStyle = '#fff4c4';
         ctx.fillRect(x - 2, y - 2, 4, 4);
       }
+    for (const [i, enemy] of (f.enemies || []).entries()) {
+      const mission = stage.missions.find((m) => m.id === stage.enemies[i]?.mission);
+      if (mission?.type !== 'defense' || enemy.active === false || enemy.hp <= 0) continue;
+      const [x, y] = map(enemy.x, enemy.z),
+        [tx, ty] = map(mission.x, mission.z);
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(Math.atan2(ty - y, tx - x));
+      ctx.fillStyle = enemy.phase === 'windup' ? '#d73b2e' : '#a44a36';
+      ctx.strokeStyle = '#fff4d4';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(3.5, 0);
+      ctx.lineTo(-2.5, -2.5);
+      ctx.lineTo(-2.5, 2.5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
     const [gx, gy] = map(stage.goal.x, stage.goal.z);
     for (const [i, star] of stage.collectibles.entries())
       if (!course.collected.has(i)) {
@@ -143,8 +170,8 @@ export class FieldHUD {
     ctx.fillStyle = f.unlocked ? '#d99b38' : '#85649d';
     ctx.fillRect(gx - 7, gy - 4, 14, 8);
     ctx.fillStyle = '#355c4a';
-    ctx.textAlign = 'left';
-    ctx.fillText(f.unlocked ? '門 OPEN' : '門 LOCK', gx + 11, gy + 4);
+    ctx.textAlign = gx > 130 ? 'right' : 'left';
+    ctx.fillText(f.unlocked ? '門 OPEN' : '門 LOCK', gx + (gx > 130 ? -11 : 11), gy + 4);
     const [px, py] = map(course.sim.position.x, course.sim.position.z);
     ctx.beginPath();
     ctx.arc(px, py, 4.5, 0, Math.PI * 2);

@@ -46,7 +46,7 @@ for (const stage of STAGES.filter((s) => s.expedition))
     await playField(
       page,
       `stage-${stage.id}`,
-      stage.id === 3 ? ['pearls', 'sluice', 'boss'] : undefined,
+      stage.id === 3 ? ['sluice', 'pearls', 'boss'] : undefined,
     );
     await page.screenshot({ path: `test-results/expedition/stage-${stage.id}-clear.png` });
     expect(errors).toEqual([]);
@@ -73,7 +73,7 @@ test('city timer stays visible with the portrait mission map folded', async ({ p
       started = true;
       break;
     }
-    const input = viewControls(fieldControls(state, i, ['lamps', 'guards', 'boss'], stage), state);
+    const input = viewControls(fieldControls(state, i, ['lamps', 'gears', 'clock'], stage), state);
     for (const [key, on] of [
       ['KeyA', input.x < -0.1],
       ['KeyD', input.x > 0.1],

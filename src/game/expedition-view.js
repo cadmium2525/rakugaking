@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import { addCloud } from './scenery.js';
+import { buildMissionIdentities } from './mission-identity-view.js';
+import { buildWindWaterIdentity } from './wind-water-identity-view.js';
+import { buildCityStarIdentity } from './city-star-identity-view.js';
 export function buildExpedition(world, stage) {
   const height = stage.height,
     batches = new Map(),
@@ -301,8 +304,18 @@ export function buildExpedition(world, stage) {
       add('cone', 0x647f90, x, y + 3, z, 3, 2, 3);
       add('box', 0x384858, x, y + 0.8, z + 1.7, 1.2, 1.6, 0.1);
     }
-    tower(0, -82, 20, 0xe8dec3);
-    add('ring', 0xf6d386, 0, height(0, -82) + 17, -82, 4, 4, 4);
+    const lighthouse = stage.lighthouse || { x: 0, z: -82 };
+    tower(lighthouse.x, lighthouse.z, 20, 0xe8dec3);
+    add(
+      'ring',
+      0xf6d386,
+      lighthouse.x,
+      height(lighthouse.x, lighthouse.z) + 17,
+      lighthouse.z,
+      4,
+      4,
+      4,
+    );
     for (let i = 0; i < 120; i++) {
       const x = -37 + (i % 12) * 1.1,
         z = -6 - Math.floor(i / 12) * 1.3,
@@ -328,16 +341,18 @@ export function buildExpedition(world, stage) {
       add('box', 0x78a8ae, x, y + 0.9, z, 1.5, 1.8, 0.7);
       add('ring', 0xe7c578, x, y + 1.4, z + 0.5, 0.65, 0.65, 0.65);
     }
+    const temple = stage.temple || { x: 0, z: -78 };
     for (const side of [-1, 1])
       for (const z of [-66, -73, -82]) {
-        const x = side * 8,
-          y = height(x, z);
-        add('cylinder', stage.stone, x, y + 4.5, z, 0.7, 9, 0.7);
-        add('box', 0xe5e8d7, x, y + 9, z, 2, 0.55, 2);
+        const x = temple.x + side * 8,
+          pz = z + temple.z + 78,
+          y = height(x, pz);
+        add('cylinder', stage.stone, x, y + 4.5, pz, 0.7, 9, 0.7);
+        add('box', 0xe5e8d7, x, y + 9, pz, 2, 0.55, 2);
       }
-    add('box', 0xadd3cf, 0, height(0, -78) + 9.4, -77, 18, 0.8, 18);
-    add('ico', 0x6fbbc9, 0, height(0, -78) + 12.4, -77, 7, 3, 7);
-    add('cone', 0xf3d49a, 0, height(0, -78) + 16, -77, 1.1, 2.2, 1.1);
+    add('box', 0xadd3cf, temple.x, height(temple.x, temple.z) + 9.4, temple.z + 1, 18, 0.8, 18);
+    add('ico', 0x6fbbc9, temple.x, height(temple.x, temple.z) + 12.4, temple.z + 1, 7, 3, 7);
+    add('cone', 0xf3d49a, temple.x, height(temple.x, temple.z) + 16, temple.z + 1, 1.1, 2.2, 1.1);
     for (let i = 0; i < 18; i++) {
       const a = i * 2.4,
         x = 25 + Math.cos(a) * (10 + (i % 4)),
@@ -569,7 +584,7 @@ export function buildExpedition(world, stage) {
     }
   }
   for (const m of stage.missions) {
-    if (stage.id === 4 && m.type === 'combat')
+    if (stage.id === 4 && m.id === 'gears')
       for (let x = m.x - 9; x <= m.x + 9; x += 2)
         for (let z = m.z - 9; z <= m.z + 9; z += 2)
           add(
@@ -723,17 +738,40 @@ export function buildExpedition(world, stage) {
       root = new THREE.Group();
     root.position.set(r.x, r.y, r.z);
     world.add(root);
-    const pedestal = mesh('cylinder', stage.stone, root);
-    pedestal.position.y = 0.3;
-    pedestal.scale.set(0.8, 0.6, 0.8);
-    const gem = mesh('ico', m.color, root);
+    if (m.type !== 'collect') {
+      const pedestal = mesh('cylinder', stage.stone, root);
+      pedestal.position.y = 0.3;
+      pedestal.scale.set(0.8, 0.6, 0.8);
+    }
+    const gem =
+      m.type === 'collect'
+        ? new THREE.Mesh(
+            stage.id === 4
+              ? new THREE.TorusGeometry(0.5, 0.16, 6, 12)
+              : new THREE.SphereGeometry(0.5, 12, 8),
+            new THREE.MeshStandardMaterial({ color: m.color, roughness: 0.35 }),
+          )
+        : mesh('ico', m.color, root);
+    if (m.type === 'collect') root.add(gem);
+    if (m.type === 'collect' && stage.id === 4)
+      for (let i = 0; i < 8; i++) {
+        const tooth = mesh('box', m.color, gem),
+          a = (i * Math.PI) / 4;
+        tooth.position.set(Math.sin(a) * 0.62, Math.cos(a) * 0.62, 0);
+        tooth.rotation.z = -a;
+        tooth.scale.set(0.18, 0.3, 0.22);
+      }
     gem.position.y = 1.2;
-    gem.scale.setScalar(0.55);
+    gem.scale.setScalar(m.type === 'collect' ? 1 : 0.55);
     const halo = mesh('ring', m.color, root);
     halo.position.y = 1.3;
     halo.scale.setScalar(1.1);
     const tag = label(
-      `${r.index + 1} ${m.type === 'relay' ? '通過' : 'ACTION'}`,
+      m.type === 'collect'
+        ? stage.id === 4
+          ? '歯車'
+          : '真珠'
+        : `${r.index + 1} ${m.type === 'relay' ? '通過' : 'ACTION'}`,
       m.color,
       r.x,
       r.y + 3,
@@ -752,6 +790,11 @@ export function buildExpedition(world, stage) {
   });
   const attackRing = mesh('ring', 0xffedba);
   attackRing.rotation.x = -Math.PI / 2;
+  const identityViews = [
+    buildMissionIdentities(world, stage),
+    buildWindWaterIdentity(world, stage),
+    buildCityStarIdentity(world, stage),
+  ];
   return {
     enemies,
     boss,
@@ -759,6 +802,7 @@ export function buildExpedition(world, stage) {
       const f = course.field,
         p = course.sim.position,
         t = course.elapsed;
+      identityViews.forEach((view) => view.update(course));
       for (const tag of labels)
         if (tag.category === 'area') {
           tag.m.material.opacity = Math.min(
@@ -773,7 +817,7 @@ export function buildExpedition(world, stage) {
       });
       animated.forEach((a) => {
         if (a.kind === 'mill' && f.runes.has(a.index)) a.root.rotation.z = t * 0.65;
-        if (a.kind === 'clock' && f.bossHP <= 0) {
+        if (a.kind === 'clock' && f.done('clock')) {
           a.started ??= t;
           a.root.rotation.z = -(t - a.started) * 0.07;
         }
@@ -794,14 +838,17 @@ export function buildExpedition(world, stage) {
       });
       enemies.forEach(({ root, body }, i) => {
         const e = f.enemies[i];
-        root.visible = e.hp > 0 || t - (e.defeatedAt ?? -Infinity) < 0.45;
+        root.visible = e.active !== false && (e.hp > 0 || t - (e.defeatedAt ?? -Infinity) < 0.45);
         root.position.set(e.x, height(e.x, e.z), e.z);
-        root.rotation.y = Math.atan2(p.x - e.x, p.z - e.z);
+        const mission = f.mission(e.mission),
+          aim = mission?.type === 'defense' ? mission : p;
+        root.rotation.y = Math.atan2(aim.x - e.x, aim.z - e.z);
         body.material.color.setHex(
           e.hitUntil > t ? 0xffffff : e.phase === 'windup' ? 0xef5947 : 0xb77865,
         );
       });
-      boss.root.visible = f.bossHP > 0 || t - (f.bossDefeatedAt ?? -Infinity) < 0.7;
+      boss.root.visible =
+        !stage.boss.disabled && (f.bossHP > 0 || t - (f.bossDefeatedAt ?? -Infinity) < 0.7);
       boss.root.rotation.y =
         f.bossAttack?.kind === 'fan' && (f.bossPhase === 'windup' || f.bossPhase === 'slam')
           ? f.bossAttack.sweep
@@ -830,9 +877,11 @@ export function buildExpedition(world, stage) {
           next = stage.runes.findIndex((n, j) => n.mission === m.id && !f.runes.has(j));
         r.halo.material.emissive.setHex(m.sequence && i === next ? 0x95ffe1 : 0);
         r.halo.material.emissiveIntensity = 0.8;
-        r.tag.visible = !active;
+        r.tag.visible = !active && f.ready(m.id);
         r.root.visible =
-          stage.missions.find((m) => m.id === stage.runes[i].mission).type !== 'relay' || !active;
+          f.ready(m.id) &&
+          m.type !== 'escort' &&
+          ((m.type !== 'relay' && m.type !== 'collect') || !active);
       });
       rewards.forEach((r, i) => {
         const m = stage.missions[i];

@@ -22,7 +22,7 @@ const loops = {
     [53, -45],
     [57, -31],
     [42, -9],
-    [0, 10],
+    [-46, 10],
   ],
   3: [
     [-43, -2],
@@ -30,11 +30,12 @@ const loops = {
     [-55, -42],
     [-32, -53],
     [0, -48],
-    [32, -55],
-    [51, -47],
+    [39, -45],
+    [63, -40],
     [57, -29],
+    [57, -25],
     [44, -7],
-    [0, 10],
+    [52, 15],
   ],
   4: [
     [-44, -7],
@@ -47,7 +48,7 @@ const loops = {
     [57, -30],
     [48, -18],
     [42, 4],
-    [0, 10],
+    [-52, 10],
   ],
   5: [
     [-45, -7],
@@ -60,7 +61,7 @@ const loops = {
     [53, -55],
     [57, -36],
     [43, -13],
-    [0, 10],
+    [-57, 10],
   ],
 };
 function walk(c, points, limit = 14000, digital = false) {
@@ -99,7 +100,6 @@ test('city fountain park offers walkable detours and solid visible furniture', (
       walk(
         c,
         [
-          [-30, 4],
           [-42, 3],
           [-48, -6],
           [-54, -29],
@@ -127,7 +127,10 @@ test('city fountain park offers walkable detours and solid visible furniture', (
           [57, -30],
           [48, -18],
           [42, 4],
-          [0, 10],
+          [4, 5],
+          [-27, -4],
+          [-42, 3],
+          [-52, 10],
         ],
         14000,
         digital,
@@ -140,47 +143,89 @@ test('city fountain park offers walkable detours and solid visible furniture', (
 });
 test('sky ridge colonnade is walkable, rewards detouring, and cannot bypass the locked goal', () => {
   const stage = STAGES[4];
-  for (const stats of builds) {
-    const c = new Course(stage, stats);
-    walk(c, [[38, 2], [57, -36], [53, -55], ...stage.causeway.slice(1), [0, -78]], 16000);
-    assert.ok(
-      c.collected.has(7) && c.collected.has(8),
-      'ridge detour collects two real HP fragments',
-    );
-    assert.equal(c.sim.jumps, 0, 'the raised ridge can be crossed on foot');
-    assert.equal(c.sim.deaths, 0);
-    assert.equal(c.complete, false, 'entering from the north cannot skip the three medals');
-    assert.equal(c.activated, false);
-    assert.ok(c.sim.platforms[stage.platforms.indexOf(stage.gate)].isEnabled());
-    walk(c, [
-      [8, -84],
-      [8, -69],
-      [22, -69],
-      [22, -50],
-      [0, -47],
-    ]);
-    driveField(c, 26000);
-    assert.ok(
-      c.complete,
-      'all real missions, reward pickups and final goal still work after the detour',
-    );
-    assert.equal(c.field.rewards.size, 3);
-    assert.equal(c.sim.deaths, 0);
-    c.dispose();
-  }
-});
-for (const stage of STAGES.filter((s) => s.expedition)) {
-  test(`field ${stage.id}: both bodies walk a full western/eastern loop and collect lookout rewards`, () => {
-    for (const stats of builds) {
+  for (const stats of builds)
+    for (const digital of [false, true]) {
       const c = new Course(stage, stats);
-      walk(c, loops[stage.id]);
-      for (let i = 9; i < stage.collectibles.length; i++)
-        assert.ok(c.collected.has(i), `stage ${stage.id} missed optional reward ${i}`);
-      assert.equal(c.sim.jumps, 0, 'open field loops are walkable without forced jumps');
+      // The expedition now starts in the west and exits behind the castle.
+      // Approach the ridge arches through their openings, then walk around the
+      // locked gate to reach the real goal from behind without any mission keys.
+      walk(
+        c,
+        [
+          [-45, -7],
+          [-23, -15],
+          [10, -26],
+          [26, -29],
+          [47, -29],
+          [57, -36],
+          [53, -55],
+          ...stage.causeway.slice(1),
+          [8, -83],
+          [0, -83],
+          [0, -92],
+          [stage.goal.x, stage.goal.z],
+        ],
+        16000,
+        digital,
+      );
+      assert.ok(
+        c.collected.has(7) && c.collected.has(8),
+        'ridge detour collects two real HP fragments',
+      );
+      assert.equal(c.sim.jumps, 0, 'the raised ridge can be crossed on foot');
       assert.equal(c.sim.deaths, 0);
-      assert.ok(stage.overlooks.every((o) => stage.height(o.x, o.z) > 3));
+      assert.ok(
+        Math.hypot(c.sim.position.x - stage.goal.x, c.sim.position.z - stage.goal.z) < 0.65,
+      );
+      assert.equal(
+        c.complete,
+        false,
+        'entering the actual goal from behind cannot skip the three medals',
+      );
+      assert.equal(c.activated, false);
+      assert.ok(c.sim.platforms[stage.platforms.indexOf(stage.gate)].isEnabled());
+      walk(
+        c,
+        [
+          [0, -92],
+          [0, -83],
+          [8, -83],
+          [25, -83],
+          [25, -77],
+          [36, -68],
+          [36, -61],
+          [20, -66],
+          [0, -47],
+        ],
+        14000,
+        digital,
+      );
+      driveField(c, 26000);
+      assert.ok(
+        c.complete,
+        `all real missions, reward pickups and final goal still work after the detour: ${JSON.stringify({ weight: stats.weight, digital, p: c.sim.position, f: c.field.snapshot() })}`,
+      );
+      assert.equal(c.field.rewards.size, 3);
+      assert.equal(c.sim.deaths, 0);
       c.dispose();
     }
+});
+for (const stage of STAGES.filter((s) => s.expedition)) {
+  test(`field ${stage.id}: both bodies and control styles walk a full western/eastern loop and collect lookout rewards`, () => {
+    for (const stats of builds)
+      for (const digital of [false, true]) {
+        const c = new Course(stage, stats);
+        walk(c, loops[stage.id], 14000, digital);
+        for (let i = 9; i < stage.collectibles.length; i++)
+          assert.ok(c.collected.has(i), `stage ${stage.id} missed optional reward ${i}`);
+        assert.equal(c.sim.jumps, 0, 'open field loops are walkable without forced jumps');
+        assert.equal(c.sim.deaths, 0);
+        assert.ok(
+          Math.hypot(c.sim.position.x - stage.spawn.x, c.sim.position.z - stage.spawn.z) < 0.65,
+        );
+        assert.ok(stage.overlooks.every((o) => stage.height(o.x, o.z) > 3));
+        c.dispose();
+      }
   });
   test(`field ${stage.id}: a heavy body can cross the southern meadow outside marked roads`, () => {
     const c = new Course(

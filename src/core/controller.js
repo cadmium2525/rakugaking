@@ -16,6 +16,7 @@ export class Simulation {
     this.world = new RAPIER.World({ x: 0, y: -22, z: 0 });
     this.world.timestep = DT;
     this.actorShape = new RAPIER.Ball(0.65);
+    this.courierShape = new RAPIER.Ball(0.35);
     this.platforms = platforms.map((p) => {
       const desc = (
         p.terrain
@@ -143,21 +144,52 @@ export class Simulation {
     );
   }
   moveActor(p, motion) {
-    const hit = this.world.castShape(
-      p,
-      { x: 0, y: 0, z: 0, w: 1 },
-      { x: motion.x, y: 0, z: motion.z },
-      this.actorShape,
-      0.025,
-      1,
-      true,
-      undefined,
-      undefined,
-      this.collider,
-      this.body,
-      (collider) => !this.terrainHandles.has(collider.handle),
-    );
+    const cast = (from, x, z) =>
+      this.world.castShape(
+        from,
+        { x: 0, y: 0, z: 0, w: 1 },
+        { x, y: 0, z },
+        motion.courier ? this.courierShape : this.actorShape,
+        motion.courier ? 0.01 : 0.025,
+        1,
+        true,
+        undefined,
+        undefined,
+        this.collider,
+        this.body,
+        (collider) => !this.terrainHandles.has(collider.handle),
+      );
+    const hit = cast(p, motion.x, motion.z);
     const t = hit ? Math.max(0, hit.time_of_impact - 0.01) : 1;
-    return { x: p.x + motion.x * t, z: p.z + motion.z * t };
+    const next = { x: p.x + motion.x * t, z: p.z + motion.z * t };
+    if (motion.courier) {
+      next.avoidSide = undefined;
+      if (hit && t < 0.98) {
+        const length = Math.hypot(hit.normal1.x, hit.normal1.z);
+        if (length > 0.05) {
+          const nx = hit.normal1.x / length,
+            nz = hit.normal1.z / length,
+            rx = motion.x * (1 - t),
+            rz = motion.z * (1 - t),
+            into = rx * nx + rz * nz;
+          let sx = rx - into * nx,
+            sz = rz - into * nz;
+          // Keep one avoidance side around narrow posts. Each lateral step
+          // still uses a new physical cast instead of bypassing the obstacle.
+          const side = motion.avoidSide ?? (rx * nz - rz * nx >= 0 ? 1 : -1);
+          if (Math.hypot(sx, sz) < Math.hypot(rx, rz) * 0.35) {
+            const remaining = Math.hypot(rx, rz);
+            sx = nz * side * remaining;
+            sz = -nx * side * remaining;
+          }
+          const slide = cast({ ...next, y: p.y }, sx, sz),
+            fraction = slide ? Math.max(0, slide.time_of_impact - 0.01) : 1;
+          next.x += sx * fraction;
+          next.z += sz * fraction;
+          next.avoidSide = side;
+        }
+      }
+    }
+    return next;
   }
 }

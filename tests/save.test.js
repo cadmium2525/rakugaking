@@ -2,13 +2,13 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { freshSave, migrateSave, SaveStore } from '../src/core/save.js';
 import { calculateStats } from '../src/core/stats.js';
-test('combat release archives 5.0 timings and preserves earned medals, characters and mute', () => {
+test('stage identity release archives 6.0 timings and preserves earned medals, characters and mute', () => {
   const raw = freshSave();
   raw.player.medals = { 1: 3, 2: 2, 3: 1, 4: 3, 5: 2 };
   raw.settings.sound = false;
   raw.records = [
     {
-      version: '5.0.0',
+      version: '6.0.0',
       total: 200,
       splits: [60, 30, 30, 30, 50],
       valid: true,

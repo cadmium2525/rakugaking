@@ -133,24 +133,29 @@ export function finishExpedition(stage, rawHeight) {
         visible: false,
       });
   }
-  stage.spawn = { x: 0, y: ground(0, 10) + 1.8, z: 10 };
-  stage.goal = { x: 0, y: ground(0, -78), z: -78 };
+  const start = stage.spawn || { x: 0, z: 10 },
+    finish = stage.goal || { x: 0, z: -78 };
+  stage.spawn = { ...start, y: start.y ?? ground(start.x, start.z) + 1.8 };
+  stage.goal = { ...finish, y: finish.y ?? ground(finish.x, finish.z) };
+  const gateInput = stage.gate || {};
   stage.gate = {
-    x: 0,
+    x: stage.goal.x,
     y: stage.goal.y + 2.5,
-    z: -75,
+    z: stage.goal.z + 3,
     w: 5,
     h: 5,
     d: 0.6,
     gate: true,
     visible: false,
+    ...gateInput,
   };
+  stage.gate.y = gateInput.y ?? ground(stage.gate.x, stage.gate.z) + stage.gate.h / 2;
   stage.platforms.push(stage.gate);
   stage.platforms.push(
     ...[-1, 1].map((side) => ({
-      x: side * 3.5,
+      x: stage.gate.x + side * 3.5,
       z: stage.gate.z,
-      y: ground(side * 3.5, stage.gate.z) + 3,
+      y: ground(stage.gate.x + side * 3.5, stage.gate.z) + 3,
       w: 1.8,
       h: 6,
       d: 2,
@@ -269,7 +274,8 @@ export function finishExpedition(stage, rawHeight) {
     stage.platforms.push({ x, z, y: top - 0.15, w: 5, d: 5, h: 0.3, color: stage.stone });
   }
   stage.missions.forEach((m) => {
-    m.reward = { x: m.x, z: m.z, y: ground(m.x, m.z) + 1.1 };
+    const reward = m.reward || { x: m.x, z: m.z };
+    m.reward = { ...reward, y: reward.y ?? ground(reward.x, reward.z) + 1.1 };
   });
   stage.runes = stage.missions.flatMap((m) =>
     (m.nodes || []).map(([x, z], index) => ({ x, z, y: ground(x, z), mission: m.id, index })),
@@ -278,7 +284,7 @@ export function finishExpedition(stage, rawHeight) {
     (m.enemies || []).map(([x, z]) => ({ x, z, hp: m.enemyHP || 35, mission: m.id })),
   );
   stage.boss.y = ground(stage.boss.x, stage.boss.z);
-  stage.boss.name ||= stage.missions.find((m) => m.type === 'boss').short;
+  stage.boss.name ||= stage.missions.find((m) => m.type === 'boss')?.short || '時計の機構';
   stage.collectibles = (stage.stars || []).map(([x, z]) => {
     const top = stage.platforms
       .filter(

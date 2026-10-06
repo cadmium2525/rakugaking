@@ -98,7 +98,7 @@ export function migrateSave(raw) {
     ...(Array.isArray(raw.legacyRecords) ? raw.legacyRecords : []),
     ...(Array.isArray(raw.records)
       ? raw.records.filter((r) =>
-          ['1.0.0', '2.0.0', '2.1.0', '3.0.0', '4.0.0', '4.1.0', '5.0.0'].includes(r?.version),
+          ['1.0.0', '2.0.0', '2.1.0', '3.0.0', '4.0.0', '4.1.0', '5.0.0', '6.0.0'].includes(r?.version),
         )
       : []),
   ]

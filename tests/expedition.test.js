@@ -119,8 +119,8 @@ test('temple roof underside blocks jumps in a local collision fixture and allows
     c = new Course(
       {
         ...s,
-        platforms: [...s.platforms, { x: 0, y: floor - 0.2, z: roof.z, w: 22, h: 0.4, d: 24 }],
-        spawn: { x: 0, y: floor + 0.82, z: roof.z },
+        platforms: [...s.platforms, { x: roof.x, y: floor - 0.2, z: roof.z, w: 22, h: 0.4, d: 24 }],
+        spawn: { x: roof.x, y: floor + 0.82, z: roof.z },
       },
       { speed: 6, jump: 8.5, weight: 1, hp: 100 },
     );
@@ -134,7 +134,7 @@ test('temple roof underside blocks jumps in a local collision fixture and allows
   }
   assert.ok(contacts > 0, 'fixture actually contacts the roof');
   for (let i = 0; i < 220; i++) c.step({ x: 1 });
-  assert.ok(c.sim.position.x > 10, 'character can leave the underside of the roof');
+  assert.ok(c.sim.position.x > roof.x+10, 'character can leave the underside of the roof');
   assert.equal(c.sim.deaths, 0);
   c.dispose();
 });
@@ -207,6 +207,7 @@ test('final giant is shielded until both prerequisites and has two distinct shoc
   c.field.enemies.forEach((e) => {
     e.hp = 0;
   });
+  c.field.defenses.get('sentinels').complete = true;
   let waves = 0,
     previous = '';
   for (let i = 0; i < 570; i++) {
