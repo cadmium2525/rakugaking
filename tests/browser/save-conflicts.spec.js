@@ -100,6 +100,8 @@ test('a stale settings tab cannot erase another tab character and can save after
   page,
   context,
 }) => {
+  // Four WebGL boots across two tabs can exceed 30s on CI's software renderer.
+  test.setTimeout(60000);
   await ready(page);
   const other = await context.newPage();
   await ready(other);
