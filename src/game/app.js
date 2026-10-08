@@ -15,12 +15,14 @@ import { sanitizeDrawing } from '../core/shape.js';
 import { RankingPanel } from '../ui/ranking-panel.js';
 import { Library } from '../ui/library.js';
 import { SAVE_VERSION } from '../core/save.js';
-import { GAME_VERSION } from '../core/ranking.js';
+import { APP_VERSION, GAME_VERSION } from '../core/ranking.js';
 import { FieldHUD } from '../ui/field-hud.js';
 import { Combat } from '../core/combat.js';
 import { cameraMovement } from '../core/camera.js';
 import { CameraInput } from '../ui/camera-input.js';
 import { CombatAudio } from '../ui/combat-audio.js';
+import { addLocalRecord, restoreLocalRecords } from '../core/records.js';
+import { localId } from '../core/local-id.js';
 
 export class GameApp {
   constructor(store, data, notice) {
@@ -29,9 +31,9 @@ export class GameApp {
     this.characters = data.characters;
     this.active = data.active;
     this.settings = data.settings;
-    this.records = data.records;
+    Object.assign(this, restoreLocalRecords(data));
     this.legacyRecords = data.legacyRecords || [];
-    this.best = data.best;
+    this.finishedRecord = null;
     const active = this.characters.find((c) => c.id === this.active);
     this.drawing = active?.drawing || defaultDrawing();
     this.name = active?.name || 'らくがきくん';
@@ -85,7 +87,7 @@ export class GameApp {
       this.save();
     };
     $('#camera-reset').onclick = () => this.view.resetCamera();
-    $('#game-version').textContent = `v${GAME_VERSION}`;
+    $('#game-version').textContent = `v${APP_VERSION}`;
     $('#world').addEventListener('webglcontextlost', (e) => {
       e.preventDefault();
       this.run?.timer.invalidate('描画が中断したため記録対象外');
@@ -121,7 +123,7 @@ export class GameApp {
       button.disabled = true;
       $('#submit-status').textContent = '記録を送信しています…';
       try {
-        await this.ranking.submit(this.records.at(-1), $('#player-name').value.trim());
+        await this.ranking.submit(this.finishedRecord, $('#player-name').value.trim());
         $('#submit-status').textContent = '登録しました。広場のランキングで確認できます。';
       } catch (error) {
         $('#submit-status').textContent = error.message;
@@ -199,31 +201,71 @@ export class GameApp {
       ? 'ALL STAGES TIME ATTACK →'
       : 'TIME ATTACK · 5ステージクリアで解放';
   }
-  birth(drawing, name) {
-    if (this.characters.length >= 24) {
-      this.editor.root.querySelector('#editor-feedback').textContent =
-        '24体まで保存できます。なかま一覧で不要なキャラクターを削除してください。';
-      return;
+  async birth(drawing, name) {
+    if (this.birthing) return;
+    this.birthing = true;
+    const editorSession = this.editor.session,
+      editorDrawing = JSON.stringify(this.editor.history.data);
+    const button = this.editor.root.querySelector('[data-do="birth"]');
+    button.disabled = true;
+    try {
+      // Earlier settings/library saves may already include a failed birth.
+      // Let their completion confirm it before choosing a retry's character.
+      await this.store.pending;
+      let character =
+        this.pendingBirthSession === editorSession
+          ? this.characters.find((c) => c.id === this.pendingBirth)
+          : null;
+      if (!character && this.characters.length >= 24) {
+        this.editor.feedback(
+          '24体まで保存できます。なかま一覧で不要なキャラクターを削除してください。',
+        );
+        return;
+      }
+      if (!character) {
+        character = { id: localId() };
+        this.characters.push(character);
+      }
+      this.pendingBirth = character.id;
+      this.pendingBirthSession = editorSession;
+      this.pendingBirthAttempt = {};
+      Object.assign(character, {
+        drawing: sanitizeDrawing(drawing),
+        name,
+        stats: calculateStats(drawing),
+      });
+      if (!(await this.selectCharacter(character))) {
+        this.editor.feedback($('#save-status').textContent);
+        return;
+      }
+      const currentName =
+        this.editor.root.querySelector('#character-name').value.trim() || 'ななしのラクガキ';
+      if (
+        this.editor.root.open &&
+        this.editor.session === editorSession &&
+        JSON.stringify(this.editor.history.data) === editorDrawing &&
+        currentName === name &&
+        this.editor.pointer === null
+      )
+        this.editor.root.close();
+      else if (this.editor.root.open)
+        this.editor.feedback('誕生時の絵を保存しました。描き足した絵はこの画面に残っています。');
+      if (!this.course) {
+        this.sim.reset();
+        this.view.celebrate();
+      }
+      $('#birth-banner').hidden = false;
+      clearTimeout(this.birthBannerTimeout);
+      this.birthBannerTimeout = setTimeout(() => ($('#birth-banner').hidden = true), 1400);
+      $('.intro h1').innerHTML = 'ヒーローが、<br>うまれた。';
+      $('.intro>p:not(.eyebrow)').textContent = `${name}と、一緒に冒険へ。`;
+      $('.pill').textContent = statRows(this.sim.stats)
+        .map(([k, v]) => `${k} ${v}`)
+        .join(' · ');
+    } finally {
+      this.birthing = false;
+      if (this.editor.root.open) this.editor.render();
     }
-    const character = {
-      id: crypto.randomUUID(),
-      drawing: sanitizeDrawing(drawing),
-      name,
-      stats: calculateStats(drawing),
-    };
-    this.characters.push(character);
-    this.selectCharacter(character);
-    this.editor.root.close();
-    this.sim.reset();
-    this.view.celebrate();
-    $('#birth-banner').hidden = false;
-    clearTimeout(this.birthBannerTimeout);
-    this.birthBannerTimeout = setTimeout(() => ($('#birth-banner').hidden = true), 1400);
-    $('.intro h1').innerHTML = 'ヒーローが、<br>うまれた。';
-    $('.intro>p:not(.eyebrow)').textContent = `${name}と、一緒に冒険へ。`;
-    $('.pill').textContent = statRows(this.sim.stats)
-      .map(([k, v]) => `${k} ${v}`)
-      .join(' · ');
   }
   selectCharacter(character) {
     this.active = character.id;
@@ -237,9 +279,13 @@ export class GameApp {
     }
     this.sim.stats = levelStats(calculateStats(this.drawing), levelFromExp(this.player.exp));
     this.homeCombat.stats = this.sim.stats;
-    this.save();
+    return this.save();
   }
   async save() {
+    const pendingBirth = this.pendingBirth,
+      pendingAttempt = this.pendingBirthAttempt,
+      includesPendingBirth =
+        pendingBirth && this.characters.some((character) => character.id === pendingBirth);
     const data = {
       version: SAVE_VERSION,
       player: this.player,
@@ -248,13 +294,26 @@ export class GameApp {
       records: this.records.slice(-20),
       legacyRecords: this.legacyRecords,
       best: this.best,
+      bestRecord: this.bestRecord,
+      bestVersion: this.bestVersion,
       settings: this.settings,
     };
     $('#save-status').textContent = '保存しています…';
     try {
       const result = await this.store.save(data);
       $('#save-status').textContent = result;
-      return result.startsWith('この端末に保存しました');
+      const saved = result.startsWith('この端末に保存しました');
+      if (
+        saved &&
+        includesPendingBirth &&
+        this.pendingBirth === pendingBirth &&
+        this.pendingBirthAttempt === pendingAttempt
+      ) {
+        this.pendingBirth = null;
+        this.pendingBirthSession = null;
+        this.pendingBirthAttempt = null;
+      }
+      return saved;
     } catch (error) {
       $('#save-status').textContent = `保存できません: ${error.message}`;
       return false;
@@ -279,6 +338,7 @@ export class GameApp {
   }
   startStage(id) {
     if (!this.run && id > this.player.unlocked) return;
+    this.finishedRecord = null;
     this.sim.dispose();
     this.course = new Course(
       getStage(id),
@@ -299,6 +359,7 @@ export class GameApp {
   }
   goHome() {
     this.run = null;
+    this.finishedRecord = null;
     this.course = null;
     this.sim.dispose();
     this.sim = new Simulation(
@@ -359,7 +420,7 @@ export class GameApp {
       time = this.run.timer.endStage(this.course.stage.id);
       if (this.run.timer.finished) {
         const record = {
-          id: crypto.randomUUID(),
+          id: localId(),
           version: GAME_VERSION,
           character: this.run.name,
           level: this.run.level,
@@ -370,9 +431,8 @@ export class GameApp {
           valid: this.run.timer.valid,
           reason: this.run.timer.reason,
         };
-        this.records.push(record);
-        if (record.valid && (this.best === null || record.total < this.best))
-          this.best = record.total;
+        this.finishedRecord = record;
+        Object.assign(this, addLocalRecord(this, record));
       }
     }
     $('#result-title').textContent = this.run?.timer.finished
@@ -397,7 +457,10 @@ export class GameApp {
     if (!this.paused) {
       this.accumulator += delta;
       while (this.accumulator >= DT) {
-        const controls = cameraMovement(this.input.read(), this.course ? this.view.cameraHeading : 0);
+        const controls = cameraMovement(
+          this.input.read(),
+          this.course ? this.view.cameraHeading : 0,
+        );
         this.actionHeld = controls.action;
         if (!this.course) {
           this.homeCombat.update(controls, DT, {
@@ -489,7 +552,7 @@ export class GameApp {
           z: this.view.camera.position.z,
         },
       },
-      version: GAME_VERSION,
+      version: APP_VERSION,
       exp: this.player.exp,
       characters: this.characters.length,
       name: this.name,

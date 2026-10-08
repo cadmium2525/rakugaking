@@ -26,6 +26,7 @@ export class Editor {
       selected: -1,
       pointer: null,
       stroke: null,
+      drag: null,
       previewAngle: 0.35,
       previewRevision: 0,
     });
@@ -93,13 +94,12 @@ export class Editor {
     for (const event of ['pointercancel', 'lostpointercapture'])
       this.canvas.addEventListener(event, (e) => {
         if (e.pointerId === this.pointer) {
-          this.stroke = null;
-          this.finish();
+          this.cancelGesture();
+          this.render();
         }
       });
     this.root.addEventListener('close', () => {
-      this.stroke = null;
-      this.pointer = null;
+      this.cancelGesture();
       clearTimeout(this.previewPending);
       this.previewPending = null;
     });
@@ -119,8 +119,8 @@ export class Editor {
     });
     window.addEventListener('resize', () => {
       if (this.pointer !== null) {
-        this.stroke = null;
-        this.finish();
+        this.cancelGesture();
+        this.render();
       }
     });
   }
@@ -326,12 +326,22 @@ export class Editor {
       const s = this.stroke;
       this.history.change((d) => d.strokes.push(s));
     }
+    this.cancelGesture();
+    this.render();
+  }
+  cancelGesture() {
+    const pointer = this.pointer;
     this.stroke = null;
     this.drag = null;
     this.pointer = null;
-    this.render();
+    // Capture release may dispatch lostpointercapture. Clear transient state
+    // first so a closed dialog cannot commit or resume the previous gesture.
+    if (pointer !== null && this.canvas.hasPointerCapture(pointer))
+      this.canvas.releasePointerCapture(pointer);
   }
   open(drawing) {
+    this.session = (this.session || 0) + 1;
+    this.cancelGesture();
     this.previewPanel.hidden = true;
     this.selected = -1;
     this.tool = 'pen';

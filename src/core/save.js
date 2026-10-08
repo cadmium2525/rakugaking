@@ -1,8 +1,10 @@
 import { defaultDrawing } from './drawing.js';
 import { sanitizeDrawing } from './shape.js';
 import { newPlayer } from './progression.js';
-import { validateRecord, GAME_VERSION } from './ranking.js';
+import { GAME_VERSION } from './ranking.js';
 import { calculateStats } from './stats.js';
+import { restoreLocalRecords, validateLocalRecord } from './records.js';
+import { localId } from './local-id.js';
 export const SAVE_VERSION = 4;
 const finite = (v, min, max, fallback) =>
   Number.isFinite(v) ? Math.max(min, Math.min(max, v)) : fallback;
@@ -16,6 +18,8 @@ export function freshSave() {
     records: [],
     legacyRecords: [],
     best: null,
+    bestRecord: null,
+    bestVersion: null,
     settings: { quality: 'medium', sound: true },
   };
 }
@@ -91,26 +95,26 @@ export function migrateSave(raw) {
   data.active = data.characters.some((c) => c.id === raw.active)
     ? raw.active
     : data.characters[0].id;
-  data.records = (Array.isArray(raw.records) ? raw.records : [])
-    .slice(-20)
-    .filter((r) => validateRecord({ ...r, player: r?.player || 'ゲスト' }).length === 0);
+  Object.assign(data, restoreLocalRecords(raw));
   data.legacyRecords = [
     ...(Array.isArray(raw.legacyRecords) ? raw.legacyRecords : []),
     ...(Array.isArray(raw.records)
       ? raw.records.filter((r) =>
-          ['1.0.0', '2.0.0', '2.1.0', '3.0.0', '4.0.0', '4.1.0', '5.0.0', '6.0.0'].includes(r?.version),
+          ['1.0.0', '2.0.0', '2.1.0', '3.0.0', '4.0.0', '4.1.0', '5.0.0', '6.0.0'].includes(
+            r?.version,
+          ),
         )
       : []),
   ]
     .filter(
       (r) =>
-        validateRecord({ ...r, version: GAME_VERSION, player: r?.player || 'ゲスト' }).length === 0,
+        validateLocalRecord({ ...r, version: GAME_VERSION, player: r?.player || 'ゲスト' })
+          .length === 0,
     )
     .slice(-20);
   if (data.legacyRecords.length && !raw.legacyRecords?.length)
     notice =
       'ゲームの更新に伴い、旧タイムは退避して新しいベストを別に記録します。キャラクターと進行はそのままです。';
-  data.best = data.records.length ? Math.min(...data.records.map((r) => r.total)) : null;
   data.settings.quality = ['low', 'medium', 'high'].includes(raw.settings?.quality)
     ? raw.settings.quality
     : 'medium';
@@ -133,6 +137,18 @@ export class SaveStore {
     this.mode = 'indexeddb';
     this.readOnly = false;
     this.pending = Promise.resolve();
+    this.loaded = false;
+    this.expected = null;
+    this.lastSavedAt = 0;
+    this.saveRevision = 0;
+    this.conflicted = false;
+    this.databaseKnown = false;
+    this.conflictKey = `conflict:${localId()}`;
+    try {
+      this.locks = Object.hasOwn(options, 'locks') ? options.locks : globalThis.navigator?.locks;
+    } catch {
+      this.locks = null;
+    }
   }
   async open() {
     if (this.db) return this.db;
@@ -180,14 +196,25 @@ export class SaveStore {
       request.onerror = () => reject(request.error);
     });
   }
-  async dbWrite(data, key = 'main') {
+  async dbWrite(data, key = 'main', expected) {
     const db = await this.open();
     return new Promise((resolve, reject) => {
       const tx = db.transaction('saves', 'readwrite');
-      tx.objectStore('saves').put(data, key);
+      const saves = tx.objectStore('saves');
+      let conflict;
+      if (expected !== undefined) {
+        const request = saves.get('main');
+        request.onsuccess = () => {
+          const latest = chooseSave(request.result, this.readFallback());
+          if (saveIdentity(latest) !== expected) {
+            conflict = new SaveConflict();
+            tx.abort();
+          } else saves.put(data, key);
+        };
+      } else saves.put(data, key);
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
-      tx.onabort = () => reject(tx.error || new Error('aborted'));
+      tx.onabort = () => reject(conflict || tx.error || new Error('aborted'));
     });
   }
   async load() {
@@ -195,6 +222,7 @@ export class SaveStore {
       notice = '';
     try {
       raw = await this.dbRead();
+      this.databaseKnown = true;
     } catch {
       this.mode = 'localstorage';
       notice = 'IndexedDBが使えないため代替保存を使用します。';
@@ -204,7 +232,7 @@ export class SaveStore {
       localText = this.storage?.getItem('rakuga.save');
       if (localText) {
         const local = JSON.parse(localText);
-        if (!raw || (local?.savedAt || 0) > (raw?.savedAt || 0)) raw = local;
+        raw = chooseSave(raw, local);
       }
     } catch {
       notice = '代替セーブを読み込めません。破損データを退避します。';
@@ -227,31 +255,140 @@ export class SaveStore {
         this.readOnly = true;
       }
     }
+    this.expected = saveIdentity(raw);
+    this.lastSavedAt = savedNumber(raw?.savedAt);
+    this.saveRevision = savedNumber(raw?.saveRevision);
+    this.conflicted = false;
+    this.loaded = true;
     return { data: result.data, notice: result.notice || notice };
   }
-  save(data) {
-    const snapshot = { ...structuredClone(data), savedAt: Date.now() };
-    const job = this.pending.then(async () => {
-      if (this.readOnly) return '元のセーブを保護するため保存していません。';
-      if (this.mode === 'indexeddb') {
-        try {
-          await this.dbWrite(snapshot);
-          return 'この端末に保存しました';
-        } catch {
-          this.mode = 'localstorage';
-        }
-      }
+  readFallback() {
+    try {
+      const text = this.storage?.getItem('rakuga.save');
+      return text ? JSON.parse(text) : undefined;
+    } catch {
+      return undefined;
+    }
+  }
+  async readLatest() {
+    let raw;
+    this.databaseReadable = false;
+    try {
+      raw = await this.dbRead();
+      this.databaseReadable = true;
+      this.databaseKnown = true;
+    } catch {
+      // A failed database can still have a readable localStorage fallback.
+    }
+    return chooseSave(raw, this.readFallback());
+  }
+  async backupSnapshot(snapshot) {
+    let backedUp = false;
+    try {
+      await this.dbWrite(snapshot, this.conflictKey);
+      backedUp = true;
+    } catch {
       try {
-        if (!this.storage) throw new Error('Storage unavailable');
-        this.storage.setItem('rakuga.save', JSON.stringify(snapshot));
-        this.mode = 'localstorage';
-        return 'この端末に保存しました（代替保存）';
+        if (this.storage) {
+          this.storage.setItem(`rakuga.save.${this.conflictKey}`, JSON.stringify(snapshot));
+          backedUp = true;
+        }
       } catch {
-        this.mode = 'memory';
-        return '保存できません。容量・ブラウザ設定を確認してください。このタブ内でのみ保持します。';
+        // Keep the unsaved character and progression in the current app.
       }
+    }
+    return backedUp;
+  }
+  async preserveConflict(snapshot) {
+    this.conflicted = true;
+    const backedUp = await this.backupSnapshot(snapshot);
+    return (
+      '別のタブで保存が更新されたため、このタブからの上書きを停止しました。' +
+      (backedUp ? '未保存データは退避しました。' : '未保存データはこの画面に残っています。') +
+      'このタブの落書きは残し、新しいタブで最新データを開いてください。'
+    );
+  }
+  async preserveUnavailable(snapshot, reason) {
+    const backedUp = await this.backupSnapshot(snapshot);
+    return `保存できません。${reason}${backedUp ? '未保存データは退避しました。' : '未保存データはこの画面に残っています。'}`;
+  }
+  save(data) {
+    const snapshot = structuredClone(data);
+    const job = this.pending.then(async () => {
+      const write = async () => {
+        if (!this.loaded) await this.load();
+        if (this.readOnly) return '元のセーブを保護するため保存していません。';
+        if (this.conflicted) return this.preserveConflict(snapshot);
+        const latest = await this.readLatest();
+        if (!this.databaseReadable && (this.databaseKnown || this.idb))
+          return this.preserveUnavailable(
+            snapshot,
+            '保存の状態を確認できません。もう一度保存してください。',
+          );
+        if (saveIdentity(latest) !== this.expected) return this.preserveConflict(snapshot);
+        snapshot.savedAt = Math.max(Date.now(), this.lastSavedAt + 1);
+        snapshot.saveRevision = this.saveRevision + 1;
+        snapshot.saveId = localId();
+        if (this.mode === 'indexeddb' || (!this.locks?.request && this.databaseReadable)) {
+          try {
+            // The comparison and put share a readwrite transaction. Another tab
+            // cannot slip a newer main save between these two operations.
+            await this.dbWrite(snapshot, 'main', this.expected);
+            this.committed(snapshot);
+            return 'この端末に保存しました';
+          } catch (error) {
+            if (error instanceof SaveConflict) return this.preserveConflict(snapshot);
+            this.mode = 'localstorage';
+          }
+        }
+        if (!this.locks?.request)
+          return this.preserveUnavailable(snapshot, 'この環境では安全な共有保存を利用できません。');
+        // Native Web Locks serialize the database-to-fallback transition too.
+        // Recheck after a failed database write before touching the fallback.
+        const fallbackLatest = await this.readLatest();
+        if (!this.databaseReadable && (this.databaseKnown || this.idb))
+          return this.preserveUnavailable(
+            snapshot,
+            '保存の状態を確認できません。もう一度保存してください。',
+          );
+        if (saveIdentity(fallbackLatest) !== this.expected) return this.preserveConflict(snapshot);
+        try {
+          if (!this.storage) throw new Error('Storage unavailable');
+          this.storage.setItem('rakuga.save', JSON.stringify(snapshot));
+          this.mode = 'localstorage';
+          this.committed(snapshot);
+          return 'この端末に保存しました（代替保存）';
+        } catch {
+          this.mode = 'memory';
+          return '保存できません。容量・ブラウザ設定を確認してください。このタブ内でのみ保持します。';
+        }
+      };
+      return this.locks?.request ? this.locks.request('rakuga-save', write) : write();
     });
     this.pending = job.catch(() => {});
     return job;
+  }
+  committed(snapshot) {
+    this.expected = saveIdentity(snapshot);
+    this.lastSavedAt = snapshot.savedAt;
+    this.saveRevision = snapshot.saveRevision;
+  }
+}
+
+const savedNumber = (value) => (Number.isSafeInteger(value) && value >= 0 ? value : 0);
+const saveIdentity = (raw) => (raw === undefined || raw === null ? null : JSON.stringify(raw));
+function chooseSave(database, fallback) {
+  if (!database) return fallback;
+  if (!fallback) return database;
+  const dbRevision = savedNumber(database.saveRevision),
+    fallbackRevision = savedNumber(fallback.saveRevision);
+  if (dbRevision && fallbackRevision && dbRevision !== fallbackRevision)
+    return fallbackRevision > dbRevision ? fallback : database;
+  return savedNumber(fallback.savedAt) >= savedNumber(database.savedAt) ? fallback : database;
+}
+class SaveConflict extends Error {
+  constructor() {
+    super('A newer save belongs to another tab');
+    this.name = 'SaveConflict';
   }
 }

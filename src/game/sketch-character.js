@@ -9,7 +9,7 @@ export function buildSketchCharacter(raw) {
   const all = drawing.strokes.flatMap((s) => s.points),
     b = sketchBounds(all),
     cx = (b.minX + b.maxX) / 2;
-  const bottom = b.maxY + Math.max(0.004, ...drawing.strokes.map((s) => s.width / 2));
+  const bottom = b.maxY;
   const pieces = [];
   drawing.strokes.forEach((stroke, index) => {
     const points = stroke.points.map(
@@ -72,6 +72,16 @@ export function buildSketchCharacter(raw) {
     joint.name = `stroke-${index}`;
     pieces.push({ joint, role: stroke.role, index });
   });
+  // A filled face has no line-width padding, and a thick stroke higher on the
+  // page must not lift thin feet. Anchor the actual generated surfaces together
+  // while preserving every part's relative position and animation pivot.
+  let floor = Infinity;
+  for (const { joint } of pieces) {
+    const geometry = joint.children[0].geometry;
+    geometry.computeBoundingBox();
+    floor = Math.min(floor, joint.position.y + geometry.boundingBox.min.y);
+  }
+  for (const { joint } of pieces) joint.position.y -= floor;
   root.userData = {
     sketch: true,
     rig,

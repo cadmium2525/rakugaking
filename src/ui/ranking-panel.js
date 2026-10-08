@@ -3,6 +3,7 @@ import { formatTime } from '../core/timer.js';
 export class RankingPanel {
   constructor() {
     this.client = null;
+    this.connectPromise = null;
     this.dialog = document.createElement('dialog');
     this.dialog.className = 'ranking-panel';
     this.dialog.innerHTML =
@@ -12,19 +13,25 @@ export class RankingPanel {
     this.dialog.querySelector('.ranking-refresh').onclick = () => this.load();
   }
   async connect() {
-    if (!this.client) {
-      const response = await fetch(`${import.meta.env.BASE_URL}ranking-config.json`);
-      if (!response.ok) throw new Error('ランキング設定を読み込めません');
-      const config = await response.json();
-      if (
-        config.endpoint &&
-        !/^https:\/\//.test(config.endpoint) &&
-        !/^http:\/\/127\.0\.0\.1:\d+$/.test(config.endpoint)
-      )
-        throw new Error('ランキング接続先が不正です');
-      this.client = new RankingClient(config.endpoint || '');
+    if (this.client) return this.client;
+    if (!this.connectPromise) {
+      this.connectPromise = (async () => {
+        const response = await fetch(`${import.meta.env?.BASE_URL ?? './'}ranking-config.json`);
+        if (!response.ok) throw new Error('ランキング設定を読み込めません');
+        const config = await response.json();
+        if (
+          config.endpoint &&
+          !/^https:\/\//.test(config.endpoint) &&
+          !/^http:\/\/127\.0\.0\.1:\d+$/.test(config.endpoint)
+        )
+          throw new Error('ランキング接続先が不正です');
+        this.client = new RankingClient(config.endpoint || '');
+        return this.client;
+      })().finally(() => {
+        this.connectPromise = null;
+      });
     }
-    return this.client;
+    return this.connectPromise;
   }
   async open() {
     this.dialog.showModal();

@@ -1,10 +1,12 @@
 export class RankingClient {
-  constructor(endpoint, storage = globalThis.localStorage) {
+  constructor(endpoint, storage) {
     this.endpoint = endpoint.replace(/\/$/, '');
-    this.storage = storage;
+    this.storage = null;
     this.token = null;
+    this.authPromise = null;
     try {
-      this.token = storage?.getItem(`rakuga.ranking.${this.endpoint}`);
+      this.storage = storage === undefined ? globalThis.localStorage : storage;
+      this.token = this.storage?.getItem(`rakuga.ranking.${this.endpoint}`);
     } catch {
       this.storage = null;
     }
@@ -37,13 +39,20 @@ export class RankingClient {
   }
   async authenticate() {
     if (this.token) return;
-    const { token } = await this.request('/session', { method: 'POST' });
-    this.token = token;
-    try {
-      this.storage?.setItem(`rakuga.ranking.${this.endpoint}`, token);
-    } catch {
-      this.storage = null;
+    if (!this.authPromise) {
+      this.authPromise = (async () => {
+        const { token } = await this.request('/session', { method: 'POST' });
+        this.token = token;
+        try {
+          this.storage?.setItem(`rakuga.ranking.${this.endpoint}`, token);
+        } catch {
+          this.storage = null;
+        }
+      })().finally(() => {
+        this.authPromise = null;
+      });
     }
+    return this.authPromise;
   }
   async submit(record) {
     await this.authenticate();

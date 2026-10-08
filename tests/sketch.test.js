@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import * as THREE from 'three';
 import {
   sanitizeSketch,
   sketchTemplate,
@@ -31,6 +32,76 @@ const ink = {
     { x: 0.8, y: 0.8 },
   ],
 };
+test('closed faces rest on the floor independently of an unused line-width setting', () => {
+  const face = {
+    ...ink,
+    role: 'body',
+    closed: true,
+    points: [
+      { x: 0.2, y: 0.2 },
+      { x: 0.8, y: 0.2 },
+      { x: 0.8, y: 0.8 },
+      { x: 0.2, y: 0.8 },
+    ],
+  };
+  const bounds = [];
+  for (const width of [0.004, 0.16]) {
+    const root = buildCharacter({ kind: 'sketch', strokes: [{ ...face, width }] }),
+      box = new THREE.Box3().setFromObject(root);
+    assert.ok(Math.abs(box.min.y) < 1e-6, `floating face at ${box.min.y}`);
+    bounds.push({ min: box.min.toArray(), max: box.max.toArray() });
+    disposeCharacter(root);
+  }
+  assert.deepEqual(bounds[0], bounds[1], 'line width must not move or resize a filled surface');
+});
+test('mixed stroke widths, points and templates share a real floor without moving parts apart', () => {
+  const mixed = {
+    kind: 'sketch',
+    strokes: [
+      {
+        ...ink,
+        width: 0.16,
+        points: [
+          { x: 0.2, y: 0.2 },
+          { x: 0.8, y: 0.2 },
+        ],
+      },
+      {
+        ...ink,
+        width: 0.004,
+        role: 'leg',
+        points: [
+          { x: 0.5, y: 0.5 },
+          { x: 0.5, y: 0.9 },
+        ],
+      },
+    ],
+  };
+  for (const raw of [
+    mixed,
+    {
+      kind: 'sketch',
+      strokes: [{ ...ink, role: 'body', width: 0.16, points: [{ x: 0.5, y: 0.5 }] }],
+    },
+    sketchTemplate('human'),
+    sketchTemplate('dog'),
+    sketchTemplate('dragon'),
+  ]) {
+    const drawing = sanitizeSketch(raw),
+      root = buildCharacter(drawing),
+      box = new THREE.Box3().setFromObject(root),
+      joints = root.userData.pieces.map((p) => p.joint.position);
+    assert.ok(Math.abs(box.min.y) < 1e-6, `floating geometry at ${box.min.y}`);
+    for (let i = 1; i < joints.length; i++) {
+      const expected = (drawing.strokes[0].points[0].y - drawing.strokes[i].points[0].y) * 2.8;
+      assert.ok(Math.abs(joints[i].y - joints[0].y - expected) < 1e-9);
+    }
+    animateCharacter(root, { vx: 0, vz: 0, vy: 0, grounded: true }, 1 / 60);
+    const idleFloor = new THREE.Box3().setFromObject(root).min.y;
+    assert.ok(Math.abs(idleFloor) < 1e-6, `idle floor at ${idleFloor}`);
+    disposeCharacter(root);
+  }
+});
 test('dog and dragon abilities can complete the mission field with normal input', async () => {
   await initPhysics();
   for (const kind of ['dog', 'dragon']) {

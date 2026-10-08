@@ -196,8 +196,9 @@ try {
       };
       window.originalTransaction = IDBDatabase.prototype.transaction;
       window.originalSetItem = Storage.prototype.setItem;
-      IDBDatabase.prototype.transaction = () => {
-        throw new Error('test storage failure');
+      IDBDatabase.prototype.transaction = function (...args) {
+        if (args[1] === 'readwrite') throw new Error('test storage failure');
+        return window.originalTransaction.apply(this, args);
       };
       Storage.prototype.setItem = () => {
         throw new Error('test quota');

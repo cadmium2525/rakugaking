@@ -3,6 +3,7 @@ import { levelStats } from './progression.js';
 import { PARTS, COLORS } from './drawing.js';
 import { validSketch } from './sketch.js';
 export const GAME_VERSION = '7.0.0';
+export const APP_VERSION = '7.0.1';
 export const STAT_KEYS = ['hp', 'power', 'defense', 'speed', 'jump', 'weight'];
 export function validateRecord(record) {
   const errors = [];

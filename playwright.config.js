@@ -7,7 +7,7 @@ export default defineConfig({
     baseURL: 'http://127.0.0.1:5186',
     headless: true,
     launchOptions: {
-      channel: 'msedge',
+      channel: process.env.CI ? undefined : 'msedge',
       args: ['--enable-webgl', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
     },
   },
