@@ -3,6 +3,25 @@ import { freshSave } from '../../src/core/save.js';
 import { calculateStats } from '../../src/core/stats.js';
 import { APP_VERSION, GAME_VERSION } from '../../src/core/ranking.js';
 
+test.afterEach(async ({ context }, info) => {
+  if (info.status === info.expectedStatus) return;
+  for (const page of context.pages()) {
+    try {
+      console.log(
+        'Save regression diagnostics:',
+        await page.evaluate(() => ({
+          status: document.querySelector('#save-status')?.textContent,
+          editor: document.querySelector('#editor-feedback')?.textContent,
+          editorOpen: document.querySelector('.editor')?.open,
+          characters: window.__qa?.state().characters,
+        })),
+      );
+    } catch (error) {
+      console.log('Save regression diagnostic failed:', error.message);
+    }
+  }
+});
+
 async function saved(page, key = 'main') {
   return page.evaluate(
     (key) =>
@@ -33,8 +52,10 @@ async function birth(page, name) {
   await page.locator('#draw-open').click();
   await page.locator('#character-name').fill(name);
   await page.locator('[data-do="birth"]').click();
+  await expect(page.locator('#save-status')).toContainText('この端末に保存しました', {
+    timeout: 15000,
+  });
   await expect(page.locator('.editor')).toBeHidden();
-  await expect(page.locator('#save-status')).toContainText('この端末に保存しました');
 }
 
 test('HTTP LAN-like contexts boot, save a new character and reload with real IndexedDB and no UUID or Web Locks', async ({
@@ -102,8 +123,11 @@ test('a stale settings tab cannot erase another tab character and can save after
 }) => {
   // Four WebGL boots across two tabs can exceed 30s on CI's software renderer.
   test.setTimeout(60000);
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
   await ready(page);
   const other = await context.newPage();
+  other.on('pageerror', (error) => errors.push(error.message));
   await ready(other);
   await birth(page, 'tab-A');
   await other.locator('#pause').click();
@@ -122,6 +146,7 @@ test('a stale settings tab cannot erase another tab character and can save after
   const final = await saved(other);
   expect(final.characters).toHaveLength(2);
   expect(final.settings.sound).toBe(false);
+  expect(errors).toEqual([]);
   await other.close();
 });
 
@@ -129,8 +154,12 @@ test('a stale birth retains its editor draft and backs it up without duplicating
   page,
   context,
 }) => {
+  test.setTimeout(60000);
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
   await ready(page);
   const other = await context.newPage();
+  other.on('pageerror', (error) => errors.push(error.message));
   await ready(other);
   await other.locator('#draw-open').click();
   await other.getByLabel('下絵', { exact: true }).selectOption('dragon');
@@ -172,6 +201,7 @@ test('a stale birth retains its editor draft and backs it up without duplicating
     true,
   );
   expect((await saved(page)).characters.map((c) => c.name)).toEqual(['らくがきくん', 'tab-A']);
+  expect(errors).toEqual([]);
   await other.close();
 });
 

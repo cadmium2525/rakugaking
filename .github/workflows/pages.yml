@@ -22,7 +22,15 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test tests/browser/editor-recovery.spec.js tests/browser/save-conflicts.spec.js tests/browser/ranking.spec.js
+      - run: npx playwright test tests/browser/editor-recovery.spec.js tests/browser/save-conflicts.spec.js tests/browser/ranking.spec.js --reporter=line
+      - name: Save browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failure-diagnostics
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
       - run: node tests/production-smoke.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
